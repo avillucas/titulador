@@ -1,0 +1,49 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV WINEDEBUG=-all
+ENV WINEPREFIX=/root/.wine
+
+# Install Wine, winbind, gnutls, wget, unzip, ca-certificates
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        wine \
+        wine64 \
+        wine32 \
+        winbind \
+        libgnutls30 \
+        libgnutls30:i386 \
+        wget \
+        unzip \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Initialize Wine prefix
+RUN wineboot --init
+
+# Download and unpack full official Python 3.11 64-bit distribution (includes Tcl/Tk & tkinter for CustomTkinter)
+RUN wget -q https://www.nuget.org/api/v2/package/python/3.11.8 -O /tmp/python_nuget.zip && \
+    mkdir -p /tmp/nuget_extracted && \
+    unzip -q /tmp/python_nuget.zip -d /tmp/nuget_extracted && \
+    mkdir -p /root/.wine/drive_c/Python311 && \
+    cp -r /tmp/nuget_extracted/tools/* /root/.wine/drive_c/Python311/ && \
+    rm -rf /tmp/python_nuget.zip /tmp/nuget_extracted
+
+# Install pip inside Python 3.11 Wine environment with trusted hosts
+RUN wget -q https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py && \
+    wine "C:\\Python311\\python.exe" /tmp/get-pip.py --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org && \
+    rm /tmp/get-pip.py
+
+# Install PyInstaller and app dependencies
+COPY requirements.txt .
+RUN wine "C:\\Python311\\python.exe" -m pip install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pyinstaller && \
+    wine "C:\\Python311\\python.exe" -m pip install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt
+
+WORKDIR /src
+
+# Copy application source code
+COPY . .
+
+# Default command: Compile app_gui.py to dist/Titulador.exe with full CustomTkinter & Tcl/Tk support
+CMD ["wine", "cmd", "/c", "set PATH=C:\\Python311;C:\\Python311\\Scripts;C:\\windows\\system32;C:\\windows && python -m PyInstaller --noconfirm --onefile --windowed --name Titulador --exclude-module darkdetect._mac_detect --exclude-module darkdetect._gsettings --add-data ejemplos;ejemplos app_gui.py"]

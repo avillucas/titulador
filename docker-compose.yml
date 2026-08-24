@@ -1,0 +1,20 @@
+services:
+  titulador:
+    build: .
+    volumes:
+      - .:/app
+      - ./output:/app/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["python", "main.py", "batch"]
+
+  titulador-gui:
+    build: .
+    volumes:
+      - .:/app
+      - ./output:/app/output
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY}
+      - PYTHONUNBUFFERED=1
+    command: ["python", "app_gui.py"]

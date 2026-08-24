@@ -1,0 +1,10 @@
+services:
+  windows_builder:
+    build:
+      context: .
+      dockerfile: Dockerfile.windows
+    volumes:
+      - .:/src
+      - ./dist:/src/dist
+    environment:
+      - PYTHONUNBUFFERED=1
