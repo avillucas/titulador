@@ -1,0 +1,6 @@
+output/
+test_output.pptx
+build
+dist
+ejemplos/
+src/__pycache__
