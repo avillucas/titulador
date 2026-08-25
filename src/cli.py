@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import Optional, List, Dict, Any
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -10,6 +11,7 @@ from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
 from src.exporter import convert_pptx_to_pdf, print_pdf_a5
+from src.catalog import TrayectoCatalog, format_trayecto_data
 
 app = typer.Typer(name="titulador", help="Sistema de generación de certificados y títulos en A5")
 console = Console()
@@ -18,11 +20,26 @@ DEFAULT_TEMPLATE = "ejemplos/Modelo base.pptx"
 DEFAULT_EXCEL = "ejemplos/Acta de examen.xlsx"
 OUTPUT_DIR = "output"
 
+def resolve_trayecto(catalog: TrayectoCatalog, code_or_name: Optional[str], excel_trayecto_data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """Resolves trayecto data from CLI option or Excel auto-matched trayecto."""
+    if code_or_name:
+        match = catalog.find_by_code(code_or_name) or catalog.find_by_display_name(code_or_name) or catalog.search_trayecto(code_or_name)
+        if match:
+            return format_trayecto_data(match)
+        else:
+            console.print(f"[bold yellow]⚠️  No se encontró el trayecto '{code_or_name}' en el catálogo JSON.[/bold yellow]")
+    
+    if excel_trayecto_data:
+        return excel_trayecto_data
+        
+    return None
+
 @app.command("batch")
 def batch_generate(
     excel_path: str = typer.Option(DEFAULT_EXCEL, "--excel", "-e", help="Ruta al archivo Excel de Acta de examen"),
     template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t", help="Ruta a la plantilla PPTX"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
+    trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
     convert_pdf: bool = typer.Option(True, "--pdf/--no-pdf", help="Convertir a PDF automáticamente si LibreOffice está disponible")
 ):
     """Procesa un archivo Excel de Acta de examen y genera los certificados de todos los egresados aprobados."""
@@ -36,13 +53,22 @@ def batch_generate(
         console.print(f"[bold red]Error:[bold red] La plantilla PPTX no existe: {template_path}")
         raise typer.Exit(code=1)
 
+    catalog = TrayectoCatalog()
     parser = ExcelParser(excel_path)
-    data = parser.load_data()
+    data = parser.load_data(catalog=catalog)
     
     egresados = data["egresados"]
     omitidos = data.get("omitidos", [])
 
-    console.print(f"Curso/Especialidad: [cyan]{data['especialidad']}[/cyan]")
+    trayecto_data = resolve_trayecto(catalog, trayecto_code, data.get("trayecto_data"))
+
+    console.print(f"Especialidad Acta: [cyan]{data['especialidad']}[/cyan]")
+    if trayecto_data:
+        console.print(f"[bold green]✔ Trayecto Catálogo JSON:[/bold green] [cyan]{trayecto_data['codigo']}[/cyan] - [cyan]{trayecto_data['nombre_trayecto']}[/cyan] ({trayecto_data['sector']})")
+        console.print(f"  • Horas: [yellow]{trayecto_data['horas_cursada']}[/yellow] | Res: [yellow]{trayecto_data['resolucion']}[/yellow] | Módulos: [yellow]{len(trayecto_data['modulos'])}[/yellow]")
+    else:
+        console.print("[bold yellow]⚠️  No se identificó trayecto en catálogo JSON. Se usarán datos por defecto del acta.[/bold yellow]")
+
     console.print(f"Fecha Egreso: [cyan]{data['fecha_egreso']}[/cyan]")
     console.print(f"Total egresados aprobados: [bold yellow]{len(egresados)}[/bold yellow]")
 
@@ -57,17 +83,19 @@ def batch_generate(
 
     generator = PPTXGenerator(template_path)
     
-    # Modules for Carpinteria example if matching course
-    modules = []
-    if "carpintería" in data["especialidad"].lower():
-        modules = [
-            "Relaciones laborales y Orientación profesional. (MM0011.1)",
-            "Tecnología de la Madera y materiales derivados.",
-            "(MM 0012.1)",
-            "Documentación técnica en carpintería. (MM0013.1)",
-            "Trazado y corte de la madera y derivados. (MM0014.2)--",
-            "Mecanizado, ensamble, unión y calidad de terminación en productos de madera y derivados. (MM0015.2)"
-        ]
+    # Determine certificate template fields from trayecto_data or fallback
+    if trayecto_data:
+        t_line1 = trayecto_data["titulo_linea1"]
+        t_line2 = trayecto_data["titulo_linea2"]
+        horas = trayecto_data["horas_cursada"]
+        res = trayecto_data["resolucion"]
+        modules = trayecto_data["modulos"]
+    else:
+        t_line1 = data["especialidad"].title()
+        t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
+        horas = "540"
+        res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
+        modules = []
 
     table = Table(title="Certificados a Generar")
     table.add_column("N° Egresado", style="cyan")
@@ -84,10 +112,10 @@ def batch_generate(
         titulo_data = TituloData(
             apellido_nombre=eg['apellido_nombre'],
             documento=eg['documento'],
-            horas_cursada="230" if "carpintería" in data["especialidad"].lower() else "540",
-            titulo_linea1=data["especialidad"].title(),
-            titulo_linea2=data["especialidad"].title() if len(data["especialidad"]) > 40 else "",
-            resolucion="Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE",
+            horas_cursada=horas,
+            titulo_linea1=t_line1,
+            titulo_linea2=t_line2,
+            resolucion=res,
             emision_dia="02",
             emision_mes="Septiembre",
             emision_ano="25",
@@ -113,19 +141,40 @@ def batch_generate(
 @app.command("form")
 def interactive_form(
     template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t", help="Ruta a la plantilla PPTX"),
-    output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida")
+    output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
+    trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)")
 ):
     """Crea un certificado completando el formulario campo por campo en la consola."""
     console.print(Panel("[bold green]Titulador - Formulario Interactivo[/bold green]"))
 
     generator = PPTXGenerator(template_path)
+    catalog = TrayectoCatalog()
+
+    selected_code = trayecto_code
+    if not selected_code:
+        selected_code = Prompt.ask("Código o nombre de trayecto en catálogo (ej. MM11, presione ENTER para omitir)", default="")
+
+    trayecto_data = None
+    if selected_code:
+        match = catalog.find_by_code(selected_code) or catalog.find_by_display_name(selected_code) or catalog.search_trayecto(selected_code)
+        if match:
+            trayecto_data = format_trayecto_data(match)
+            console.print(f"[bold green]✔ Carga desde catálogo:[/bold green] {trayecto_data['codigo']} - {trayecto_data['nombre_trayecto']}")
+        else:
+            console.print(f"[bold yellow]⚠️  Trayecto '{selected_code}' no encontrado en el catálogo.[/bold yellow]")
+
+    def_l1 = trayecto_data["titulo_linea1"] if trayecto_data else "Operadora/or de Carpintería y Fabricación de Mobiliario"
+    def_l2 = trayecto_data["titulo_linea2"] if trayecto_data else ""
+    def_hrs = trayecto_data["horas_cursada"] if trayecto_data else "230"
+    def_res = trayecto_data["resolucion"] if trayecto_data else "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
+    def_mods = trayecto_data["modulos"] if trayecto_data else []
 
     apellido_nombre = Prompt.ask("Apellido y Nombre")
     documento = Prompt.ask("DNI / Documento")
-    horas_cursada = Prompt.ask("Cantidad de horas de cursada", default="230")
-    titulo_linea1 = Prompt.ask("Nombre del Título (Línea 1)", default="Operadora/or de Carpintería y Fabricación de Mobiliario")
-    titulo_linea2 = Prompt.ask("Nombre del Título (Línea 2)", default="")
-    resolucion = Prompt.ask("Resolución", default="Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE")
+    horas_cursada = Prompt.ask("Cantidad de horas de cursada", default=def_hrs)
+    titulo_linea1 = Prompt.ask("Nombre del Título (Línea 1)", default=def_l1)
+    titulo_linea2 = Prompt.ask("Nombre del Título (Línea 2)", default=def_l2)
+    resolucion = Prompt.ask("Resolución", default=def_res)
     emision_dia = Prompt.ask("Emisión Día", default="02")
     emision_mes = Prompt.ask("Emisión Mes", default="Septiembre")
     emision_ano = Prompt.ask("Emisión Año", default="25")
@@ -135,13 +184,22 @@ def interactive_form(
     numero_cpf = Prompt.ask("Número CPF", default="412")
     distrito_cpf = Prompt.ask("Distrito CPF", default="Lomas de Zamora")
 
-    console.print("\n[bold yellow]Ingrese los módulos (hasta 10, presione ENTER para finalizar):[/bold yellow]")
-    modulos = []
-    for i in range(1, 11):
-        mod = Prompt.ask(f"Módulo {i}", default="")
-        if not mod:
-            break
-        modulos.append(mod)
+    if def_mods:
+        console.print("\n[bold yellow]Módulos cargados automáticamente desde el catálogo:[/bold yellow]")
+        for i, m in enumerate(def_mods, 1):
+            console.print(f"  {i}. {m}")
+        if not Confirm.ask("¿Desea conservar estos módulos del catálogo?", default=True):
+            def_mods = []
+
+    modulos = def_mods
+    if not modulos:
+        console.print("\n[bold yellow]Ingrese los módulos (hasta 10, presione ENTER para finalizar):[/bold yellow]")
+        modulos = []
+        for i in range(1, 11):
+            mod = Prompt.ask(f"Módulo {i}", default="")
+            if not mod:
+                break
+            modulos.append(mod)
 
     data = TituloData(
         apellido_nombre=apellido_nombre,
@@ -179,17 +237,21 @@ def interactive_form(
 def select_egresado(
     excel_path: str = typer.Option(DEFAULT_EXCEL, "--excel", "-e"),
     template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t"),
-    output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o")
+    output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o"),
+    trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)")
 ):
     """Muestra la lista de egresados del Excel y permite elegir uno para emitir su certificado."""
     if not os.path.exists(excel_path):
         console.print(f"[bold red]Error:[bold red] El archivo Excel no existe: {excel_path}")
         raise typer.Exit(code=1)
 
+    catalog = TrayectoCatalog()
     parser = ExcelParser(excel_path)
-    data = parser.load_data()
+    data = parser.load_data(catalog=catalog)
     egresados = data["egresados"]
     omitidos = data.get("omitidos", [])
+
+    trayecto_data = resolve_trayecto(catalog, trayecto_code, data.get("trayecto_data"))
 
     if omitidos:
         console.print("[bold yellow]⚠️  Filas evitadas por no contar con Número de Egresado (no aprobó):[/bold yellow]")
@@ -219,22 +281,26 @@ def select_egresado(
 
     generator = PPTXGenerator(template_path)
     
-    modules = [
-        "Relaciones laborales y Orientación profesional. (MM0011.1)",
-        "Tecnología de la Madera y materiales derivados.",
-        "(MM 0012.1)",
-        "Documentación técnica en carpintería. (MM0013.1)",
-        "Trazado y corte de la madera y derivados. (MM0014.2)--",
-        "Mecanizado, ensamble, unión y calidad de terminación en productos de madera y derivados. (MM0015.2)"
-    ]
+    if trayecto_data:
+        t_line1 = trayecto_data["titulo_linea1"]
+        t_line2 = trayecto_data["titulo_linea2"]
+        horas = trayecto_data["horas_cursada"]
+        res = trayecto_data["resolucion"]
+        modules = trayecto_data["modulos"]
+    else:
+        t_line1 = data["especialidad"].title()
+        t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
+        horas = "230"
+        res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
+        modules = []
 
     titulo_data = TituloData(
         apellido_nombre=selected_eg['apellido_nombre'],
         documento=selected_eg['documento'],
-        horas_cursada="230",
-        titulo_linea1=data["especialidad"].title(),
-        titulo_linea2=data["especialidad"].title() if len(data["especialidad"]) > 40 else "",
-        resolucion="Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE",
+        horas_cursada=horas,
+        titulo_linea1=t_line1,
+        titulo_linea2=t_line2,
+        resolucion=res,
         emision_dia="02",
         emision_mes="Septiembre",
         emision_ano="25",

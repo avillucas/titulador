@@ -2,6 +2,7 @@ import re
 import openpyxl
 from typing import List, Dict, Any, Optional
 from src.models import Egresado, TituloData
+from src.catalog import TrayectoCatalog, format_trayecto_data
 
 def format_dni(doc_val: Any) -> str:
     """Formats raw document number into dot-separated string (e.g. 35.140.353)."""
@@ -39,7 +40,7 @@ class ExcelParser:
     def __init__(self, file_path: str):
         self.file_path = file_path
 
-    def load_data(self) -> Dict[str, Any]:
+    def load_data(self, catalog: Optional[TrayectoCatalog] = None) -> Dict[str, Any]:
         wb = openpyxl.load_workbook(self.file_path, data_only=True)
         sheet = wb.active if "Acta de examen" not in wb.sheetnames else wb["Acta de examen"]
         
@@ -98,6 +99,12 @@ class ExcelParser:
                     "motivo": "Sin número de egresado (no aprobó)",
                     "fila": r
                 })
+
+        if catalog is None:
+            catalog = TrayectoCatalog()
+
+        matched_trayecto = catalog.search_trayecto(especialidad)
+        trayecto_data = format_trayecto_data(matched_trayecto) if matched_trayecto else None
             
         return {
             "numero_cpf": cpf_num,
@@ -105,5 +112,8 @@ class ExcelParser:
             "especialidad": especialidad,
             "fecha_egreso": fecha_egreso,
             "egresados": egresados,
-            "omitidos": omitidos
+            "omitidos": omitidos,
+            "trayecto_matched": matched_trayecto,
+            "trayecto_data": trayecto_data
         }
+

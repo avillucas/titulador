@@ -13,6 +13,7 @@ except ImportError:
 from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
+from src.catalog import TrayectoCatalog, format_trayecto_data
 
 DEFAULT_TEMPLATE = "ejemplos/Modelo base.pptx"
 DEFAULT_EXCEL = "ejemplos/Acta de examen.xlsx"
@@ -43,11 +44,14 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         # Window settings
         self.title("Titulador 🎓 - Generador de Certificados y Títulos A5")
-        self.geometry("900x700")
-        self.minsize(800, 600)
+        self.geometry("950x750")
+        self.minsize(850, 650)
 
         ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("blue")
+
+        # Catalog manager
+        self.catalog = TrayectoCatalog()
 
         # State variables
         self.excel_path = ctk.StringVar(value=DEFAULT_EXCEL)
@@ -55,6 +59,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.output_dir = ctk.StringVar(value=OUTPUT_DIR)
         
         self.excel_data: Optional[Dict[str, Any]] = None
+        self.current_trayecto_data: Optional[Dict[str, Any]] = None
         self.last_generated_pptx: Optional[str] = None
 
         self._build_ui()
@@ -79,7 +84,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         subtitle_label = ctk.CTkLabel(
             header_frame, 
-            text="Generador de certificados en formato PPTX editable para hojas A5",
+            text="Generador de certificados en formato PPTX editable para hojas A5 con Catálogo 2025 FP",
             font=ctk.CTkFont(size=12, slant="italic")
         )
         subtitle_label.grid(row=1, column=0, padx=15, pady=(0, 10), sticky="w")
@@ -92,7 +97,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         theme_switch.select()
         theme_switch.grid(row=0, column=1, rowspan=2, padx=15, pady=10, sticky="e")
 
-        # 2. File Pickers Frame
+        # 2. File Pickers & Catalog Frame
         paths_frame = ctk.CTkFrame(self, corner_radius=10)
         paths_frame.grid(row=1, column=0, padx=15, pady=5, sticky="ew")
         paths_frame.grid_columnconfigure(1, weight=1)
@@ -114,6 +119,16 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.output_entry = ctk.CTkEntry(paths_frame, textvariable=self.output_dir)
         self.output_entry.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
         ctk.CTkButton(paths_frame, text="Buscar...", width=80, command=self._browse_output).grid(row=2, column=2, padx=10, pady=5)
+
+        # Trayecto Catalog Dropdown
+        ctk.CTkLabel(paths_frame, text="Trayecto Catálogo:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
+        display_list = self.catalog.get_trayecto_display_list() or ["Sin catálogo disponible"]
+        self.trayecto_dropdown = ctk.CTkOptionMenu(
+            paths_frame, 
+            values=display_list,
+            command=self._on_trayecto_selected
+        )
+        self.trayecto_dropdown.grid(row=3, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
 
         # 3. Main Tabview
         self.tabview = ctk.CTkTabview(self, corner_radius=10)
@@ -151,7 +166,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         )
         btn_open_pptx.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
-        self.log("Aplicación iniciada. Lista para generar certificados.")
+        self.log("Aplicación iniciada. Catálogo JSON cargado con 322 trayectos.")
 
     def log(self, message: str):
         """Appends a log message to the log textbox."""
@@ -178,6 +193,38 @@ class TituladorGUI(ctk.CTk if ctk else object):
         if folder:
             self.output_dir.set(folder)
 
+    def _on_trayecto_selected(self, choice: str):
+        match = self.catalog.find_by_display_name(choice)
+        if match:
+            self.current_trayecto_data = format_trayecto_data(match)
+            self.log(f"Trayecto seleccionado del catálogo: {self.current_trayecto_data['codigo']} - {self.current_trayecto_data['nombre_trayecto']}")
+            self._update_batch_info()
+            self._populate_form_from_catalog()
+
+    def _update_batch_info(self):
+        if not self.excel_data:
+            return
+        
+        egresados = self.excel_data.get("egresados", [])
+        omitidos = self.excel_data.get("omitidos", [])
+        especialidad_acta = self.excel_data.get("especialidad", "")
+        
+        if self.current_trayecto_data:
+            t_str = f"Categoría JSON: [{self.current_trayecto_data['codigo']}] {self.current_trayecto_data['nombre_trayecto']} ({self.current_trayecto_data['sector']})\n" \
+                    f"Horas: {self.current_trayecto_data['horas_cursada']} hs | Res: {self.current_trayecto_data['resolucion']} | Módulos: {len(self.current_trayecto_data['modulos'])}"
+        else:
+            t_str = "Trayecto JSON: No asignado"
+
+        info_text = (
+            f"Especialidad del Acta: {especialidad_acta}\n"
+            f"{t_str}\n"
+            f"Fecha Egreso: {self.excel_data.get('fecha_egreso', '')}\n"
+            f"CPF N°: {self.excel_data.get('numero_cpf', '')} - {self.excel_data.get('distrito_cpf', '')}\n"
+            f"Total Egresados Aprobados: {len(egresados)}\n"
+            f"Total Filas Evitadas (no aprobó): {len(omitidos)}"
+        )
+        self.batch_info_label.configure(text=info_text)
+
     def _load_excel_data(self):
         path = self.excel_path.get()
         if not os.path.exists(path):
@@ -185,18 +232,28 @@ class TituladorGUI(ctk.CTk if ctk else object):
             return
         try:
             parser = ExcelParser(path)
-            self.excel_data = parser.load_data()
+            self.excel_data = parser.load_data(catalog=self.catalog)
             egresados = self.excel_data["egresados"]
             omitidos = self.excel_data.get("omitidos", [])
             
-            # Update Batch UI Labels
-            self.batch_info_label.configure(
-                text=f"Especialidad: {self.excel_data['especialidad']}\n"
-                     f"Fecha Egreso: {self.excel_data['fecha_egreso']}\n"
-                     f"CPF N°: {self.excel_data['numero_cpf']} - {self.excel_data['distrito_cpf']}\n"
-                     f"Total Aprobados: {len(egresados)}\n"
-                     f"Total Evitados (no aprobó): {len(omitidos)}"
-            )
+            # Auto-select matched trayecto from catalog
+            matched_trayecto = self.excel_data.get("trayecto_matched")
+            if matched_trayecto:
+                self.current_trayecto_data = self.excel_data.get("trayecto_data")
+                code = matched_trayecto.get("Código", "")
+                name = matched_trayecto.get("Nombre del Trayecto", "")
+                sector = matched_trayecto.get("Sector", "")
+                disp_str = f"{code} - {name}"
+                if sector:
+                    disp_str += f" [{sector}]"
+                
+                self.trayecto_dropdown.set(disp_str)
+                self.log(f"✔ Trayecto identificado en catálogo: [{code}] {name}")
+            else:
+                self.log(f"⚠️ No se identificó coincidencia exacta en el catálogo para especialidad '{self.excel_data['especialidad']}'. Seleccione un trayecto manualmente.")
+                self.current_trayecto_data = None
+
+            self._update_batch_info()
 
             # Update Select Option Menu
             options = [f"{e['num_egresado']} - {e['apellido_nombre']} ({e['documento']})" for e in egresados]
@@ -206,11 +263,11 @@ class TituladorGUI(ctk.CTk if ctk else object):
             else:
                 self.select_dropdown.configure(values=["Sin egresados aprobados"])
 
-            self.log(f"Excel cargado exitosamente: {len(egresados)} egresados aprobados encontrados.")
+            self.log(f"Excel cargado: {len(egresados)} egresados aprobados encontrados.")
             if omitidos:
                 self.log(f"⚠️ {len(omitidos)} fila(s) evitada(s) por no contar con Número de Egresado (no aprobó):")
                 for o in omitidos:
-                    self.log(f"   • [Fila {o['fila']}] {o['apellido_nombre']} (DNI: {o['documento']}) - SIN N° DE EGRESADO")
+                    self.log(f"   • [Fila {o['fila']}] {o['apellido_nombre']} (DNI: {o['documento']})")
         except Exception as e:
             self.log(f"Error al leer Excel: {e}")
 
@@ -223,7 +280,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         self.batch_info_label = ctk.CTkLabel(
             info_frame, 
-            text="Cargando información del Excel...", 
+            text="Cargando información del Excel y Catálogo...", 
             justify="left",
             font=ctk.CTkFont(size=13)
         )
@@ -253,7 +310,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         try:
             parser = ExcelParser(excel_p)
-            data = parser.load_data()
+            data = parser.load_data(catalog=self.catalog)
             egresados = data["egresados"]
             omitidos = data.get("omitidos", [])
 
@@ -267,16 +324,20 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 return
 
             generator = PPTXGenerator(tmpl_p)
-            modules = []
-            if "carpintería" in data["especialidad"].lower():
-                modules = [
-                    "Relaciones laborales y Orientación profesional. (MM0011.1)",
-                    "Tecnología de la Madera y materiales derivados.",
-                    "(MM 0012.1)",
-                    "Documentación técnica en carpintería. (MM0013.1)",
-                    "Trazado y corte de la madera y derivados. (MM0014.2)--",
-                    "Mecanizado, ensamble, unión y calidad de terminación en productos de madera y derivados. (MM0015.2)"
-                ]
+            
+            t_data = self.current_trayecto_data or data.get("trayecto_data")
+            if t_data:
+                t_line1 = t_data["titulo_linea1"]
+                t_line2 = t_data["titulo_linea2"]
+                horas = t_data["horas_cursada"]
+                res = t_data["resolucion"]
+                modules = t_data["modulos"]
+            else:
+                t_line1 = data["especialidad"].title()
+                t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
+                horas = "540"
+                res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
+                modules = []
 
             total = len(egresados)
             for idx, eg in enumerate(egresados, 1):
@@ -286,10 +347,10 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 titulo_data = TituloData(
                     apellido_nombre=eg['apellido_nombre'],
                     documento=eg['documento'],
-                    horas_cursada="230" if "carpintería" in data["especialidad"].lower() else "540",
-                    titulo_linea1=data["especialidad"].title(),
-                    titulo_linea2=data["especialidad"].title() if len(data["especialidad"]) > 40 else "",
-                    resolucion="Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE",
+                    horas_cursada=horas,
+                    titulo_linea1=t_line1,
+                    titulo_linea2=t_line2,
+                    resolucion=res,
                     emision_dia="02",
                     emision_mes="Septiembre",
                     emision_ano="25",
@@ -353,22 +414,27 @@ class TituladorGUI(ctk.CTk if ctk else object):
         out_d = self.output_dir.get()
         generator = PPTXGenerator(tmpl_p)
 
-        modules = [
-            "Relaciones laborales y Orientación profesional. (MM0011.1)",
-            "Tecnología de la Madera y materiales derivados.",
-            "(MM 0012.1)",
-            "Documentación técnica en carpintería. (MM0013.1)",
-            "Trazado y corte de la madera y derivados. (MM0014.2)--",
-            "Mecanizado, ensamble, unión y calidad de terminación en productos de madera y derivados. (MM0015.2)"
-        ]
+        t_data = self.current_trayecto_data or data.get("trayecto_data")
+        if t_data:
+            t_line1 = t_data["titulo_linea1"]
+            t_line2 = t_data["titulo_linea2"]
+            horas = t_data["horas_cursada"]
+            res = t_data["resolucion"]
+            modules = t_data["modulos"]
+        else:
+            t_line1 = data["especialidad"].title()
+            t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
+            horas = "230"
+            res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
+            modules = []
 
         titulo_data = TituloData(
             apellido_nombre=target_eg['apellido_nombre'],
             documento=target_eg['documento'],
-            horas_cursada="230",
-            titulo_linea1=data["especialidad"].title(),
-            titulo_linea2=data["especialidad"].title() if len(data["especialidad"]) > 40 else "",
-            resolucion="Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE",
+            horas_cursada=horas,
+            titulo_linea1=t_line1,
+            titulo_linea2=t_line2,
+            resolucion=res,
             emision_dia="02",
             emision_mes="Septiembre",
             emision_ano="25",
@@ -389,6 +455,17 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
     # --- TAB 3: FORMULARIO MANUAL ---
     def _setup_form_tab(self):
+        top_frame = ctk.CTkFrame(self.tab_form)
+        top_frame.pack(fill="x", padx=5, pady=5)
+        
+        btn_apply_cat = ctk.CTkButton(
+            top_frame,
+            text="📋 Cargar campos desde el Trayecto Seleccionado del Catálogo",
+            command=self._populate_form_from_catalog,
+            fg_color="#1f538d"
+        )
+        btn_apply_cat.pack(padx=10, pady=8, anchor="w")
+
         scroll_frame = ctk.CTkScrollableFrame(self.tab_form)
         scroll_frame.pack(fill="both", expand=True, padx=5, pady=5)
         scroll_frame.grid_columnconfigure(1, weight=1)
@@ -399,8 +476,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
             ("apellido_nombre", "Apellido y Nombre:", "Pérez Juan Manuel"),
             ("documento", "DNI / Documento:", "35.140.353"),
             ("horas_cursada", "Horas de Cursada:", "230"),
-            ("titulo_linea1", "Título (Línea 1):", "Operadora/or de Carpintería y Fabricación de Mobiliario"),
-            ("titulo_linea2", "Título (Línea 2):", ""),
+            ("titulo_linea1", "Título (Línea 1):", "Operadora/or de Carpintería y"),
+            ("titulo_linea2", "Título (Línea 2):", "Fabricación de Mobiliario"),
             ("resolucion", "Resolución:", "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"),
             ("emision_dia", "Emisión Día:", "02"),
             ("emision_mes", "Emisión Mes:", "Septiembre"),
@@ -428,10 +505,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
         for i in range(1, 11):
             ctk.CTkLabel(scroll_frame, text=f"Módulo {i}:").grid(row=row, column=0, padx=10, pady=2, sticky="e")
             mod_entry = ctk.CTkEntry(scroll_frame)
-            if i == 1:
-                mod_entry.insert(0, "Relaciones laborales y Orientación profesional. (MM0011.1)")
-            elif i == 2:
-                mod_entry.insert(0, "Tecnología de la Madera y materiales derivados. (MM0012.1)")
             mod_entry.grid(row=row, column=1, padx=10, pady=2, sticky="ew")
             self.module_entries.append(mod_entry)
             row += 1
@@ -444,6 +517,34 @@ class TituladorGUI(ctk.CTk if ctk else object):
             command=self._run_form_generation
         )
         btn_form.grid(row=row, column=0, columnspan=2, pady=15)
+
+        # Pre-fill form if current_trayecto_data exists
+        self._populate_form_from_catalog()
+
+    def _populate_form_from_catalog(self):
+        if not hasattr(self, 'form_entries') or not self.current_trayecto_data:
+            return
+            
+        t_data = self.current_trayecto_data
+        
+        self.form_entries["titulo_linea1"].delete(0, "end")
+        self.form_entries["titulo_linea1"].insert(0, t_data.get("titulo_linea1", ""))
+
+        self.form_entries["titulo_linea2"].delete(0, "end")
+        self.form_entries["titulo_linea2"].insert(0, t_data.get("titulo_linea2", ""))
+
+        self.form_entries["horas_cursada"].delete(0, "end")
+        self.form_entries["horas_cursada"].insert(0, t_data.get("horas_cursada", ""))
+
+        self.form_entries["resolucion"].delete(0, "end")
+        self.form_entries["resolucion"].insert(0, t_data.get("resolucion", ""))
+
+        # Populate modules
+        mods = t_data.get("modulos", [])
+        for i, entry in enumerate(self.module_entries):
+            entry.delete(0, "end")
+            if i < len(mods):
+                entry.insert(0, mods[i])
 
     def _run_form_generation(self):
         tmpl_p = self.template_path.get()
