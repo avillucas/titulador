@@ -1,6 +1,6 @@
 # Documentación Operativa y Guía de Agente: Titulador Desktop & Docker
 
-Este documento sirva como guía operativa para desarrolladores y agentes de IA encargados del mantenimiento, compilación y despliegue de la aplicación **Titulador**.
+Este documento sirve como guía operativa para desarrolladores y agentes de IA encargados del mantenimiento, compilación y despliegue de la aplicación **Titulador**.
 
 ---
 
@@ -20,14 +20,18 @@ La aplicación **Titulador** está diseñada con una arquitectura modular desaco
 El proyecto cuenta con dos entornos de Docker aislados para distintos objetivos:
 
 ### 2.1. Entorno de Ejecución Local / Servidor (Linux CLI & GUI)
-- **`Dockerfile`**: Imagen ligera basada en `python:3.11-slim` que incluye LibreOffice e impresoras CUPS.
+- **`Dockerfile`**: Imagen ligera basada en `python:3.11-slim` que incluye LibreOffice, paquetes de Tkinter (`python3-tk`, `tk`, `tcl`) y fuentes de sistema.
+  > **Nota de Configuración**: Se utiliza `CMD ["python", "main.py", "batch"]` en lugar de `ENTRYPOINT` para permitir a Docker y Docker Compose sobrescribir libremente el comando al invocar `python app_gui.py` sin conflictos con el parser CLI de `main.py`.
 - **`docker-compose.yml`**:
-  - Servicio `titulador`: Ejecuta procesos batch en modo CLI.
-  - Servicio `titulador-gui`: Permite lanzar la interfaz de escritorio GUI mediante mapeo de socket X11 (`/tmp/.X11-unix`).
+  - Servicio `titulador`: Ejecuta procesos batch en modo CLI (`python main.py batch`).
+  - Servicio `titulador-gui`: Permite lanzar la interfaz de escritorio GUI (`python app_gui.py`) mediante mapeo de socket X11 (`/tmp/.X11-unix`) y la variable `DISPLAY`.
 
 #### Ejecutar GUI en Docker:
 ```bash
 ./docker-run.sh --gui
+# O directamente vía docker compose:
+xhost +local:docker 2>/dev/null || true
+docker compose run --rm titulador-gui
 ```
 
 #### Ejecutar CLI en Docker:
@@ -93,6 +97,6 @@ ssh usuario@servidor "cd /ruta/a/titulador && docker compose run --rm titulador 
 | `windows_build.sh` | Orchestrador de build para Windows `.exe`. |
 | `docker-run.sh` | Orchestrador de ejecución Docker (CLI/GUI). |
 | `Dockerfile.windows` | Definición de compilación cruzada Wine + Python 3.11. |
-| `Dockerfile` | Definición del contenedor de ejecución Linux. |
+| `Dockerfile` | Definición del contenedor de ejecución Linux (CLI/GUI). |
 | `docker-compose.windows.yml` | Composición de servicios de compilación. |
-| `docker-compose.yml` | Composición de servicios de ejecución. |
+| `docker-compose.yml` | Composición de servicios de ejecución (titulador / titulador-gui). |

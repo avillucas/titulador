@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# Install LibreOffice, CUPS printer client, and fonts for A5 PDF conversion
+# Install LibreOffice, CUPS printer client, fonts, and Tkinter for GUI support
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice-impress \
     libreoffice-java-common \
@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-dejavu \
     fonts-liberation \
     fonts-freefont-ttf \
+    python3-tk \
+    tk \
+    tcl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -20,5 +23,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Default command
-ENTRYPOINT ["python", "main.py"]
-CMD ["batch"]
+CMD ["python", "main.py", "batch"]

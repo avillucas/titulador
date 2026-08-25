@@ -54,6 +54,7 @@ class ExcelParser:
         fecha_egreso = parse_fecha_egreso(header_text)
         
         egresados: List[Dict[str, Any]] = []
+        omitidos: List[Dict[str, Any]] = []
         
         # Scan rows starting from row 11 up to summary rows
         for r in range(11, sheet.max_row + 1):
@@ -70,28 +71,39 @@ class ExcelParser:
                 continue
                 
             num_egresado = ""
-            if num_egresado_raw and str(num_egresado_raw).strip() != "--------------------":
-                if isinstance(num_egresado_raw, float):
-                    num_egresado = str(int(num_egresado_raw))
-                else:
-                    num_egresado = str(num_egresado_raw).strip()
+            if num_egresado_raw is not None:
+                val_str = str(num_egresado_raw).strip()
+                if val_str and not re.match(r'^-+$', val_str):
+                    if isinstance(num_egresado_raw, float):
+                        num_egresado = str(int(num_egresado_raw))
+                    else:
+                        num_egresado = val_str
             
             doc_formatted = format_dni(doc_raw)
             
-            # State
-            estado = "Aprobado" if num_egresado else "Ausente/Desaprobado"
-            
-            egresados.append({
-                "num_egresado": num_egresado,
-                "apellido_nombre": nombre_str,
-                "documento": doc_formatted,
-                "estado": estado
-            })
+            if num_egresado:
+                egresados.append({
+                    "num_egresado": num_egresado,
+                    "apellido_nombre": nombre_str,
+                    "documento": doc_formatted,
+                    "estado": "Aprobado",
+                    "fila": r
+                })
+            else:
+                omitidos.append({
+                    "num_egresado": "",
+                    "apellido_nombre": nombre_str,
+                    "documento": doc_formatted,
+                    "estado": "Ausente/Desaprobado",
+                    "motivo": "Sin número de egresado (no aprobó)",
+                    "fila": r
+                })
             
         return {
             "numero_cpf": cpf_num,
             "distrito_cpf": distrito,
             "especialidad": especialidad,
             "fecha_egreso": fecha_egreso,
-            "egresados": egresados
+            "egresados": egresados,
+            "omitidos": omitidos
         }

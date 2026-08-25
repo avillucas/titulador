@@ -40,11 +40,20 @@ def batch_generate(
     data = parser.load_data()
     
     egresados = data["egresados"]
-    aprobados = [e for e in egresados if e["estado"] == "Aprobado"]
+    omitidos = data.get("omitidos", [])
 
     console.print(f"Curso/Especialidad: [cyan]{data['especialidad']}[/cyan]")
     console.print(f"Fecha Egreso: [cyan]{data['fecha_egreso']}[/cyan]")
-    console.print(f"Total egresados aprobados: [bold yellow]{len(aprobados)}[/bold yellow]\n")
+    console.print(f"Total egresados aprobados: [bold yellow]{len(egresados)}[/bold yellow]")
+
+    if omitidos:
+        console.print(f"Total filas evitadas (no aprobó): [bold red]{len(omitidos)}[/bold red]\n")
+        console.print("[bold yellow]⚠️  Filas evitadas por no contar con Número de Egresado (no aprobó):[/bold yellow]")
+        for o in omitidos:
+            console.print(f"  • [yellow]{o['apellido_nombre']}[/yellow] (DNI: {o['documento']}) - Fila {o['fila']}")
+        console.print("")
+    else:
+        console.print("")
 
     generator = PPTXGenerator(template_path)
     
@@ -68,7 +77,7 @@ def batch_generate(
 
     generated_files = []
 
-    for eg in aprobados:
+    for eg in egresados:
         filename_base = f"{eg['num_egresado']}_{eg['apellido_nombre'].replace(' ', '_')}"
         out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
         
@@ -180,8 +189,15 @@ def select_egresado(
     parser = ExcelParser(excel_path)
     data = parser.load_data()
     egresados = data["egresados"]
+    omitidos = data.get("omitidos", [])
 
-    table = Table(title=f"Egresados en {os.path.basename(excel_path)}")
+    if omitidos:
+        console.print("[bold yellow]⚠️  Filas evitadas por no contar con Número de Egresado (no aprobó):[/bold yellow]")
+        for o in omitidos:
+            console.print(f"  • [yellow]{o['apellido_nombre']}[/yellow] (DNI: {o['documento']}) - Fila {o['fila']}")
+        console.print("")
+
+    table = Table(title=f"Egresados Aprobados en {os.path.basename(excel_path)}")
     table.add_column("Índice", style="cyan")
     table.add_column("N° Egresado", style="yellow")
     table.add_column("Nombre y Apellido", style="bold white")

@@ -186,25 +186,31 @@ class TituladorGUI(ctk.CTk if ctk else object):
         try:
             parser = ExcelParser(path)
             self.excel_data = parser.load_data()
-            aprobados = [e for e in self.excel_data["egresados"] if e["estado"] == "Aprobado"]
+            egresados = self.excel_data["egresados"]
+            omitidos = self.excel_data.get("omitidos", [])
             
             # Update Batch UI Labels
             self.batch_info_label.configure(
                 text=f"Especialidad: {self.excel_data['especialidad']}\n"
                      f"Fecha Egreso: {self.excel_data['fecha_egreso']}\n"
                      f"CPF N°: {self.excel_data['numero_cpf']} - {self.excel_data['distrito_cpf']}\n"
-                     f"Total Aprobados: {len(aprobados)}"
+                     f"Total Aprobados: {len(egresados)}\n"
+                     f"Total Evitados (no aprobó): {len(omitidos)}"
             )
 
             # Update Select Option Menu
-            options = [f"{e['num_egresado']} - {e['apellido_nombre']} ({e['documento']})" for e in aprobados]
+            options = [f"{e['num_egresado']} - {e['apellido_nombre']} ({e['documento']})" for e in egresados]
             if options:
                 self.select_dropdown.configure(values=options)
                 self.select_dropdown.set(options[0])
             else:
                 self.select_dropdown.configure(values=["Sin egresados aprobados"])
 
-            self.log(f"Excel cargado exitosamente: {len(aprobados)} egresados aprobados encontrados.")
+            self.log(f"Excel cargado exitosamente: {len(egresados)} egresados aprobados encontrados.")
+            if omitidos:
+                self.log(f"⚠️ {len(omitidos)} fila(s) evitada(s) por no contar con Número de Egresado (no aprobó):")
+                for o in omitidos:
+                    self.log(f"   • [Fila {o['fila']}] {o['apellido_nombre']} (DNI: {o['documento']}) - SIN N° DE EGRESADO")
         except Exception as e:
             self.log(f"Error al leer Excel: {e}")
 
@@ -248,9 +254,15 @@ class TituladorGUI(ctk.CTk if ctk else object):
         try:
             parser = ExcelParser(excel_p)
             data = parser.load_data()
-            aprobados = [e for e in data["egresados"] if e["estado"] == "Aprobado"]
+            egresados = data["egresados"]
+            omitidos = data.get("omitidos", [])
 
-            if not aprobados:
+            if omitidos:
+                self.log(f"⚠️ Omite {len(omitidos)} fila(s) por no contar con Número de Egresado (no aprobó):")
+                for o in omitidos:
+                    self.log(f"   • [Fila {o['fila']}] {o['apellido_nombre']} (DNI: {o['documento']})")
+
+            if not egresados:
                 messagebox.showinfo("Información", "No hay egresados aprobados en la planilla.")
                 return
 
@@ -266,8 +278,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
                     "Mecanizado, ensamble, unión y calidad de terminación en productos de madera y derivados. (MM0015.2)"
                 ]
 
-            total = len(aprobados)
-            for idx, eg in enumerate(aprobados, 1):
+            total = len(egresados)
+            for idx, eg in enumerate(egresados, 1):
                 filename_base = f"{eg['num_egresado']}_{eg['apellido_nombre'].replace(' ', '_')}"
                 out_pptx = os.path.join(out_d, f"{filename_base}.pptx")
 
