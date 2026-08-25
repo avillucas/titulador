@@ -38,9 +38,15 @@ Solo requiere tener instalado **Docker** y **Docker Compose**.
 ## 🚀 Guía de Uso
 
 ### 🖥️ Aplicación de Escritorio (GUI)
-Para iniciar la interfaz gráfica de usuario:
+
+#### Ejecución Local:
 ```bash
 python app_gui.py
+```
+
+#### Ejecución con Docker (Linux con X11):
+```bash
+./docker-run.sh --gui
 ```
 *(Permite seleccionar archivos Excel/PPTX mediante selectores de archivos, procesar lotes, cargar formularios manuales y abrir los PPTX generados directamente con un clic).*
 
@@ -52,6 +58,8 @@ python app_gui.py
 Procesa el archivo Excel y genera los certificados de **todos los egresados aprobados**:
 ```bash
 python main.py batch
+# O mediante Docker:
+./docker-run.sh batch
 ```
 
 #### 2. Modo Selección (`select`)
@@ -70,7 +78,7 @@ python main.py form
 
 ## 📦 Compilación del Ejecutable de Windows (`.exe`) con Docker
 
-Para compilar un paquete ejecutable ejecutable standalone `.exe` para Windows desde cualquier sistema operativo (Linux/macOS) mediante Docker:
+Para compilar un paquete ejecutable standalone `.exe` para Windows desde cualquier sistema operativo (Linux/macOS) mediante Docker:
 
 ```bash
 # Otorgar permisos de ejecución (solo la primera vez)
@@ -84,6 +92,29 @@ Al finalizar el proceso, el archivo ejecutable resultante estará disponible en 
 ```text
 dist/Titulador.exe
 ```
+
+---
+
+## 🔑 Comandos SSH para Compilación y Ejecución Remota
+
+Para compilar o ejecutar el proyecto en un servidor remoto mediante SSH:
+
+1. **Compilar `.exe` de Windows remotamente vía SSH:**
+   ```bash
+   ssh usuario@servidor "cd /ruta/a/titulador && ./windows_build.sh"
+   ```
+
+2. **Descargar el ejecutable `.exe` compilado vía SCP:**
+   ```bash
+   scp usuario@servidor:/ruta/a/titulador/dist/Titulador.exe ./dist/Titulador.exe
+   ```
+
+3. **Lanzar la GUI remota en tu pantalla local (X11 Forwarding):**
+   ```bash
+   ssh -X usuario@servidor "cd /ruta/a/titulador && ./docker-run.sh --gui"
+   ```
+
+*(Para más detalles técnicos de arquitectura y despliegue, consultar [`agent.md`](agent.md)).*
 
 ---
 
@@ -103,11 +134,12 @@ titulador/
 │   ├── models.py              # Esquema de datos Pydantic (TituloData)
 │   └── pptx_generator.py      # Manipulación de formas y textos en PowerPoint
 ├── app_gui.py                 # Punto de entrada de la aplicación de escritorio GUI
+├── agent.md                   # Documentación técnica de arquitectura y SSH
 ├── Dockerfile                 # Configuración de la imagen Docker estándar
-├── Dockerfile.windows         # Configuración de compilación cruzada Wine/PyInstaller
-├── docker-compose.yml         # Orquestación Docker CLI
+├── Dockerfile.windows         # Configuración de compilación cruzada Wine/Python 3.11/PyInstaller
+├── docker-compose.yml         # Orquestación Docker CLI y GUI
 ├── docker-compose.windows.yml # Orquestación Docker para build de Windows
-├── docker-run.sh              # Bash script ejecutor para Docker CLI
+├── docker-run.sh              # Bash script ejecutor para Docker (CLI / GUI)
 ├── windows_build.sh           # Bash script ejecutor para compilar dist/Titulador.exe
 ├── main.py                    # Punto de entrada de la aplicación CLI
 └── requirements.txt           # Dependencias de Python
