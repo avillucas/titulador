@@ -100,3 +100,20 @@ ssh usuario@servidor "cd /ruta/a/titulador && docker compose run --rm titulador 
 | `Dockerfile` | Definición del contenedor de ejecución Linux (CLI/GUI). |
 | `docker-compose.windows.yml` | Composición de servicios de compilación. |
 | `docker-compose.yml` | Composición de servicios de ejecución (titulador / titulador-gui). |
+
+---
+
+## 6. Normativa e Instructivo Técnico (Circular 04-2020)
+
+El proceso de confección de certificados cumple estrictamente con el **ANEXO INSTRUCTIVO TÉCNICO** de la **Circular N° 04-2020** de la Dirección de Formación Profesional (DGCyE):
+
+1. **Nombre y Apellido (Frente)**: Debe completarse en **MAYÚSCULAS** (fuente Arial 14 negrita).
+2. **D.U. / Documento (Frente)**: Transcrito separando las unidades por puntos (ej. `35.140.353`), fuente Arial 12.
+3. **Nombre del Trayecto / Curso (Frente)**: Extraído de la columna *"Nombre del Trayecto"* del Catálogo JSON, respetando mayúsculas, minúsculas, puntos y abreviaturas oficiales (fuente Arial 12).
+4. **Cantidad de Horas (Frente)**:
+   - Se consigna en **Horas Reloj** por defecto.
+   - **Excepción Reglamentaria (Sección 4.c Anexo)**: Para las certificaciones de *Gasista de 3ra Categoría*, *Gasista de 2da Categoría*, *Montador Electricista* y *Electricista Instalador*, se consigna obligatoriamente en **Horas Cátedra** en cumplimiento de las Res. 3993/11 y 2265/01.
+5. **Certificación DE (Frente)**: Extraído de la columna *"Certificación"* del Catálogo (fuente Arial 12).
+6. **Módulos (Anverso)**: Formato `Denominación del Módulo. (CÓDIGO)` (fuente Arial 10, un módulo por renglón). Renglones excedentes testados con línea de puntos (`---`).
+7. **Fecha de Egreso y N° de Egresado (Anverso)**: Fecha en formato texto completo (ej. `14 de Julio de 2025`) y filtrado estricto para procesar únicamente alumnos aprobados con número de egresado asignado.
+

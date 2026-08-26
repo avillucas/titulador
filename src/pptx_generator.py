@@ -19,16 +19,16 @@ SHAPE_MAP_SLIDE1 = {
 }
 
 SHAPE_MAP_SLIDE2 = {
-    99: 0,   # Modulo 1
-    100: 1,  # Modulo 2
-    101: 2,  # Modulo 3
-    102: 3,  # Modulo 4
-    103: 4,  # Modulo 5
-    104: 5,  # Modulo 6
-    105: 6,  # Modulo 7
-    106: 7,  # Modulo 8
-    107: 8,  # Modulo 9
-    108: 9,  # Modulo 10
+    99: 0,   # Slot 1  (Columna izquierda, fila 1)
+    101: 1,  # Slot 2  (Columna izquierda, fila 2)
+    103: 2,  # Slot 3  (Columna izquierda, fila 3)
+    105: 3,  # Slot 4  (Columna izquierda, fila 4)
+    107: 4,  # Slot 5  (Columna izquierda, fila 5)
+    100: 5,  # Slot 6  (Columna derecha, fila 1)
+    102: 6,  # Slot 7  (Columna derecha, fila 2)
+    104: 7,  # Slot 8  (Columna derecha, fila 3)
+    106: 8,  # Slot 9  (Columna derecha, fila 4)
+    108: 9,  # Slot 10 (Columna derecha, fila 5)
     109: "fecha_egreso",
     110: "numero_egresado",
     111: "numero_cpf",
@@ -73,6 +73,8 @@ class PPTXGenerator:
                 if shape.shape_id in SHAPE_MAP_SLIDE1:
                     field_name = SHAPE_MAP_SLIDE1[shape.shape_id]
                     val = getattr(data, field_name, "")
+                    if field_name == "apellido_nombre" and val:
+                        val = str(val).upper()
                     update_shape_text(shape, str(val))
                     
         # Process Slide 2

@@ -39,7 +39,7 @@ def split_title(title: str, max_len: int = 40) -> Tuple[str, str]:
     return line1, line2
 
 def format_trayecto_data(trayecto: Dict[str, Any]) -> Dict[str, Any]:
-    """Formats a raw trayecto dictionary from the catalog into structured data for TituloData."""
+    """Formats a raw trayecto dictionary from the catalog into structured data for TituloData per Circular 4-2020."""
     if not trayecto:
         return {}
         
@@ -48,12 +48,26 @@ def format_trayecto_data(trayecto: Dict[str, Any]) -> Dict[str, Any]:
     nombre_trayecto = str(trayecto.get("Nombre del Trayecto", "")).strip()
     certificacion = str(trayecto.get("Certificación", "")).strip()
     
-    # Preferred title text is Nombre del Trayecto, fallback to Certificación
-    title_text = nombre_trayecto or certificacion
-    t_line1, t_line2 = split_title(title_text)
+    # Line 1 (Nombre del Trayecto) and Line 2 (Certificación)
+    if certificacion and certificacion != nombre_trayecto:
+        t_line1 = nombre_trayecto
+        t_line2 = certificacion
+    else:
+        title_text = nombre_trayecto or certificacion
+        t_line1, t_line2 = split_title(title_text)
     
-    # Hours: Hs. Reloj Trayecto preferred, fallback to Hs. Cat. Trayecto
-    horas = str(trayecto.get("Hs. Reloj Trayecto", "") or trayecto.get("Hs. Cat. Trayecto", "")).strip()
+    # Hours calculation: Normative exception check (Circular 4-2020 Anexo, Sección 4.c)
+    # Gasista 3ra, Gasista 2da, Montador Electricista, Electricista Instalador MUST use Hs. Cátedra.
+    full_title_check = f"{nombre_trayecto} {certificacion}".lower()
+    is_horas_catedra_exception = any(
+        term in full_title_check
+        for term in ["gasista de 3", "gasista 3", "gasista de 2", "gasista 2", "montador electricista", "electricista instalador"]
+    )
+    
+    if is_horas_catedra_exception:
+        horas = str(trayecto.get("Hs. Cat. Trayecto", "") or trayecto.get("Hs. Reloj Trayecto", "")).strip()
+    else:
+        horas = str(trayecto.get("Hs. Reloj Trayecto", "") or trayecto.get("Hs. Cat. Trayecto", "")).strip()
     
     # Resolution formatting
     res_raw = str(trayecto.get("Res Jurisdiccional", "")).strip()
@@ -67,7 +81,7 @@ def format_trayecto_data(trayecto: Dict[str, Any]) -> Dict[str, Any]:
     else:
         resolucion = ""
         
-    # Format Accreditation Modules
+    # Format Accreditation Modules (Section 1 Anverso: "Módulo (CÓDIGO)")
     modulos: List[str] = []
     raw_mods = trayecto.get("Módulos Acreditables", [])
     if isinstance(raw_mods, list):
