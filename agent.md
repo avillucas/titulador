@@ -117,3 +117,27 @@ El proceso de confección de certificados cumple estrictamente con el **ANEXO IN
 6. **Módulos (Anverso)**: Formato `Denominación del Módulo. (CÓDIGO)` (fuente Arial 10, un módulo por renglón). Renglones excedentes testados con línea de puntos (`---`).
 7. **Fecha de Egreso y N° de Egresado (Anverso)**: Fecha en formato texto completo (ej. `14 de Julio de 2025`) y filtrado estricto para procesar únicamente alumnos aprobados con número de egresado asignado.
 
+---
+
+## 7. Diagnóstico y Registro de Errores (Logs) en Windows
+
+Cuando el ejecutable `Titulador.exe` se empaqueta en modo GUI con PyInstaller (`--windowed` / `console=False`), la consola del sistema operativo (STDERR/STDOUT) queda deshabilitada. Si ocurre una excepción o fallo de inicio (por falta de assets, DLLs o dependencias), el programa se cierra inmediatamente sin mostrar ninguna ventana de error.
+
+### 7.1. Captura de Errores Integrada (Log & Popup)
+El archivo `app_gui.py` incluye un manejador global `sys.excepthook` que:
+1. Genera un archivo **`titulador_error.log`** en la misma carpeta donde reside `Titulador.exe` con la traza completa de la excepción (`traceback`).
+2. Muestra una ventana de diálogo de error de Windows (`tkinter.messagebox`) indicando el fallo visualmente antes de cerrar.
+
+### 7.2. Compilación en Modo Consola para Depuración (Debug Mode)
+Si se desea ver la salida de terminal en vivo al ejecutar desde `cmd.exe` o `PowerShell` en Windows:
+1. Reemplazar `--windowed` por `--console` en `Dockerfile.windows` (o quitar `console=False` en `Titulador.spec`).
+2. Ejecutar `./windows_build.sh`.
+3. Al ejecutar `.\Titulador.exe` desde la terminal de Windows, se mantendrá una consola visible mostrando logs en tiempo real y errores de importación/runtime.
+
+### 7.3. Visor de Eventos de Windows (Event Viewer)
+Si la aplicación ni siquiera inicia la máquina virtual de Python (crash nativo o falta de DLLs como `vcruntime140.dll` / `tcl86t.dll`):
+1. Presionar `Win + R`, escribir `eventvwr.msc` y presionar Enter.
+2. Navegar a **Registros de Windows** -> **Aplicación**.
+3. Buscar eventos con nivel **Error** con origen `Application Error` asociados a `Titulador.exe` para identificar la DLL o librería faltante.
+
+

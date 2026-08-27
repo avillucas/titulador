@@ -46,4 +46,4 @@ WORKDIR /src
 COPY . .
 
 # Default command: Compile app_gui.py to dist/Titulador.exe with full CustomTkinter & Tcl/Tk support
-CMD ["wine", "cmd", "/c", "set PATH=C:\\Python311;C:\\Python311\\Scripts;C:\\windows\\system32;C:\\windows && python -m PyInstaller --noconfirm --onefile --windowed --name Titulador --exclude-module darkdetect._mac_detect --exclude-module darkdetect._gsettings --add-data ejemplos;ejemplos --add-data utils;utils app_gui.py"]
+CMD ["wine", "cmd", "/c", "set PATH=C:\\Python311;C:\\Python311\\Scripts;C:\\windows\\system32;C:\\windows && python -m PyInstaller --noconfirm --onefile --windowed --collect-all customtkinter --name Titulador --exclude-module darkdetect._mac_detect --exclude-module darkdetect._gsettings --add-data ejemplos;ejemplos --add-data utils;utils app_gui.py"]

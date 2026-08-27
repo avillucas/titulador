@@ -1,5 +1,6 @@
 import os
 import pptx
+from pptx.util import Pt
 from typing import Dict, Any, List
 from src.models import TituloData
 
@@ -36,14 +37,40 @@ SHAPE_MAP_SLIDE2 = {
 }
 
 def update_shape_text(shape, new_text: str):
-    """Updates the shape's text frame preserving run styles where possible."""
+    """Updates the shape's text frame preserving run styles where possible, scaling font size for long titles to avoid overflow."""
     if not shape.has_text_frame:
         return
     tf = shape.text_frame
     
-    # If text frame has paragraphs and runs, update text on the first run/paragraph
+    # Disable word wrap for title shapes (88, 89) to prevent vertical wrapping into resolution line (90)
+    if shape.shape_id in (88, 89):
+        tf.word_wrap = False
+
     if tf.paragraphs:
         p = tf.paragraphs[0]
+        
+        # Apply font scaling for long titles
+        if shape.shape_id == 89:  # titulo_linea2 (Width ~241 pt)
+            if len(new_text) > 35:
+                p.font.size = Pt(9)
+            elif len(new_text) > 26:
+                p.font.size = Pt(10)
+            else:
+                p.font.size = Pt(12)
+        elif shape.shape_id == 88:  # titulo_linea1 (Width ~320 pt)
+            if len(new_text) > 42:
+                p.font.size = Pt(9.5)
+            elif len(new_text) > 34:
+                p.font.size = Pt(10.5)
+            else:
+                p.font.size = Pt(12)
+        elif shape.shape_id == 85:  # apellido_nombre (Arial 14 Bold)
+            p.font.bold = True
+            if len(new_text) > 32:
+                p.font.size = Pt(12)
+            else:
+                p.font.size = Pt(14)
+
         if p.runs:
             p.runs[0].text = new_text
             # Clear remaining runs in paragraph
@@ -56,6 +83,7 @@ def update_shape_text(shape, new_text: str):
             p.text = new_text
     else:
         tf.text = new_text
+
 
 class PPTXGenerator:
     def __init__(self, template_path: str):

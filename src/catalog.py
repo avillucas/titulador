@@ -46,15 +46,16 @@ def format_trayecto_data(trayecto: Dict[str, Any]) -> Dict[str, Any]:
     codigo = str(trayecto.get("Código", "")).strip()
     sector = str(trayecto.get("Sector", "")).strip()
     nombre_trayecto = str(trayecto.get("Nombre del Trayecto", "")).strip()
-    certificacion = str(trayecto.get("Certificación", "")).strip()
+    certificacion_raw = str(trayecto.get("Certificación", "")).strip()
     
-    # Line 1 (Nombre del Trayecto) and Line 2 (Certificación)
-    if certificacion and certificacion != nombre_trayecto:
-        t_line1 = nombre_trayecto
-        t_line2 = certificacion
-    else:
-        title_text = nombre_trayecto or certificacion
-        t_line1, t_line2 = split_title(title_text)
+    # Clean certification text from trailing "según Resolución..." suffixes
+    certificacion = re.sub(r"\s+según\s+Resolución.*$", "", certificacion_raw, flags=re.IGNORECASE).strip()
+    certificacion = re.sub(r"\s+según\s+Res.*$", "", certificacion, flags=re.IGNORECASE).strip()
+    
+    # Line 1 (Nombre del Trayecto - Shape 88) and Line 2 (Certificación - Shape 89)
+    t_line1 = nombre_trayecto
+    t_line2 = certificacion if certificacion else nombre_trayecto
+
     
     # Hours calculation: Normative exception check (Circular 4-2020 Anexo, Sección 4.c)
     # Gasista 3ra, Gasista 2da, Montador Electricista, Electricista Instalador MUST use Hs. Cátedra.

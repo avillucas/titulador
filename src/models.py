@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 class Egresado(BaseModel):
     num_egresado: str = ""
@@ -10,6 +10,12 @@ class Egresado(BaseModel):
 class TituloData(BaseModel):
     # Slide 1 fields
     apellido_nombre: str = Field(default="", description="Apellido y nombre del egresado")
+    
+    @field_validator("apellido_nombre", mode="after")
+    @classmethod
+    def force_uppercase(cls, v: str) -> str:
+        return v.upper() if v else ""
+
     documento: str = Field(default="", description="DNI / Documento formateado (ej. 35.140.353)")
     horas_cursada: str = Field(default="", description="Cantidad de horas de cursada (ej. 230)")
     titulo_linea1: str = Field(default="", description="Nombre del título (Línea 1)")

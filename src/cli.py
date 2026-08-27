@@ -10,8 +10,11 @@ from rich.panel import Panel
 from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
-from src.exporter import convert_pptx_to_pdf, print_pdf_a5
+from src.exporter import convert_pptx_to_pdf, generate_editable_pdf, print_pdf_a5
+
+
 from src.catalog import TrayectoCatalog, format_trayecto_data
+
 
 app = typer.Typer(name="titulador", help="Sistema de generación de certificados y títulos en A5")
 console = Console()
@@ -136,7 +139,8 @@ def batch_generate(
         table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], os.path.basename(out_pptx))
 
     console.print(table)
-    console.print(f"\n[bold green]✔ ¡Se generaron {len(generated_files)} certificados exitosamente en {output_dir}![/bold green]")
+    console.print(f"\n[bold green]✔ ¡Se generaron {len(generated_files)} certificados PPTX exitosamente en {output_dir}![/bold green]")
+
 
 @app.command("form")
 def interactive_form(
@@ -222,7 +226,7 @@ def interactive_form(
     output_pptx = os.path.join(output_dir, f"{numero_egresado}_{safe_name}.pptx")
     generator.generate(data, output_pptx)
 
-    console.print(f"\n[bold green]✔ Certificado generado en: {output_pptx}[/bold green]")
+    console.print(f"\n[bold green]✔ Certificado PPTX generado en: {output_pptx}[/bold green]")
     
     pdf_path = convert_pptx_to_pdf(output_pptx, output_dir)
     if pdf_path:
@@ -320,6 +324,7 @@ def select_egresado(
     pdf_path = convert_pptx_to_pdf(output_pptx, output_dir)
     if pdf_path:
         console.print(f"[bold cyan]✔ PDF generado en: {pdf_path}[/bold cyan]")
+
 
 if __name__ == "__main__":
     app()

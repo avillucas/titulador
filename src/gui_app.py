@@ -13,6 +13,7 @@ except ImportError:
 from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
+from src.exporter import convert_pptx_to_pdf
 from src.catalog import TrayectoCatalog, format_trayecto_data
 
 DEFAULT_TEMPLATE = "ejemplos/Modelo base.pptx"
@@ -44,8 +45,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         # Window settings
         self.title("Titulador 🎓 - Generador de Certificados y Títulos A5")
-        self.geometry("950x750")
-        self.minsize(850, 650)
+        self.geometry("980x750")
+        self.minsize(880, 650)
 
         ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("blue")
@@ -61,6 +62,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.excel_data: Optional[Dict[str, Any]] = None
         self.current_trayecto_data: Optional[Dict[str, Any]] = None
         self.last_generated_pptx: Optional[str] = None
+        self.last_generated_pdf: Optional[str] = None
+
 
         self._build_ui()
         self._load_excel_data()
@@ -160,13 +163,22 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         btn_open_pptx = ctk.CTkButton(
             bottom_frame, 
-            text="📄 Abrir Último PPTX Generado", 
+            text="📄 Abrir Último PPTX", 
             command=self._open_last_pptx,
             fg_color="#2b845b"
         )
-        btn_open_pptx.grid(row=1, column=1, padx=10, pady=10, sticky="w")
+        btn_open_pptx.grid(row=1, column=1, padx=5, pady=10, sticky="w")
+
+        btn_open_pdf = ctk.CTkButton(
+            bottom_frame, 
+            text="✍️ Abrir Último PDF Editable", 
+            command=self._open_last_pdf,
+            fg_color="#844b2b"
+        )
+        btn_open_pdf.grid(row=1, column=2, padx=5, pady=10, sticky="w")
 
         self.log("Aplicación iniciada. Catálogo JSON cargado con 322 trayectos.")
+
 
     def log(self, message: str):
         """Appends a log message to the log textbox."""
@@ -363,11 +375,19 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
                 generator.generate(titulo_data, out_pptx)
                 self.last_generated_pptx = out_pptx
+
+                out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
+                if out_pdf:
+                    self.last_generated_pdf = out_pdf
+                    self.log(f"[{idx}/{total}] PPTX + PDF generado: {os.path.basename(out_pdf)}")
+                else:
+                    self.log(f"[{idx}/{total}] PPTX generado: {os.path.basename(out_pptx)}")
+
                 self.progress_bar.set(idx / total)
-                self.log(f"[{idx}/{total}] PPTX generado: {os.path.basename(out_pptx)}")
                 self.update_idletasks()
 
-            messagebox.showinfo("¡Éxito!", f"Se generaron {total} archivos PPTX en:\n{out_d}")
+            messagebox.showinfo("¡Éxito!", f"Se generaron {total} certificados PPTX en:\n{out_d}")
+
         except Exception as e:
             messagebox.showerror("Error", f"Fallo durante la generación: {e}")
             self.log(f"ERROR Batch: {e}")
@@ -448,10 +468,16 @@ class TituladorGUI(ctk.CTk if ctk else object):
         safe_name = target_eg['apellido_nombre'].replace(" ", "_")
         out_pptx = os.path.join(out_d, f"{target_eg['num_egresado']}_{safe_name}.pptx")
         generator.generate(titulo_data, out_pptx)
-
         self.last_generated_pptx = out_pptx
-        self.log(f"✔ PPTX individual generado: {out_pptx}")
-        messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
+
+        out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
+        if out_pdf:
+            self.last_generated_pdf = out_pdf
+            self.log(f"✔ PPTX y PDF generado: {out_pdf}")
+            messagebox.showinfo("¡Éxito!", f"Certificado PPTX y PDF generados correctamente:\n{out_pptx}")
+        else:
+            self.log(f"✔ PPTX generado: {out_pptx}")
+            messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
 
     # --- TAB 3: FORMULARIO MANUAL ---
     def _setup_form_tab(self):
@@ -511,7 +537,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         btn_form = ctk.CTkButton(
             scroll_frame, 
-            text="✨ Generar PPTX con Datos del Formulario", 
+            text="✨ Generar Certificado (PPTX y PDF Editable)", 
             font=ctk.CTkFont(size=13, weight="bold"),
             height=35,
             command=self._run_form_generation
@@ -579,10 +605,16 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         generator = PPTXGenerator(tmpl_p)
         generator.generate(titulo_data, out_pptx)
-
         self.last_generated_pptx = out_pptx
-        self.log(f"✔ PPTX generado desde formulario: {out_pptx}")
-        messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
+
+        out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
+        if out_pdf:
+            self.last_generated_pdf = out_pdf
+            self.log(f"✔ PPTX y PDF generado desde formulario: {out_pptx}")
+            messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
+        else:
+            self.log(f"✔ PPTX generado desde formulario: {out_pptx}")
+            messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
 
     # --- ACTIONS ---
     def _open_output_folder(self):
@@ -595,6 +627,13 @@ class TituladorGUI(ctk.CTk if ctk else object):
             open_in_system(self.last_generated_pptx)
         else:
             messagebox.showinfo("Información", "Aún no se ha generado ningún archivo PPTX en esta sesión.")
+
+    def _open_last_pdf(self):
+        if self.last_generated_pdf and os.path.exists(self.last_generated_pdf):
+            open_in_system(self.last_generated_pdf)
+        else:
+            messagebox.showinfo("Información", "Aún no se ha generado ningún archivo PDF Editable en esta sesión.")
+
 
 def main():
     if ctk is None:
