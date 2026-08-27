@@ -4,3 +4,4 @@ build
 dist
 ejemplos/
 src/__pycache__
+*.png

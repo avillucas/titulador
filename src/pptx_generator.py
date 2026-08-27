@@ -42,34 +42,44 @@ def update_shape_text(shape, new_text: str):
         return
     tf = shape.text_frame
     
-    # Disable word wrap for title shapes (88, 89) to prevent vertical wrapping into resolution line (90)
-    if shape.shape_id in (88, 89):
+    # Disable word wrap for title shapes (88, 89) and module shapes (99..108) to prevent vertical wrapping
+    if shape.shape_id in (88, 89) or shape.shape_id in range(99, 109):
         tf.word_wrap = False
 
     if tf.paragraphs:
         p = tf.paragraphs[0]
         
-        # Apply font scaling for long titles
+        # Apply font scaling for long titles and modules
         if shape.shape_id == 89:  # titulo_linea2 (Width ~241 pt)
-            if len(new_text) > 35:
-                p.font.size = Pt(9)
+            if len(new_text) > 45:
+                p.font.size = Pt(7.0)
+            elif len(new_text) > 35:
+                p.font.size = Pt(7.5)
             elif len(new_text) > 26:
-                p.font.size = Pt(10)
+                p.font.size = Pt(8.5)
             else:
-                p.font.size = Pt(12)
+                p.font.size = Pt(11.0)
         elif shape.shape_id == 88:  # titulo_linea1 (Width ~320 pt)
-            if len(new_text) > 42:
-                p.font.size = Pt(9.5)
-            elif len(new_text) > 34:
-                p.font.size = Pt(10.5)
+            if len(new_text) > 45:
+                p.font.size = Pt(8.0)
+            elif len(new_text) > 35:
+                p.font.size = Pt(9.0)
             else:
-                p.font.size = Pt(12)
+                p.font.size = Pt(11.5)
+
+        elif shape.shape_id in range(99, 109):  # Module slots
+            if len(new_text) > 50:
+                p.font.size = Pt(7.5)
+            elif len(new_text) > 38:
+                p.font.size = Pt(8.5)
+            else:
+                p.font.size = Pt(9.5)
         elif shape.shape_id == 85:  # apellido_nombre (Arial 14 Bold)
             p.font.bold = True
             if len(new_text) > 32:
-                p.font.size = Pt(12)
+                p.font.size = Pt(12.0)
             else:
-                p.font.size = Pt(14)
+                p.font.size = Pt(14.0)
 
         if p.runs:
             p.runs[0].text = new_text
@@ -83,6 +93,7 @@ def update_shape_text(shape, new_text: str):
             p.text = new_text
     else:
         tf.text = new_text
+
 
 
 class PPTXGenerator:

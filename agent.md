@@ -105,17 +105,97 @@ ssh usuario@servidor "cd /ruta/a/titulador && docker compose run --rm titulador 
 
 ## 6. Normativa e Instructivo Técnico (Circular 04-2020)
 
-El proceso de confección de certificados cumple estrictamente con el **ANEXO INSTRUCTIVO TÉCNICO** de la **Circular N° 04-2020** de la Dirección de Formación Profesional (DGCyE):
+El proceso de confección de certificados cumple estrictamente con el **ANEXO INSTRUCTIVO TÉCNICO** de la **Circular N° 04-2020** de la Dirección General de Cultura y Educación (DGCyE).
 
-1. **Nombre y Apellido (Frente)**: Debe completarse en **MAYÚSCULAS** (fuente Arial 14 negrita).
-2. **D.U. / Documento (Frente)**: Transcrito separando las unidades por puntos (ej. `35.140.353`), fuente Arial 12.
-3. **Nombre del Trayecto / Curso (Frente)**: Extraído de la columna *"Nombre del Trayecto"* del Catálogo JSON, respetando mayúsculas, minúsculas, puntos y abreviaturas oficiales (fuente Arial 12).
-4. **Cantidad de Horas (Frente)**:
-   - Se consigna en **Horas Reloj** por defecto.
-   - **Excepción Reglamentaria (Sección 4.c Anexo)**: Para las certificaciones de *Gasista de 3ra Categoría*, *Gasista de 2da Categoría*, *Montador Electricista* y *Electricista Instalador*, se consigna obligatoriamente en **Horas Cátedra** en cumplimiento de las Res. 3993/11 y 2265/01.
-5. **Certificación DE (Frente)**: Extraído de la columna *"Certificación"* del Catálogo (fuente Arial 12).
-6. **Módulos (Anverso)**: Formato `Denominación del Módulo. (CÓDIGO)` (fuente Arial 10, un módulo por renglón). Renglones excedentes testados con línea de puntos (`---`).
-7. **Fecha de Egreso y N° de Egresado (Anverso)**: Fecha en formato texto completo (ej. `14 de Julio de 2025`) y filtrado estricto para procesar únicamente alumnos aprobados con número de egresado asignado.
+*Nota importante: Se toma la información del D.U. y del Catálogo de Certificaciones, descartando que el acta contenga los números a los que hace referencia.*
+
+---FRENTE DEL CERTIFICADO:
+
+1. **POR CUANTO - (Nombre y Apellido)**
+   - **a)** Tomar los datos del D.U.
+   - **b)** Completar el nombre tal cual figura en el D.U.
+   - **c)** Completar el apellido tal cual figura en el D.U.
+   - **d)** Texto todo en **MAYÚSCULAS**, formato de fuente **Arial 14**, estilo **negrita**.
+   - **e)** No superponer el texto con el renglón pre-impreso.
+   - **f)** No extenderse más allá del final del renglón pre-impreso.
+
+2. **NÚMERO DE D.U.**
+   - **a)** Tomar la fotocopia del D.U. y transcribirlo tal cual figura separando por puntos las unidades (ej: `35.140.353`).
+   - **b)** Formato de fuente **Arial 12**.
+   - **c)** No superponer el texto con el renglón pre-impreso.
+   - **d)** No extenderse más allá del final del renglón pre-impreso.
+   - **e)** Si tuviera una letra, consignarla.
+
+3. **TRAYECTO / CURSO FORMACIÓN PROFESIONAL DE (Nombre del Trayecto / Curso)**
+   - **a)** Tomar del Catálogo de certificaciones.
+   - **b)** Formato de fuente **Arial 12**.
+   - **c)** Completar el nombre tal cual figura en el Catálogo respetando las letras mayúsculas, minúsculas, puntos y abreviaturas que figuran en la columna *"Nombre del Trayecto"*.
+   - **d)** No superponer el texto con el renglón pre-impreso.
+   - **e)** No extenderse más allá del final del renglón pre-impreso.
+   - **f)** Para utilizar el segundo renglón se debe utilizar el primero por completo, pudiendo separar en sílabas la última palabra, siempre que sea ortográficamente posible.
+   - **g)** Testar con línea de puntos el excedente de espacio no utilizado.
+
+4. **CANTIDAD DE HORAS**
+   - **a)** Tomar del Catálogo de certificaciones.
+   - **b)** Completar la cantidad de horas reloj asignada al Trayecto/Curso en el catálogo de certificaciones (columna *"Hs. Reloj"*).
+   - **c)** **Excepción Reglamentaria**: Las certificaciones de *Gasista de 3ra Categoría*, *Gasista de 2da Categoría*, *Montador Electricista* y *Electricista Instalador* se deberán consignar en **horas cátedra** para dar cumplimiento a las Resoluciones 3993/11 y 2265/01 respectivamente.
+   - **d)** Formato de fuente **Arial 12**.
+
+5. **CERTIFICACIÓN DE (Denominación de la certificación)**
+   - **a)** Tomar del Catálogo de certificaciones.
+   - **b)** Formato de fuente **Arial 12**.
+   - **c)** Completar el nombre tal cual figura en el Catálogo respetando las letras mayúsculas, minúsculas, puntos y abreviaturas que figuran en la columna *"Certificación"*.
+   - **d)** No superponer el texto con el renglón pre-impreso.
+   - **e)** No extenderse más allá del final del renglón pre-impreso.
+   - **f)** Para utilizar el segundo renglón se debe utilizar el primero por completo, pudiendo separar en sílabas la última palabra, siempre que sea ortográficamente posible.
+   - **g)** Testar con línea de puntos el excedente de espacio no utilizado.
+
+6. **FECHA**
+   - **a)** Completar con el día en que se confecciona el certificado (nunca puede ser anterior a la fecha de egreso).
+   - **b)** Usar el N° de día, nombre de mes y últimas dos cifras del año completando lo pre-impreso en el certificado.
+   - **c)** Ej. `"01 de Julio 2018"`.
+   - **d)** Formato de fuente **Arial 12**.
+
+7. **FIRMAS**
+   - **a)** En el renglón sin texto pre-impreso debe firmar el Director o quien se encuentre a cargo de la dirección previo acto administrativo correspondiente que acredite dicha situación.
+   - **b)** La firma del Director debe ir acompañada en el lugar correspondiente pre-impreso y destinado a tal fin con la firma del inspector del servicio.
+
+---DORSO / ANVERSO DEL CERTIFICADO:
+
+1. **MÓDULOS**
+   - **a)** Tomar del Catálogo de certificaciones.
+   - **b)** Completar el nombre tal cual figura en el Catálogo respetando las letras mayúsculas, minúsculas, puntos y abreviaturas que figuran en la columna *"Denominación del Módulo"*.
+   - **c)** No superponer el texto con el renglón pre-impreso.
+   - **d)** No extenderse más allá del final del renglón pre-impreso.
+   - **e)** Ubicar un módulo por renglón.
+   - **f)** Por cada renglón, de ser necesario, se puede disponer de 2 niveles de escritura; al finalizar el texto consignar el código del módulo entre paréntesis.
+   - **g)** Testar con línea de puntos el excedente de espacio.
+   - **h)** Formato de fuente **Arial 10**.
+
+2. **FECHA DE EGRESO**
+   - **a)** Tomar del acta de examen.
+   - **b)** Completar con el día que se asignó al examen final.
+   - **c)** Usar el N° de día con 2 cifras, nombre del mes completo en formato texto y 4 cifras para el año (Ej. `"29 de Noviembre 2017"`).
+   - **d)** Formato de fuente **Arial 12**.
+
+3. **Nº DE EGRESADO**
+   - **a)** Asignar los números de egresados a los alumnos que figuran en el acta de examen como aprobados.
+   - **b)** Alumno que adeuda documentación no se le asignará el número de egresado. Una vez completa la misma, se asignará un número pudiendo este no ser correlativo al Trayecto / Curso.
+   - **c)** Completar el certificado con el número asignado.
+   - **d)** Formato de fuente **Arial 12**.
+
+4. **C.F.P. Nº**
+   - **a)** Consignar las 3 cifras del número que identifica al servicio en el distrito.
+   - **b)** Formato de fuente **Arial 12**.
+
+5. **DISTRITO**
+   - **a)** Completar el nombre del distrito completo sin abreviaturas (Ej. `"Lomas de Zamora"`).
+   - **b)** Formato de fuente **Arial 12**.
+
+6. **FIRMAS (Anverso)**
+   - **a)** Los datos consignados los puede firmar el secretario/a o quien esté a cargo de la secretaría previo acto administrativo correspondiente que acredite dicha situación. De no existir el cargo, estar descubierto o por razones operativas del servicio, debe firmar el Director o quien esté a cargo de la Dirección previo acto administrativo correspondiente.
+   - **b)** La autenticación de la firma que antecede la debe hacer una autoridad superior (si firmase el secretario será autenticada por el Director; si firma el Director solo podrá ser autenticada por el inspector a cargo del servicio).
+   - **c)** Para mayor seguridad y evitar duplicaciones, las firmas se realizarán en **tinta azul**.
 
 ---
 

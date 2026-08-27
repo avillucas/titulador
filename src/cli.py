@@ -133,7 +133,8 @@ def batch_generate(
         
         pdf_file = None
         if convert_pdf:
-            pdf_file = convert_pptx_to_pdf(out_pptx, output_dir)
+            pdf_file = generate_editable_pdf(out_pptx, titulo_data, output_dir)
+
             
         generated_files.append((out_pptx, pdf_file))
         table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], os.path.basename(out_pptx))

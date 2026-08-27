@@ -20,6 +20,76 @@ Toma datos directamente desde planillas de examen en **Excel (`Acta de examen.xl
 
 ---
 
+## 📜 Reglas de Confección (Circular 04-2020 - Frente del Certificado)
+
+El sistema aplica las reglas oficiales de confección para el **Frente del Certificado** (descartando la referencia a números del acta):
+
+### 📄 Frente del Certificado
+
+1. **Nombre y Apellido (POR CUANTO)**:
+   - Datos tomados del D.U. (se descarta que el acta contenga los números a los que hace referencia).
+   - Completar nombre y apellido tal cual figuran en el D.U.
+   - Texto en **MAYÚSCULAS**, fuente **Arial 14**, estilo **negrita**.
+   - No superponer con el renglón pre-impreso ni extenderse más allá de su final.
+
+2. **NÚMERO DE D.U.**:
+   - Transcripción tal cual figura en el D.U. separando unidades por puntos (ej: `35.140.353`). Consignar letra si la tuviera.
+   - Fuente **Arial 12**.
+   - Respetar los límites del renglón pre-impreso.
+
+3. **TRAYECTO / CURSO FORMACIÓN PROFESIONAL DE**:
+   - Datos del Catálogo de Certificaciones (columna *"Nombre del Trayecto"*).
+   - Fuente **Arial 12**. Respetar exactamente mayúsculas, minúsculas, puntos y abreviaturas del catálogo.
+   - Para usar el segundo renglón se completa el primero y se puede separar en sílabas la última palabra.
+   - Testar con línea de puntos el excedente de espacio no utilizado.
+
+4. **CANTIDAD DE HORAS**:
+   - Horas reloj asignadas en el Catálogo de Certificaciones (columna *"Hs. Reloj"*).
+   - **Excepción**: Certificaciones de *Gasista de 3ra Categoría*, *Gasista de 2da Categoría*, *Montador Electricista* y *Electricista Instalador* se consignan en **horas cátedra** (Res. 3993/11 y 2265/01).
+   - Fuente **Arial 12**.
+
+5. **CERTIFICACIÓN DE**:
+   - Datos del Catálogo de Certificaciones (columna *"Certificación"*).
+   - Fuente **Arial 12**. Respetar mayúsculas, minúsculas, puntos y abreviaturas del catálogo.
+   - Completar renglones en orden, separando en sílabas la última palabra si es necesario. Testar excedente con línea de puntos.
+
+6. **FECHA**:
+   - Día de confección del certificado (nunca anterior a la fecha de egreso).
+   - Formato: Nº de día, nombre del mes y últimas dos cifras del año (ej. `"01 de Julio 2018"`).
+   - Fuente **Arial 12**.
+
+7. **FIRMAS (Frente)**:
+   - Renglón sin texto pre-impreso destinado a la firma del Director (o a cargo de dirección).
+   - Firma del Director acompañada de la firma del Inspector del servicio en el lugar correspondiente.
+
+### 📄 Anverso / Reverso del Certificado
+
+1. **MÓDULOS**:
+   - Tomar del Catálogo de certificaciones (columna *"Denominación del Módulo"*), respetando mayúsculas, minúsculas, puntos y abreviaturas.
+   - Ubicar un módulo por renglón (hasta 2 niveles de escritura si es necesario) y consignar el código entre paréntesis al final.
+   - Fuente **Arial 10**. Testar excedente con línea de puntos. No superponer ni extender del renglón.
+
+2. **FECHA DE EGRESO**:
+   - Tomada del acta de examen (día del examen final).
+   - Formato: N° de día (2 cifras), nombre de mes completo y 4 cifras del año (ej. `"29 de Noviembre 2017"`). Fuente **Arial 12**.
+
+3. **Nº DE EGRESADO**:
+   - Asignar a alumnos aprobados en el acta de examen. Alumno que adeuda documentación no recibe número hasta completarla.
+   - Completar en el certificado con fuente **Arial 12**.
+
+4. **C.F.P. Nº**:
+   - Consignar las 3 cifras del número de servicio en el distrito. Fuente **Arial 12**.
+
+5. **DISTRITO**:
+   - Nombre completo del distrito sin abreviaturas (ej. `"Lomas de Zamora"`). Fuente **Arial 12**.
+
+6. **FIRMAS (Anverso)**:
+   - Firmado por Secretario/a (o a cargo) o Director.
+   - Autenticación por autoridad superior (Director autentica a Secretario, Inspector autentica a Director).
+   - Firmas obligatoriamente en **tinta azul**.
+
+---
+
 ## 🛠️ Requisitos Previos
 
 ### Opción 1: Ejecución Local en Python
