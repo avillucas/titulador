@@ -43,17 +43,14 @@ def batch_generate(
     template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t", help="Ruta a la plantilla PPTX"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
     trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
-    convert_pdf: bool = typer.Option(True, "--pdf/--no-pdf", help="Convertir a PDF automáticamente si LibreOffice está disponible")
+    output_format: str = typer.Option("all", "--format", "-f", help="Formato de salida: html, pdf, pptx, all"),
+    convert_pdf: bool = typer.Option(True, "--pdf/--no-pdf", help="Convertir PPTX a PDF vía LibreOffice")
 ):
-    """Procesa un archivo Excel de Acta de examen y genera los certificados de todos los egresados aprobados."""
-    console.print(Panel("[bold green]Titulador - Generación en Lote (Batch)[/bold green]"))
+    """Procesa un archivo Excel de Acta de examen y genera los certificados en el formato seleccionado."""
+    console.print(Panel(f"[bold green]Titulador - Generación en Lote (Batch: {output_format.upper()})[/bold green]"))
 
     if not os.path.exists(excel_path):
         console.print(f"[bold red]Error:[bold red] El archivo Excel no existe: {excel_path}")
-        raise typer.Exit(code=1)
-
-    if not os.path.exists(template_path):
-        console.print(f"[bold red]Error:[bold red] La plantilla PPTX no existe: {template_path}")
         raise typer.Exit(code=1)
 
     catalog = TrayectoCatalog()
@@ -84,7 +81,7 @@ def batch_generate(
     else:
         console.print("")
 
-    generator = PPTXGenerator(template_path)
+    generator = PPTXGenerator(template_path) if os.path.exists(template_path) else None
     
     # Determine certificate template fields from trayecto_data or fallback
     if trayecto_data:
@@ -100,17 +97,16 @@ def batch_generate(
         res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
         modules = []
 
-    table = Table(title="Certificados a Generar")
+    table = Table(title=f"Certificados a Generar (Formato: {output_format.upper()})")
     table.add_column("N° Egresado", style="cyan")
     table.add_column("Nombre y Apellido", style="bold white")
     table.add_column("DNI", style="yellow")
-    table.add_column("Archivo PPTX", style="green")
+    table.add_column("Archivos Generados", style="green")
 
-    generated_files = []
+    from src.exporter import generate_html_certificate, generate_html_pdf_certificate
 
     for eg in egresados:
         filename_base = f"{eg['num_egresado']}_{eg['apellido_nombre'].replace(' ', '_')}"
-        out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
         
         titulo_data = TituloData(
             apellido_nombre=eg['apellido_nombre'],
@@ -129,18 +125,28 @@ def batch_generate(
             distrito_cpf=data["distrito_cpf"]
         )
 
-        generator.generate(titulo_data, out_pptx)
-        
-        pdf_file = None
-        if convert_pdf:
-            pdf_file = generate_editable_pdf(out_pptx, titulo_data, output_dir)
+        outs = []
 
-            
-        generated_files.append((out_pptx, pdf_file))
-        table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], os.path.basename(out_pptx))
+        if output_format in ["html", "all"]:
+            out_html = os.path.join(output_dir, f"{filename_base}.html")
+            generate_html_certificate(titulo_data, out_html)
+            outs.append(os.path.basename(out_html))
+
+        if output_format in ["pdf", "all"]:
+            out_pdf = os.path.join(output_dir, f"{filename_base}.pdf")
+            generate_html_pdf_certificate(titulo_data, out_pdf)
+            outs.append(os.path.basename(out_pdf))
+
+        if output_format in ["pptx", "all"] and generator:
+            out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
+            generator.generate(titulo_data, out_pptx)
+            outs.append(os.path.basename(out_pptx))
+
+        table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], ", ".join(outs))
 
     console.print(table)
-    console.print(f"\n[bold green]✔ ¡Se generaron {len(generated_files)} certificados PPTX exitosamente en {output_dir}![/bold green]")
+    console.print(f"\n[bold green]✔ ¡Se procesaron los certificados exitosamente en {output_dir}![/bold green]")
+
 
 
 @app.command("form")

@@ -55,6 +55,24 @@ def generate_editable_pdf(pptx_path: str, data: TituloData, output_dir: Optional
         print(f"Error making PDF editable: {e}")
         return flat_pdf
 
+def generate_html_certificate(data: TituloData, output_path: str) -> str:
+    """
+    Generates a standalone A5 HTML certificate.
+    """
+    from src.html_generator import HTMLGenerator
+    gen = HTMLGenerator()
+    return gen.generate(data, output_path)
+
+def generate_html_pdf_certificate(data: TituloData, output_path: str) -> str:
+    """
+    Generates an A5 HTML certificate and exports it directly to PDF.
+    """
+    from src.html_generator import HTMLGenerator
+    gen = HTMLGenerator()
+    html_path = output_path.replace('.pdf', '.html')
+    gen.generate(data, html_path)
+    return gen.export_to_pdf(html_path, output_path)
+
 def print_pdf_a5(pdf_path: str, printer_name: Optional[str] = None) -> bool:
     """
     Sends PDF to default printer or specified printer with A5 paper size setting.
@@ -75,3 +93,4 @@ def print_pdf_a5(pdf_path: str, printer_name: Optional[str] = None) -> bool:
     except subprocess.SubprocessError as e:
         print(f"Print error: {e}")
         return False
+

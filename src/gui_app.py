@@ -13,8 +13,9 @@ except ImportError:
 from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
-from src.exporter import convert_pptx_to_pdf
+from src.exporter import convert_pptx_to_pdf, generate_html_certificate, generate_html_pdf_certificate
 from src.catalog import TrayectoCatalog, format_trayecto_data
+
 
 DEFAULT_TEMPLATE = "ejemplos/Modelo base.pptx"
 DEFAULT_EXCEL = "ejemplos/Acta de examen.xlsx"
@@ -123,15 +124,24 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.output_entry.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
         ctk.CTkButton(paths_frame, text="Buscar...", width=80, command=self._browse_output).grid(row=2, column=2, padx=10, pady=5)
 
+        # Output Format Selector
+        ctk.CTkLabel(paths_frame, text="Formato Salida:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
+        self.format_dropdown = ctk.CTkOptionMenu(
+            paths_frame,
+            values=["HTML + PDF (A5 Directo)", "Solo HTML", "Solo PDF", "PPTX (PowerPoint)", "Todos los Formatos"]
+        )
+        self.format_dropdown.grid(row=3, column=1, padx=5, pady=5, sticky="ew")
+
         # Trayecto Catalog Dropdown
-        ctk.CTkLabel(paths_frame, text="Trayecto Catálogo:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
+        ctk.CTkLabel(paths_frame, text="Trayecto Catálogo:", font=ctk.CTkFont(weight="bold")).grid(row=4, column=0, padx=10, pady=5, sticky="e")
         display_list = self.catalog.get_trayecto_display_list() or ["Sin catálogo disponible"]
         self.trayecto_dropdown = ctk.CTkOptionMenu(
             paths_frame, 
             values=display_list,
             command=self._on_trayecto_selected
         )
-        self.trayecto_dropdown.grid(row=3, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
+        self.trayecto_dropdown.grid(row=4, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
+
 
         # 3. Main Tabview
         self.tabview = ctk.CTkTabview(self, corner_radius=10)
@@ -315,9 +325,10 @@ class TituladorGUI(ctk.CTk if ctk else object):
         excel_p = self.excel_path.get()
         tmpl_p = self.template_path.get()
         out_d = self.output_dir.get()
+        fmt_choice = self.format_dropdown.get()
 
-        if not os.path.exists(excel_p) or not os.path.exists(tmpl_p):
-            messagebox.showerror("Error", "Por favor verifique que las rutas de Excel y Plantilla existan.")
+        if not os.path.exists(excel_p):
+            messagebox.showerror("Error", "Por favor verifique que la ruta del Excel exista.")
             return
 
         try:
@@ -335,7 +346,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 messagebox.showinfo("Información", "No hay egresados aprobados en la planilla.")
                 return
 
-            generator = PPTXGenerator(tmpl_p)
+            generator = PPTXGenerator(tmpl_p) if os.path.exists(tmpl_p) else None
             
             t_data = self.current_trayecto_data or data.get("trayecto_data")
             if t_data:
@@ -354,7 +365,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
             total = len(egresados)
             for idx, eg in enumerate(egresados, 1):
                 filename_base = f"{eg['num_egresado']}_{eg['apellido_nombre'].replace(' ', '_')}"
-                out_pptx = os.path.join(out_d, f"{filename_base}.pptx")
 
                 titulo_data = TituloData(
                     apellido_nombre=eg['apellido_nombre'],
@@ -373,22 +383,35 @@ class TituladorGUI(ctk.CTk if ctk else object):
                     distrito_cpf=data["distrito_cpf"]
                 )
 
-                generator.generate(titulo_data, out_pptx)
-                self.last_generated_pptx = out_pptx
+                outs = []
 
-                out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
-                if out_pdf:
-                    self.last_generated_pdf = out_pdf
-                    self.log(f"[{idx}/{total}] PPTX + PDF generado: {os.path.basename(out_pdf)}")
-                else:
-                    self.log(f"[{idx}/{total}] PPTX generado: {os.path.basename(out_pptx)}")
+                if "HTML" in fmt_choice or "Todos" in fmt_choice:
+                    out_h = os.path.join(out_d, f"{filename_base}.html")
+                    generate_html_certificate(titulo_data, out_h)
+                    outs.append("HTML")
 
+                if "PDF" in fmt_choice or "Todos" in fmt_choice:
+                    out_p = os.path.join(out_d, f"{filename_base}.pdf")
+                    generate_html_pdf_certificate(titulo_data, out_p)
+                    self.last_generated_pdf = out_p
+                    outs.append("PDF")
+
+                if ("PPTX" in fmt_choice or "Todos" in fmt_choice) and generator:
+                    out_px = os.path.join(out_d, f"{filename_base}.pptx")
+                    generator.generate(titulo_data, out_px)
+                    self.last_generated_pptx = out_px
+                    outs.append("PPTX")
+
+                self.log(f"[{idx}/{total}] Generado ({', '.join(outs)}): {filename_base}")
                 self.progress_bar.set(idx / total)
                 self.update_idletasks()
 
-            messagebox.showinfo("¡Éxito!", f"Se generaron {total} certificados PPTX en:\n{out_d}")
+            messagebox.showinfo("¡Éxito!", f"Se procesaron {total} certificados ({fmt_choice}) en:\n{out_d}")
 
         except Exception as e:
+            messagebox.showerror("Error", f"Fallo durante la generación: {e}")
+            self.log(f"ERROR Batch: {e}")
+
             messagebox.showerror("Error", f"Fallo durante la generación: {e}")
             self.log(f"ERROR Batch: {e}")
 

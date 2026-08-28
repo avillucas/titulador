@@ -9,9 +9,13 @@ Este documento sirve como guía operativa para desarrolladores y agentes de IA e
 La aplicación **Titulador** está diseñada con una arquitectura modular desacoplada:
 
 - **`src/excel_parser.py`**: Procesa libros de trabajo Excel (`.xlsx`), valida la estructura de actas de examen de titulación e extrae la nómina de alumnos.
-- **`src/pptx_generator.py`**: Motor central de generación de documentos `.pptx` (formato A5) basado en plantillas personalizadas.
-- **`src/cli.py` / `main.py`**: Interfaz de línea de comandos (CLI) construida sobre `typer` y `rich`.
+- **`src/pptx_generator.py`**: Generador de documentos `.pptx` (formato A5) basado en plantillas PowerPoint.
+- **`src/html_generator.py`**: Nuevo motor central de generación en **HTML + CSS** A5 (210mm x 148.5mm) y conversión directa a **PDF** vía Chrome Headless.
+- **`templates/template_certificate.html`**: Plantilla HTML5/CSS3 con posicionamiento estricto de campos según la Circular 04-2020.
+- **`templates/assets/`**: Almacena las imágenes de fondo en alta resolución de la plantilla (`frente.jpg` y `dorso.jpg`).
+- **`src/cli.py` / `main.py`**: Interfaz de línea de comandos (CLI) construida sobre `typer` y `rich` (soporta `--format html|pdf|pptx|all`).
 - **`src/gui_app.py` / `app_gui.py`**: Interfaz gráfica de escritorio (GUI) moderna construida con `customtkinter`.
+
 
 ---
 
