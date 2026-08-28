@@ -2,7 +2,7 @@ import os
 import re
 import pptx
 from pptx.util import Pt
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Optional
 from src.models import TituloData
 
 DEFAULT_DASH_LINE = "--------------------------------------------------------------------------"
@@ -139,8 +139,43 @@ def set_text_frame_content(shape, text: str, font_name: str = "Arial", font_size
         p.text = line
 
 
+DEFAULT_BASE_MODEL = "documentacion/Modelo base.pptx"
+
+def get_default_base_model() -> str:
+    """Devuelve la ruta por defecto del modelo base."""
+    return PPTXGenerator.get_default_template_path()
+
+def set_default_base_model(path: str):
+    """Establece la ruta por defecto del modelo base."""
+    PPTXGenerator.set_default_template_path(path)
+
+
 class PPTXGenerator:
-    def __init__(self, template_path: str):
+    _default_template_path: str = DEFAULT_BASE_MODEL
+
+    @classmethod
+    def get_default_template_path(cls) -> str:
+        """Devuelve la ruta por defecto de la plantilla base PPTX."""
+        return cls._default_template_path
+
+    @classmethod
+    def set_default_template_path(cls, path: str):
+        """Establece la ruta por defecto de la plantilla base PPTX."""
+        cls._default_template_path = path
+
+    @classmethod
+    def get_base_model_path(cls) -> str:
+        """Método para obtener la ruta del modelo base por defecto."""
+        return cls.get_default_template_path()
+
+    @classmethod
+    def set_base_model_path(cls, path: str):
+        """Método para definir la ruta del modelo base por defecto."""
+        cls.set_default_template_path(path)
+
+    def __init__(self, template_path: Optional[str] = None):
+        if not template_path:
+            template_path = self.get_default_template_path()
         if not os.path.exists(template_path):
             raise FileNotFoundError(f"Template file not found at {template_path}")
         self.template_path = template_path

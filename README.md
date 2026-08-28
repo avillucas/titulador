@@ -16,9 +16,12 @@ La aplicación utiliza como referencia los documentos oficiales almacenados en l
 | :--- | :--- | :--- |
 | **Normativa de Certificación** | `documentacion/Circular 4-2020 Certificacion de trayectos formativos y cursos de Formacion Profesional.pdf` | Instructivo técnico oficial que establece los tamaños de fuente, alineación, estilos y pautas de testado para el frente y dorso del certificado A5. |
 | **Catálogo de Trayectos** | `documentacion/CATALOGO 2025 FP.pdf` | Catálogo Oficial de Trayectos Formativos y Cursos de Formación Profesional (procesado en JSON para búsqueda automática de módulos, resoluciones y horas). |
+| **Modelo Base PPTX** | `documentacion/Modelo base.pptx` | Plantilla base por defecto en PowerPoint A5 (Diapositivas 1 y 2) para la generación de certificados. |
 | **Acta de Examen Modelo** | `documentacion/Acta de examen.xlsx` | Planilla Excel modelo con el formato estándar de actas de examen final de donde el sistema extrae los datos de los egresados aprobados. |
 
-> ⚠️ **Nota aclaratoria**: Los archivos presentes en las carpetas `documentacion/` y `ejemplos/` son provistos exclusivamente a modo de **ejemplos y modelos de prueba** para verificar el correcto funcionamiento del sistema.
+> ⚠️ **Nota aclaratoria**: Los archivos presentes en las carpetas `documentacion/` and `ejemplos/` son provistos exclusivamente a modo de **ejemplos y modelos de prueba** para verificar el correcto funcionamiento del sistema.
+
+> 🤖 **Aviso / Disclaimer**: Esta aplicación fue creada y desarrollada con la asistencia de tecnologías de Inteligencia Artificial (IA).
 
 ---
 
@@ -142,11 +145,11 @@ python main.py form
 ```text
 titulador/
 ├── documentacion/                   # Fuentes de referencia y modelos oficiales
+│   ├── Modelo base.pptx             # Plantilla base por defecto en PowerPoint A5
 │   ├── Acta de examen.xlsx          # Planilla Excel modelo de examen
 │   ├── CATALOGO 2025 FP.pdf         # Catálogo de certificaciones y módulos de FP
 │   └── Circular 4-2020...pdf        # Normativa e instructivo técnico A5
 ├── ejemplos/
-│   ├── Modelo base.pptx             # Plantilla base en PowerPoint A5 (Diapositivas 1 y 2)
 │   └── CATALOGO_2025_FP_agrupado.json # Catálogo FP estructurado para búsqueda rápida
 ├── output/                          # Carpeta donde se exportan los certificados generados
 ├── src/

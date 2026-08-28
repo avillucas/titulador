@@ -21,7 +21,7 @@ app = typer.Typer(name="titulador", help="Sistema de generación de Certificados
 
 console = Console()
 
-DEFAULT_TEMPLATE = "ejemplos/Modelo base.pptx"
+DEFAULT_TEMPLATE = PPTXGenerator.get_default_template_path()
 DEFAULT_EXCEL = "ejemplos/Acta de examen.xlsx"
 OUTPUT_DIR = "output"
 

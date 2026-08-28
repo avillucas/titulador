@@ -18,7 +18,7 @@ from src.exporter import convert_pptx_to_pdf
 from src.catalog import TrayectoCatalog, format_trayecto_data
 
 
-DEFAULT_TEMPLATE = "ejemplos/Modelo base.pptx"
+DEFAULT_TEMPLATE = PPTXGenerator.get_default_template_path()
 DEFAULT_EXCEL = "ejemplos/Acta de examen.xlsx"
 OUTPUT_DIR = "output"
 
@@ -349,7 +349,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 messagebox.showinfo("Información", "No hay egresados aprobados en la planilla.")
                 return
 
-            generator = PPTXGenerator(tmpl_p) if os.path.exists(tmpl_p) else None
+            generator = PPTXGenerator(tmpl_p) if (tmpl_p and os.path.exists(tmpl_p)) else PPTXGenerator()
             
             t_data = self.current_trayecto_data or data.get("trayecto_data")
             if t_data:
