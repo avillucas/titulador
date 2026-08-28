@@ -13,7 +13,8 @@ except ImportError:
 from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
-from src.exporter import convert_pptx_to_pdf, generate_html_certificate, generate_html_pdf_certificate
+from src.exporter import convert_pptx_to_pdf
+
 from src.catalog import TrayectoCatalog, format_trayecto_data
 
 
@@ -88,9 +89,10 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         subtitle_label = ctk.CTkLabel(
             header_frame, 
-            text="Generador de certificados en formato PPTX editable para hojas A5 con Catálogo 2025 FP",
+            text="Confección y emisión de certificados de Trayectos Formativos de FP (Circular 04-2020)",
             font=ctk.CTkFont(size=12, slant="italic")
         )
+
         subtitle_label.grid(row=1, column=0, padx=15, pady=(0, 10), sticky="w")
 
         theme_switch = ctk.CTkSwitch(
@@ -128,8 +130,9 @@ class TituladorGUI(ctk.CTk if ctk else object):
         ctk.CTkLabel(paths_frame, text="Formato Salida:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
         self.format_dropdown = ctk.CTkOptionMenu(
             paths_frame,
-            values=["HTML + PDF (A5 Directo)", "Solo HTML", "Solo PDF", "PPTX (PowerPoint)", "Todos los Formatos"]
+            values=["PPTX + PDF (Recomendado)", "Solo PPTX", "Solo PDF"]
         )
+
         self.format_dropdown.grid(row=3, column=1, padx=5, pady=5, sticky="ew")
 
         # Trayecto Catalog Dropdown
@@ -384,23 +387,18 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 )
 
                 outs = []
+                out_pptx = os.path.join(out_d, f"{filename_base}.pptx")
+                generator.generate(titulo_data, out_pptx)
+                self.last_generated_pptx = out_pptx
 
-                if "HTML" in fmt_choice or "Todos" in fmt_choice:
-                    out_h = os.path.join(out_d, f"{filename_base}.html")
-                    generate_html_certificate(titulo_data, out_h)
-                    outs.append("HTML")
-
-                if "PDF" in fmt_choice or "Todos" in fmt_choice:
-                    out_p = os.path.join(out_d, f"{filename_base}.pdf")
-                    generate_html_pdf_certificate(titulo_data, out_p)
-                    self.last_generated_pdf = out_p
-                    outs.append("PDF")
-
-                if ("PPTX" in fmt_choice or "Todos" in fmt_choice) and generator:
-                    out_px = os.path.join(out_d, f"{filename_base}.pptx")
-                    generator.generate(titulo_data, out_px)
-                    self.last_generated_pptx = out_px
+                if "PPTX" in fmt_choice:
                     outs.append("PPTX")
+
+                if "PDF" in fmt_choice or "Recomendado" in fmt_choice:
+                    out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
+                    if out_pdf:
+                        self.last_generated_pdf = out_pdf
+                        outs.append("PDF")
 
                 self.log(f"[{idx}/{total}] Generado ({', '.join(outs)}): {filename_base}")
                 self.progress_bar.set(idx / total)
@@ -412,8 +410,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
             messagebox.showerror("Error", f"Fallo durante la generación: {e}")
             self.log(f"ERROR Batch: {e}")
 
-            messagebox.showerror("Error", f"Fallo durante la generación: {e}")
-            self.log(f"ERROR Batch: {e}")
 
     # --- TAB 2: SELECCION INDIVIDUAL ---
     def _setup_select_tab(self):

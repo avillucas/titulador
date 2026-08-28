@@ -3,7 +3,6 @@ import subprocess
 import shutil
 from typing import Optional
 from src.models import TituloData
-from src.pdf_generator import make_pdf_editable
 
 def convert_pptx_to_pdf(pptx_path: str, output_dir: Optional[str] = None) -> Optional[str]:
     """
@@ -40,38 +39,6 @@ def convert_pptx_to_pdf(pptx_path: str, output_dir: Optional[str] = None) -> Opt
         print(f"PDF conversion error: {e}")
     return None
 
-def generate_editable_pdf(pptx_path: str, data: TituloData, output_dir: Optional[str] = None) -> Optional[str]:
-    """
-    Converts PPTX to PDF via LibreOffice, then adds AcroForm interactive form fields.
-    Returns path to generated editable PDF if successful, or None if conversion fails.
-    """
-    flat_pdf = convert_pptx_to_pdf(pptx_path, output_dir=output_dir)
-    if not flat_pdf or not os.path.exists(flat_pdf):
-        return None
-    try:
-        editable_pdf = make_pdf_editable(flat_pdf, data)
-        return editable_pdf
-    except Exception as e:
-        print(f"Error making PDF editable: {e}")
-        return flat_pdf
-
-def generate_html_certificate(data: TituloData, output_path: str) -> str:
-    """
-    Generates a standalone A5 HTML certificate.
-    """
-    from src.html_generator import HTMLGenerator
-    gen = HTMLGenerator()
-    return gen.generate(data, output_path)
-
-def generate_html_pdf_certificate(data: TituloData, output_path: str) -> str:
-    """
-    Generates an A5 HTML certificate and exports it directly to PDF.
-    """
-    from src.html_generator import HTMLGenerator
-    gen = HTMLGenerator()
-    html_path = output_path.replace('.pdf', '.html')
-    gen.generate(data, html_path)
-    return gen.export_to_pdf(html_path, output_path)
 
 def print_pdf_a5(pdf_path: str, printer_name: Optional[str] = None) -> bool:
     """
@@ -93,4 +60,3 @@ def print_pdf_a5(pdf_path: str, printer_name: Optional[str] = None) -> bool:
     except subprocess.SubprocessError as e:
         print(f"Print error: {e}")
         return False
-
