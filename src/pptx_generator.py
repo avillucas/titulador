@@ -228,8 +228,12 @@ class PPTXGenerator:
                     set_text_frame_content(shape, str(data.emision_dia), font_name="Arial", font_size_pt=12.0, word_wrap=False)
                 elif shape.shape_id == 92:  # Emisión Mes
                     set_text_frame_content(shape, str(data.emision_mes), font_name="Arial", font_size_pt=12.0, word_wrap=False)
-                elif shape.shape_id == 93:  # Emisión Año
+                elif shape.shape_id == 93:  # Emisión Año (Alineado después de 'de 20')
+                    from pptx.util import Mm
+                    shape.left = Mm(179.5)
+                    shape.top = Mm(108.6)
                     set_text_frame_content(shape, str(data.emision_ano), font_name="Arial", font_size_pt=12.0, word_wrap=False)
+
 
 
         # Process Slide 2 (Dorso)
