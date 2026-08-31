@@ -5,3 +5,4 @@ dist
 ejemplos/
 src/__pycache__
 *.png
+documentacion/*.xlsx

@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -11,10 +11,8 @@ from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
 from src.exporter import convert_pptx_to_pdf, print_pdf_a5
-
-
-
 from src.catalog import TrayectoCatalog, format_trayecto_data
+from src.date_utils import calculate_default_emision_date, parse_emision_input
 
 
 app = typer.Typer(name="titulador", help="Sistema de generación de Certificados de Formación Profesional (Circular 04-2020) en A5")
@@ -22,8 +20,36 @@ app = typer.Typer(name="titulador", help="Sistema de generación de Certificados
 console = Console()
 
 DEFAULT_TEMPLATE = PPTXGenerator.get_default_template_path()
-DEFAULT_EXCEL = "ejemplos/Acta de examen.xlsx"
+DEFAULT_EXCEL = "documentacion/Acta de examen.xlsx" if os.path.exists("documentacion/Acta de examen.xlsx") else "ejemplos/Acta de examen.xlsx"
 OUTPUT_DIR = "output"
+
+def resolve_emision_date(
+    default_dia: str,
+    default_mes: str,
+    default_ano: str,
+    fecha_emision_opt: Optional[str] = None,
+    emision_dia_opt: Optional[str] = None,
+    emision_mes_opt: Optional[str] = None,
+    emision_ano_opt: Optional[str] = None,
+) -> Tuple[str, str, str]:
+    dia, mes, ano = default_dia, default_mes, default_ano
+
+    if fecha_emision_opt:
+        parsed = parse_emision_input(fecha_emision_opt)
+        if parsed:
+            dia, mes, ano = parsed
+        else:
+            console.print(f"[bold yellow]⚠️  No se pudo interpretar '--fecha-emision {fecha_emision_opt}'. Se utilizará la fecha por defecto.[/bold yellow]")
+
+    if emision_dia_opt:
+        dia = emision_dia_opt
+    if emision_mes_opt:
+        mes = emision_mes_opt
+    if emision_ano_opt:
+        ano = emision_ano_opt
+
+    return dia, mes, ano
+
 
 def resolve_trayecto(catalog: TrayectoCatalog, code_or_name: Optional[str], excel_trayecto_data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     """Resolves trayecto data from CLI option or Excel auto-matched trayecto."""
@@ -46,6 +72,10 @@ def batch_generate(
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
     trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
     output_format: str = typer.Option("all", "--format", "-f", help="Formato de salida: pdf, pptx, all"),
+    fecha_emision: Optional[str] = typer.Option(None, "--fecha-emision", "-m", help="Fecha de emisión personalizada (ej. '14/08/2025' o '14 de Agosto de 2025')"),
+    emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
+    emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
+    emision_ano: Optional[str] = typer.Option(None, "--emision-ano", help="Año de emisión del certificado (ej. '25')"),
 ):
     """Procesa un archivo Excel de Acta de examen y genera los certificados en el formato seleccionado (PPTX y/o PDF)."""
     console.print(Panel(f"[bold green]Titulador - Generación en Lote (Batch: {output_format.upper()})[/bold green]"))
@@ -67,6 +97,14 @@ def batch_generate(
 
     trayecto_data = resolve_trayecto(catalog, trayecto_code, data.get("trayecto_data"))
 
+    e_dia, e_mes, e_ano = resolve_emision_date(
+        data["emision_dia"], data["emision_mes"], data["emision_ano"],
+        fecha_emision_opt=fecha_emision,
+        emision_dia_opt=emision_dia,
+        emision_mes_opt=emision_mes,
+        emision_ano_opt=emision_ano
+    )
+
     console.print(f"Especialidad Acta: [cyan]{data['especialidad']}[/cyan]")
     if trayecto_data:
         console.print(f"[bold green]✔ Trayecto Catálogo JSON:[/bold green] [cyan]{trayecto_data['codigo']}[/cyan] - [cyan]{trayecto_data['nombre_trayecto']}[/cyan] ({trayecto_data['sector']})")
@@ -74,7 +112,8 @@ def batch_generate(
     else:
         console.print("[bold yellow]⚠️  No se identificó trayecto en catálogo JSON. Se usarán datos por defecto del acta.[/bold yellow]")
 
-    console.print(f"Fecha Egreso: [cyan]{data['fecha_egreso']}[/cyan]")
+    console.print(f"Fecha Egreso Acta: [cyan]{data['fecha_egreso']}[/cyan]")
+    console.print(f"Fecha Emisión Certificado: [cyan]{e_dia} de {e_mes} de 20{e_ano}[/cyan]")
     console.print(f"Total egresados aprobados: [bold yellow]{len(egresados)}[/bold yellow]")
 
     if omitidos:
@@ -118,15 +157,16 @@ def batch_generate(
             titulo_linea1=t_line1,
             titulo_linea2=t_line2,
             resolucion=res,
-            emision_dia="02",
-            emision_mes="Septiembre",
-            emision_ano="25",
+            emision_dia=e_dia,
+            emision_mes=e_mes,
+            emision_ano=e_ano,
             modulos=modules,
             fecha_egreso=data["fecha_egreso"],
             numero_egresado=eg["num_egresado"],
             numero_cpf=data["numero_cpf"],
             distrito_cpf=data["distrito_cpf"]
         )
+
 
         outs = []
         out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
@@ -154,7 +194,11 @@ def batch_generate(
 def interactive_form(
     template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t", help="Ruta a la plantilla PPTX"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
-    trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)")
+    trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
+    fecha_emision: Optional[str] = typer.Option(None, "--fecha-emision", "-m", help="Fecha de emisión personalizada (ej. '14/08/2025' o '14 de Agosto de 2025')"),
+    emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
+    emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
+    emision_ano: Optional[str] = typer.Option(None, "--emision-ano", help="Año de emisión del certificado (ej. '25')"),
 ):
     """Crea un certificado completando el formulario campo por campo en la consola."""
     console.print(Panel("[bold green]Titulador - Formulario Interactivo[/bold green]"))
@@ -187,11 +231,22 @@ def interactive_form(
     titulo_linea1 = Prompt.ask("Nombre del Título (Línea 1)", default=def_l1)
     titulo_linea2 = Prompt.ask("Nombre del Título (Línea 2)", default=def_l2)
     resolucion = Prompt.ask("Resolución", default=def_res)
-    emision_dia = Prompt.ask("Emisión Día", default="02")
-    emision_mes = Prompt.ask("Emisión Mes", default="Septiembre")
-    emision_ano = Prompt.ask("Emisión Año", default="25")
     
-    fecha_egreso = Prompt.ask("Fecha de Egreso", default="14 de Julio de 2025")
+    fecha_egreso = Prompt.ask("Fecha de Egreso / Acta", default="14 de Julio de 2025")
+
+    calc_dia, calc_mes, calc_ano = calculate_default_emision_date(fecha_egreso)
+    init_dia, init_mes, init_ano = resolve_emision_date(
+        calc_dia, calc_mes, calc_ano,
+        fecha_emision_opt=fecha_emision,
+        emision_dia_opt=emision_dia,
+        emision_mes_opt=emision_mes,
+        emision_ano_opt=emision_ano
+    )
+
+    emision_dia_val = Prompt.ask("Emisión Día", default=init_dia)
+    emision_mes_val = Prompt.ask("Emisión Mes", default=init_mes)
+    emision_ano_val = Prompt.ask("Emisión Año", default=init_ano)
+
     numero_egresado = Prompt.ask("Número de Egresado", default="354")
     numero_cpf = Prompt.ask("Número CPF", default="412")
     distrito_cpf = Prompt.ask("Distrito CPF", default="Lomas de Zamora")
@@ -220,9 +275,9 @@ def interactive_form(
         titulo_linea1=titulo_linea1,
         titulo_linea2=titulo_linea2,
         resolucion=resolucion,
-        emision_dia=emision_dia,
-        emision_mes=emision_mes,
-        emision_ano=emision_ano,
+        emision_dia=emision_dia_val,
+        emision_mes=emision_mes_val,
+        emision_ano=emision_ano_val,
         modulos=modulos,
         fecha_egreso=fecha_egreso,
         numero_egresado=numero_egresado,
@@ -250,7 +305,11 @@ def select_egresado(
     excel_path: str = typer.Option(DEFAULT_EXCEL, "--excel", "-e"),
     template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o"),
-    trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)")
+    trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
+    fecha_emision: Optional[str] = typer.Option(None, "--fecha-emision", "-m", help="Fecha de emisión personalizada (ej. '14/08/2025' o '14 de Agosto de 2025')"),
+    emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
+    emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
+    emision_ano: Optional[str] = typer.Option(None, "--emision-ano", help="Año de emisión del certificado (ej. '25')"),
 ):
     """Muestra la lista de egresados del Excel y permite elegir uno para emitir su certificado."""
     if not os.path.exists(excel_path):
@@ -264,6 +323,14 @@ def select_egresado(
     omitidos = data.get("omitidos", [])
 
     trayecto_data = resolve_trayecto(catalog, trayecto_code, data.get("trayecto_data"))
+
+    e_dia, e_mes, e_ano = resolve_emision_date(
+        data["emision_dia"], data["emision_mes"], data["emision_ano"],
+        fecha_emision_opt=fecha_emision,
+        emision_dia_opt=emision_dia,
+        emision_mes_opt=emision_mes,
+        emision_ano_opt=emision_ano
+    )
 
     if omitidos:
         console.print("[bold yellow]⚠️  Filas evitadas por no contar con Número de Egresado (no aprobó):[/bold yellow]")
@@ -313,15 +380,16 @@ def select_egresado(
         titulo_linea1=t_line1,
         titulo_linea2=t_line2,
         resolucion=res,
-        emision_dia="02",
-        emision_mes="Septiembre",
-        emision_ano="25",
+        emision_dia=e_dia,
+        emision_mes=e_mes,
+        emision_ano=e_ano,
         modulos=modules,
         fecha_egreso=data["fecha_egreso"],
         numero_egresado=selected_eg["num_egresado"] or "000",
         numero_cpf=data["numero_cpf"],
         distrito_cpf=data["distrito_cpf"]
     )
+
 
     safe_name = selected_eg['apellido_nombre'].replace(" ", "_")
     output_pptx = os.path.join(output_dir, f"{selected_eg['num_egresado']}_{safe_name}.pptx")

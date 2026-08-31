@@ -3,6 +3,8 @@ import openpyxl
 from typing import List, Dict, Any, Optional
 from src.models import Egresado, TituloData
 from src.catalog import TrayectoCatalog, format_trayecto_data
+from src.date_utils import calculate_default_emision_date
+
 
 def format_dni(doc_val: Any) -> str:
     """Formats raw document number into dot-separated string (e.g. 35.140.353)."""
@@ -53,6 +55,7 @@ class ExcelParser:
         # Fecha egreso string in cell A7
         header_text = str(sheet.cell(7, 1).value or "")
         fecha_egreso = parse_fecha_egreso(header_text)
+        emision_dia, emision_mes, emision_ano = calculate_default_emision_date(fecha_egreso)
         
         egresados: List[Dict[str, Any]] = []
         omitidos: List[Dict[str, Any]] = []
@@ -111,9 +114,13 @@ class ExcelParser:
             "distrito_cpf": distrito,
             "especialidad": especialidad,
             "fecha_egreso": fecha_egreso,
+            "emision_dia": emision_dia,
+            "emision_mes": emision_mes,
+            "emision_ano": emision_ano,
             "egresados": egresados,
             "omitidos": omitidos,
             "trayecto_matched": matched_trayecto,
             "trayecto_data": trayecto_data
         }
+
 

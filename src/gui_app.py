@@ -14,12 +14,12 @@ from src.models import TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
 from src.exporter import convert_pptx_to_pdf
-
 from src.catalog import TrayectoCatalog, format_trayecto_data
+from src.date_utils import calculate_default_emision_date
 
 
 DEFAULT_TEMPLATE = PPTXGenerator.get_default_template_path()
-DEFAULT_EXCEL = "ejemplos/Acta de examen.xlsx"
+DEFAULT_EXCEL = "documentacion/Acta de examen.xlsx" if os.path.exists("documentacion/Acta de examen.xlsx") else "ejemplos/Acta de examen.xlsx"
 OUTPUT_DIR = "output"
 
 def open_in_system(path: str):
@@ -60,6 +60,12 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.excel_path = ctk.StringVar(value=DEFAULT_EXCEL)
         self.template_path = ctk.StringVar(value=DEFAULT_TEMPLATE)
         self.output_dir = ctk.StringVar(value=OUTPUT_DIR)
+        
+        # Fecha de emisión del certificado (por defecto 1 mes posterior al acta)
+        self.emision_dia = ctk.StringVar(value="14")
+        self.emision_mes = ctk.StringVar(value="Agosto")
+        self.emision_ano = ctk.StringVar(value="25")
+
         
         self.excel_data: Optional[Dict[str, Any]] = None
         self.current_trayecto_data: Optional[Dict[str, Any]] = None
@@ -144,6 +150,24 @@ class TituladorGUI(ctk.CTk if ctk else object):
             command=self._on_trayecto_selected
         )
         self.trayecto_dropdown.grid(row=4, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
+
+        # Fecha de Emisión Controls
+        ctk.CTkLabel(paths_frame, text="Fecha Emisión Certificado:", font=ctk.CTkFont(weight="bold")).grid(row=5, column=0, padx=10, pady=5, sticky="e")
+
+        emision_frame = ctk.CTkFrame(paths_frame, fg_color="transparent")
+        emision_frame.grid(row=5, column=1, columnspan=2, padx=5, pady=5, sticky="w")
+
+        ctk.CTkLabel(emision_frame, text="Día:").pack(side="left", padx=(0, 2))
+        ctk.CTkEntry(emision_frame, textvariable=self.emision_dia, width=50).pack(side="left", padx=(0, 10))
+
+        ctk.CTkLabel(emision_frame, text="Mes:").pack(side="left", padx=(0, 2))
+        ctk.CTkEntry(emision_frame, textvariable=self.emision_mes, width=110).pack(side="left", padx=(0, 10))
+
+        ctk.CTkLabel(emision_frame, text="Año (2 dígitos):").pack(side="left", padx=(0, 2))
+        ctk.CTkEntry(emision_frame, textvariable=self.emision_ano, width=50).pack(side="left", padx=(0, 10))
+
+        ctk.CTkLabel(emision_frame, text="(1 mes posterior al acta por defecto)", font=ctk.CTkFont(size=11, slant="italic")).pack(side="left", padx=5)
+
 
 
         # 3. Main Tabview
@@ -240,10 +264,12 @@ class TituladorGUI(ctk.CTk if ctk else object):
         else:
             t_str = "Trayecto JSON: No asignado"
 
+        em_d, em_m, em_a = self.emision_dia.get(), self.emision_mes.get(), self.emision_ano.get()
         info_text = (
             f"Especialidad del Acta: {especialidad_acta}\n"
             f"{t_str}\n"
-            f"Fecha Egreso: {self.excel_data.get('fecha_egreso', '')}\n"
+            f"Fecha Egreso Acta: {self.excel_data.get('fecha_egreso', '')}\n"
+            f"Fecha Emisión Certificado: {em_d} de {em_m} de 20{em_a} (1 mes posterior al acta)\n"
             f"CPF N°: {self.excel_data.get('numero_cpf', '')} - {self.excel_data.get('distrito_cpf', '')}\n"
             f"Total Egresados Aprobados: {len(egresados)}\n"
             f"Total Filas Evitadas (no aprobó): {len(omitidos)}"
@@ -260,7 +286,13 @@ class TituladorGUI(ctk.CTk if ctk else object):
             self.excel_data = parser.load_data(catalog=self.catalog)
             egresados = self.excel_data["egresados"]
             omitidos = self.excel_data.get("omitidos", [])
-            
+
+            # Update default emission date from Excel (+1 month)
+            if self.excel_data.get("emision_dia") and self.excel_data.get("emision_mes") and self.excel_data.get("emision_ano"):
+                self.emision_dia.set(self.excel_data["emision_dia"])
+                self.emision_mes.set(self.excel_data["emision_mes"])
+                self.emision_ano.set(self.excel_data["emision_ano"])
+
             # Auto-select matched trayecto from catalog
             matched_trayecto = self.excel_data.get("trayecto_matched")
             if matched_trayecto:
@@ -279,6 +311,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 self.current_trayecto_data = None
 
             self._update_batch_info()
+
 
             # Update Select Option Menu
             options = [f"{e['num_egresado']} - {e['apellido_nombre']} ({e['documento']})" for e in egresados]
@@ -376,15 +409,16 @@ class TituladorGUI(ctk.CTk if ctk else object):
                     titulo_linea1=t_line1,
                     titulo_linea2=t_line2,
                     resolucion=res,
-                    emision_dia="02",
-                    emision_mes="Septiembre",
-                    emision_ano="25",
+                    emision_dia=self.emision_dia.get(),
+                    emision_mes=self.emision_mes.get(),
+                    emision_ano=self.emision_ano.get(),
                     modulos=modules,
                     fecha_egreso=data["fecha_egreso"],
                     numero_egresado=eg["num_egresado"],
                     numero_cpf=data["numero_cpf"],
                     distrito_cpf=data["distrito_cpf"]
                 )
+
 
                 outs = []
                 out_pptx = os.path.join(out_d, f"{filename_base}.pptx")
@@ -474,15 +508,16 @@ class TituladorGUI(ctk.CTk if ctk else object):
             titulo_linea1=t_line1,
             titulo_linea2=t_line2,
             resolucion=res,
-            emision_dia="02",
-            emision_mes="Septiembre",
-            emision_ano="25",
+            emision_dia=self.emision_dia.get(),
+            emision_mes=self.emision_mes.get(),
+            emision_ano=self.emision_ano.get(),
             modulos=modules,
             fecha_egreso=data["fecha_egreso"],
             numero_egresado=target_eg["num_egresado"],
             numero_cpf=data["numero_cpf"],
             distrito_cpf=data["distrito_cpf"]
         )
+
 
         safe_name = target_eg['apellido_nombre'].replace(" ", "_")
         out_pptx = os.path.join(out_d, f"{target_eg['num_egresado']}_{safe_name}.pptx")
@@ -524,9 +559,10 @@ class TituladorGUI(ctk.CTk if ctk else object):
             ("titulo_linea1", "Título (Línea 1):", "Operadora/or de Carpintería y"),
             ("titulo_linea2", "Título (Línea 2):", "Fabricación de Mobiliario"),
             ("resolucion", "Resolución:", "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"),
-            ("emision_dia", "Emisión Día:", "02"),
-            ("emision_mes", "Emisión Mes:", "Septiembre"),
+            ("emision_dia", "Emisión Día:", "14"),
+            ("emision_mes", "Emisión Mes:", "Agosto"),
             ("emision_ano", "Emisión Año (2 dígitos):", "25"),
+
             ("fecha_egreso", "Fecha de Egreso:", "14 de Julio de 2025"),
             ("numero_egresado", "Número de Egresado:", "354"),
             ("numero_cpf", "Número CPF:", "412"),
