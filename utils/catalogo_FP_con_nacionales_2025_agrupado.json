@@ -1,0 +1,1937 @@
+[
+    {
+        "codigo": "AA49",
+        "trayecto_titulo": "Operaria/o Hortícola",
+        "cohorte": "2021 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2021-3472-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3403-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "AA0055.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "AA0056.2",
+                "Denominación del Módulo": "Armado, cuidado y mantenimiento de estructura, máquinas y herramientas",
+                "Hs. Cat. Módulo": "114",
+                "Hs. Reloj Módulo": "76"
+            },
+            {
+                "Código de Planificación": "AA0057.2",
+                "Denominación del Módulo": "Actividades Agrícolas.",
+                "Hs. Cat. Módulo": "150",
+                "Hs. Reloj Módulo": "100"
+            }
+        ]
+    },
+    {
+        "codigo": "AC30",
+        "trayecto_titulo": "Vendedor",
+        "cohorte": "2018 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2018-4953-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2032-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "AC0031.1",
+                "Denominación del Módulo": "Relaciones laborales y orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "AC0032.1",
+                "Denominación del Módulo": "Sistemas Informáticos",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "AC0033.1",
+                "Denominación del Módulo": "Herramientas de Indagación",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "AC0036.2",
+                "Denominación del Módulo": "Organización previa de tareas y acciones de preventa",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "AC0037.2",
+                "Denominación del Módulo": "Atención al público",
+                "Hs. Cat. Módulo": "45",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "AC0038.2",
+                "Denominación del Módulo": "Ejecución de ventas",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            },
+            {
+                "Código de Planificación": "AC0039.2",
+                "Denominación del Módulo": "Herramientas para la venta digital",
+                "Hs. Cat. Módulo": "45",
+                "Hs. Reloj Módulo": "30"
+            }
+        ]
+    },
+    {
+        "codigo": "AC32",
+        "trayecto_titulo": "Administrativo",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-2319-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2072-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "AC0031.1",
+                "Denominación del Módulo": "Relaciones laborales y orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "AC0032.1",
+                "Denominación del Módulo": "Sistemas Informáticos",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "AC0033.1",
+                "Denominación del Módulo": "Herramientas de Indagación",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "AC0041.2",
+                "Denominación del Módulo": "Procesamiento de datos administrativos",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "AC0042.2",
+                "Denominación del Módulo": "Administración y gestión de documentos para la administración",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            },
+            {
+                "Código de Planificación": "AC0043.2",
+                "Denominación del Módulo": "Gestión de Oficina",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            }
+        ]
+    },
+    {
+        "codigo": "AC33",
+        "trayecto_titulo": "Auxiliar Contable",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-6861-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2804-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "AC0031.1",
+                "Denominación del Módulo": "Relaciones laborales y orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "AC0044.2",
+                "Denominación del Módulo": "Registraciones Contables",
+                "Hs. Cat. Módulo": "165",
+                "Hs. Reloj Módulo": "110"
+            },
+            {
+                "Código de Planificación": "AC0045.2",
+                "Denominación del Módulo": "Procedimientos de control administrativos contables",
+                "Hs. Cat. Módulo": "165",
+                "Hs. Reloj Módulo": "110"
+            },
+            {
+                "Código de Planificación": "AC0046.2",
+                "Denominación del Módulo": "Presentación de estados contables e índices de gestión",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            }
+        ]
+    },
+    {
+        "codigo": "AC34",
+        "trayecto_titulo": "Liquidador de Sueldos",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-6862-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2158-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "AC0031.1",
+                "Denominación del Módulo": "Relaciones laborales y orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "AC0032.1",
+                "Denominación del Módulo": "Sistemas Informáticos",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "AC0033.1",
+                "Denominación del Módulo": "Herramientas de Indagación",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "AC0047.2",
+                "Denominación del Módulo": "Tareas previas a la Liquidación",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            },
+            {
+                "Código de Planificación": "AC0048.2",
+                "Denominación del Módulo": "Liquidaciones Ordinarias y Extraordinarias",
+                "Hs. Cat. Módulo": "180",
+                "Hs. Reloj Módulo": "120"
+            },
+            {
+                "Código de Planificación": "AC0049.2",
+                "Denominación del Módulo": "Procedimientos de presentación legal",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            }
+        ]
+    },
+    {
+        "codigo": "CC11",
+        "trayecto_titulo": "Diseñador-Modelista de Calzado",
+        "cohorte": "2018 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2018-4869-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2267-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "CC0011.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "CC0012.1",
+                "Denominación del Módulo": "Tecnología de los Materiales",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "CC0013.2",
+                "Denominación del Módulo": "Técnicas de Modelaje",
+                "Hs. Cat. Módulo": "225",
+                "Hs. Reloj Módulo": "150"
+            },
+            {
+                "Código de Planificación": "CC0014.2",
+                "Denominación del Módulo": "Modelaje de Calzado Clásico",
+                "Hs. Cat. Módulo": "150",
+                "Hs. Reloj Módulo": "100"
+            },
+            {
+                "Código de Planificación": "CC0015.2",
+                "Denominación del Módulo": "Modelaje de Botas",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            }
+        ]
+    },
+    {
+        "codigo": "CC12",
+        "trayecto_titulo": "Fabricante de Calzado",
+        "cohorte": "2018 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-6869-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2123-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "CC0011.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "CC0012.1",
+                "Denominación del Módulo": "Tecnología de los Materiales",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "CC0016.2",
+                "Denominación del Módulo": "Cortador y Trabajo de Mesa",
+                "Hs. Cat. Módulo": "225",
+                "Hs. Reloj Módulo": "150"
+            },
+            {
+                "Código de Planificación": "CC0017.2",
+                "Denominación del Módulo": "Sistema de Armado",
+                "Hs. Cat. Módulo": "159",
+                "Hs. Reloj Módulo": "106"
+            },
+            {
+                "Código de Planificación": "CC0018.2",
+                "Denominación del Módulo": "Terminación del Calzado",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            }
+        ]
+    },
+    {
+        "codigo": "EE16",
+        "trayecto_titulo": "Bobinador de Máquinas Eléctricas",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2385-E-GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2145-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EE0016.1",
+                "Denominación del Módulo": "Circuitos Eléctricos y Mediciones",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0017.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EE0018.2",
+                "Denominación del Módulo": "Reparación y Mantenimiento de Máquinas Eléctricas",
+                "Hs. Cat. Módulo": "150",
+                "Hs. Reloj Módulo": "100"
+            },
+            {
+                "Código de Planificación": "EE0019.2",
+                "Denominación del Módulo": "Bobinado de Máquinas Eléctricas",
+                "Hs. Cat. Módulo": "264",
+                "Hs. Reloj Módulo": "176"
+            }
+        ]
+    },
+    {
+        "codigo": "EE17",
+        "trayecto_titulo": "Electricista Industrial",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2389 - E- GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2266-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EE0016.1",
+                "Denominación del Módulo": "Circuitos Eléctricos y Mediciones",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0017.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EE0022.1",
+                "Denominación del Módulo": "Representación Gráfica",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "EE0023.1",
+                "Denominación del Módulo": "Tecnología de Control",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0024.2",
+                "Denominación del Módulo": "Montaje de Instalaciones Eléctricas",
+                "Hs. Cat. Módulo": "234",
+                "Hs. Reloj Módulo": "156"
+            },
+            {
+                "Código de Planificación": "EE0025.2",
+                "Denominación del Módulo": "Instalación y Mantenimiento de Máquinas Eléctricas",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "EE0026.2",
+                "Denominación del Módulo": "Instalaciones Eléctricas Industriales",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            }
+        ]
+    },
+    {
+        "codigo": "EE18",
+        "trayecto_titulo": "Instalador de Sistemas Eléctricos de Energía Renovables",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2381 - E - GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2148-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EE0016.1",
+                "Denominación del Módulo": "Circuitos Eléctricos y Mediciones",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0017.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EE0022.1",
+                "Denominación del Módulo": "Representación Gráfica",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "EE0024.2",
+                "Denominación del Módulo": "Montaje de Instalaciones Eléctricas",
+                "Hs. Cat. Módulo": "234",
+                "Hs. Reloj Módulo": "156"
+            },
+            {
+                "Código de Planificación": "EE0027.2",
+                "Denominación del Módulo": "Instalaciones de Sistemas Eléctricos de Energías Renovables",
+                "Hs. Cat. Módulo": "225",
+                "Hs. Reloj Módulo": "150"
+            }
+        ]
+    },
+    {
+        "codigo": "EE19",
+        "trayecto_titulo": "Montador Tablerista de Sistemas de Potencia",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2388 - E- GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2161-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EE0017.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EE0022.1",
+                "Denominación del Módulo": "Representación Gráfica",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "EE0023.1",
+                "Denominación del Módulo": "Tecnología de Control",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0029.2",
+                "Denominación del Módulo": "Tecnología de Dispositivos Programables",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0025.2",
+                "Denominación del Módulo": "Instalación y Mantenimiento de Máquinas Eléctricas",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "EE0030.2",
+                "Denominación del Módulo": "Montaje de Tableros en Sistemas de Potencia",
+                "Hs. Cat. Módulo": "204",
+                "Hs. Reloj Módulo": "136"
+            }
+        ]
+    },
+    {
+        "codigo": "EE20",
+        "trayecto_titulo": "Instalador de Sistemas de Automatización",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2019 - 2265-E-GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2146-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EE0016.1",
+                "Denominación del Módulo": "Circuitos Eléctricos y Mediciones",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0017.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EE0023.1",
+                "Denominación del Módulo": "Tecnología de Control",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0031.2",
+                "Denominación del Módulo": "Instalación y Mantenimiento de Máquinas Eléctricas",
+                "Hs. Cat. Módulo": "135",
+                "Hs. Reloj Módulo": "90"
+            },
+            {
+                "Código de Planificación": "EE0032.2",
+                "Denominación del Módulo": "Instalación y Mantenimiento de SistemasNeumáticos y Electroneumáticos",
+                "Hs. Cat. Módulo": "135",
+                "Hs. Reloj Módulo": "90"
+            },
+            {
+                "Código de Planificación": "EE0033.2",
+                "Denominación del Módulo": "Instalación y Mantenimiento de Sistemas Oleohidráulicos y Electrohidráulicos",
+                "Hs. Cat. Módulo": "135",
+                "Hs. Reloj Módulo": "90"
+            },
+            {
+                "Código de Planificación": "EE0034.2",
+                "Denominación del Módulo": "Instalación y Mantenimiento de Sistemas Automáticos Industriales",
+                "Hs. Cat. Módulo": "135",
+                "Hs. Reloj Módulo": "90"
+            }
+        ]
+    },
+    {
+        "codigo": "EE21",
+        "trayecto_titulo": "Montador Electricista Domiciliario",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2019 - 6865-GDEBA - DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2147-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EE0016.1",
+                "Denominación del Módulo": "Circuitos Eléctricos y Mediciones",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0017.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EE0024.2",
+                "Denominación del Módulo": "Montaje de Instalaciones Eléctricas",
+                "Hs. Cat. Módulo": "234",
+                "Hs. Reloj Módulo": "156"
+            }
+        ]
+    },
+    {
+        "codigo": "EE22",
+        "trayecto_titulo": "Electricista en Inmuebles",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2019 - 6908GDEBA - DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2139-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EE0016.1",
+                "Denominación del Módulo": "Circuitos Eléctricos y Mediciones",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EE0017.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EE0024.2",
+                "Denominación del Módulo": "Montaje de Instalaciones Eléctricas",
+                "Hs. Cat. Módulo": "234",
+                "Hs. Reloj Módulo": "156"
+            },
+            {
+                "Código de Planificación": "EE0022.1",
+                "Denominación del Módulo": "Representación Gráfica",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "EE0037.2",
+                "Denominación del Módulo": "Instalaciones Eléctricas en Inmuebles",
+                "Hs. Cat. Módulo": "225",
+                "Hs. Reloj Módulo": "150"
+            },
+            {
+                "Código de Planificación": "EE0038.2",
+                "Denominación del Módulo": "Proyecto de Instalaciones Eléctricas",
+                "Hs. Cat. Módulo": "150",
+                "Hs. Reloj Módulo": "100"
+            }
+        ]
+    },
+    {
+        "codigo": "EM01",
+        "trayecto_titulo": "Instalador y Reparador de Equipos de Climatización",
+        "cohorte": "2021 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2020-1808-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3408-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "EM0001.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "EM0002.1",
+                "Denominación del Módulo": "Tecnología para Sistemas Termomecánicos",
+                "Hs. Cat. Módulo": "72",
+                "Hs. Reloj Módulo": "48"
+            },
+            {
+                "Código de Planificación": "EM0003.1",
+                "Denominación del Módulo": "Técnicas de Unión",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "EM0004.2",
+                "Denominación del Módulo": "Instalación de Equipos de Climatización",
+                "Hs. Cat. Módulo": "168",
+                "Hs. Reloj Módulo": "112"
+            },
+            {
+                "Código de Planificación": "EM0005.2",
+                "Denominación del Módulo": "Reparación de Equipos de Climatización",
+                "Hs. Cat. Módulo": "234",
+                "Hs. Reloj Módulo": "156"
+            }
+        ]
+    },
+    {
+        "codigo": "GH38",
+        "trayecto_titulo": "Cocinero",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2387 - E - GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3440-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "GH0057.1",
+                "Denominación del Módulo": "Tecnología de los alimentos",
+                "Hs. Cat. Módulo": "45",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "GH0058.1",
+                "Denominación del Módulo": "Seguridad y BPM",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "GH0059.1",
+                "Denominación del Módulo": "Gestión del proceso de trabajo gastronómico",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "GH0060.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "GH0061.2",
+                "Denominación del Módulo": "Preparaciones básicas en panadería",
+                "Hs. Cat. Módulo": "69",
+                "Hs. Reloj Módulo": "46"
+            },
+            {
+                "Código de Planificación": "GH0062.2",
+                "Denominación del Módulo": "Preparaciones básicas en pastelería",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "GH0063.2",
+                "Denominación del Módulo": "Elaboraciones de cocina",
+                "Hs. Cat. Módulo": "150",
+                "Hs. Reloj Módulo": "100"
+            },
+            {
+                "Código de Planificación": "GH0064.2",
+                "Denominación del Módulo": "Buffet",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            }
+        ]
+    },
+    {
+        "codigo": "GH39",
+        "trayecto_titulo": "Panadero",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2390-E- GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3339-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "GH0057.1",
+                "Denominación del Módulo": "Tecnología de los alimentos",
+                "Hs. Cat. Módulo": "45",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "GH0058.1",
+                "Denominación del Módulo": "Seguridad y BPM",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "GH0059.1",
+                "Denominación del Módulo": "Gestión del proceso de trabajo gastronómico",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "GH0060.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "GH0061.2",
+                "Denominación del Módulo": "Preparaciones básicas en panadería",
+                "Hs. Cat. Módulo": "69",
+                "Hs. Reloj Módulo": "46"
+            },
+            {
+                "Código de Planificación": "GH0062.2",
+                "Denominación del Módulo": "Preparaciones básicas en pastelería",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "GH0065.2",
+                "Denominación del Módulo": "Elaboraciones de Panaderia",
+                "Hs. Cat. Módulo": "135",
+                "Hs. Reloj Módulo": "90"
+            },
+            {
+                "Código de Planificación": "GH0066.2",
+                "Denominación del Módulo": "Elaboracion de facturas",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            }
+        ]
+    },
+    {
+        "codigo": "GH40",
+        "trayecto_titulo": "Pastelero",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2384-E- GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3348-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "GH0057.1",
+                "Denominación del Módulo": "Tecnología de los alimentos",
+                "Hs. Cat. Módulo": "45",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "GH0058.1",
+                "Denominación del Módulo": "Seguridad y BPM",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "GH0059.1",
+                "Denominación del Módulo": "Gestión del proceso de trabajo gastronómico",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "GH0060.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "GH0061.2",
+                "Denominación del Módulo": "Preparaciones básicas en panadería",
+                "Hs. Cat. Módulo": "69",
+                "Hs. Reloj Módulo": "46"
+            },
+            {
+                "Código de Planificación": "GH0062.2",
+                "Denominación del Módulo": "Preparaciones básicas en pastelería",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "GH0067.2",
+                "Denominación del Módulo": "Elaboraciones de Pastelería",
+                "Hs. Cat. Módulo": "231",
+                "Hs. Reloj Módulo": "154"
+            },
+            {
+                "Código de Planificación": "GH0068.2",
+                "Denominación del Módulo": "Postres clásicos y de restaurante",
+                "Hs. Cat. Módulo": "180",
+                "Hs. Reloj Módulo": "120"
+            }
+        ]
+    },
+    {
+        "codigo": "IG01",
+        "trayecto_titulo": "Programador",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2383 - E- GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2058-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "IM0031.2",
+                "Denominación del Módulo": "Programación Orientada a Objetos",
+                "Hs. Cat. Módulo": "225",
+                "Hs. Reloj Módulo": "150"
+            },
+            {
+                "Código de Planificación": "IM0032.2",
+                "Denominación del Módulo": "Base de Datos",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            }
+        ]
+    },
+    {
+        "codigo": "MA21",
+        "trayecto_titulo": "Electricista del Automotor",
+        "cohorte": "2018 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2018 - 1678-E-GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2060-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MA0060.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MA0061.1",
+                "Denominación del Módulo": "Mediciones y Diagnóstico Eléctrico - Electrónico",
+                "Hs. Cat. Módulo": "81",
+                "Hs. Reloj Módulo": "54"
+            },
+            {
+                "Código de Planificación": "MA0062.1",
+                "Denominación del Módulo": "Gestión y/o atención clientes externos",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MA0063.1",
+                "Denominación del Módulo": "Gestión de servicio",
+                "Hs. Cat. Módulo": "45",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "MA0064.2",
+                "Denominación del Módulo": "Circuitos cableados - Equipamientos",
+                "Hs. Cat. Módulo": "144",
+                "Hs. Reloj Módulo": "96"
+            },
+            {
+                "Código de Planificación": "MA0065.2",
+                "Denominación del Módulo": "Sistemas de Control",
+                "Hs. Cat. Módulo": "114",
+                "Hs. Reloj Módulo": "76"
+            },
+            {
+                "Código de Planificación": "MA0066.2",
+                "Denominación del Módulo": "Sistema de Arranque y Carga",
+                "Hs. Cat. Módulo": "144",
+                "Hs. Reloj Módulo": "96"
+            }
+        ]
+    },
+    {
+        "codigo": "MA26",
+        "trayecto_titulo": "Mecánico de Sistemas de Suspensión y Dirección del Automotor",
+        "cohorte": "2021 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2020-1811-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3401-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MA0060.1",
+                "Denominación del Módulo": "Relaciones Laborales y Orientación Profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MA0061.1",
+                "Denominación del Módulo": "Mediciones y Diagnóstico Eléctrico - Electrónico",
+                "Hs. Cat. Módulo": "81",
+                "Hs. Reloj Módulo": "54"
+            },
+            {
+                "Código de Planificación": "MA0062.1",
+                "Denominación del Módulo": "Gestión y/o atención clientes externos",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MA0063.1",
+                "Denominación del Módulo": "Gestión de servicio",
+                "Hs. Cat. Módulo": "45",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "MA0067.1",
+                "Denominación del Módulo": "Mediciones y Diagnóstico Mecánico",
+                "Hs. Cat. Módulo": "81",
+                "Hs. Reloj Módulo": "54"
+            },
+            {
+                "Código de Planificación": "MA0076.1",
+                "Denominación del Módulo": "Tren de tracción Delantero / Trasero",
+                "Hs. Cat. Módulo": "162",
+                "Hs. Reloj Módulo": "108"
+            },
+            {
+                "Código de Planificación": "MA0079.2",
+                "Denominación del Módulo": "Sistemas de Suspensión y Dirección",
+                "Hs. Cat. Módulo": "153",
+                "Hs. Reloj Módulo": "102"
+            },
+            {
+                "Código de Planificación": "MA0080.2",
+                "Denominación del Módulo": "Alineación y Balanceo",
+                "Hs. Cat. Módulo": "81",
+                "Hs. Reloj Módulo": "54"
+            }
+        ]
+    },
+    {
+        "codigo": "MT26",
+        "trayecto_titulo": "Tornero",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-507-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3405-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0025.1",
+                "Denominación del Módulo": "Metrología y trazado",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0026.1",
+                "Denominación del Módulo": "Tecnología de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0027.2",
+                "Denominación del Módulo": "Tecnología del Torno Paralelo",
+                "Hs. Cat. Módulo": "72",
+                "Hs. Reloj Módulo": "48"
+            },
+            {
+                "Código de Planificación": "MT0028.2",
+                "Denominación del Módulo": "Operación del Torno Paralelo",
+                "Hs. Cat. Módulo": "234",
+                "Hs. Reloj Módulo": "156"
+            }
+        ]
+    },
+    {
+        "codigo": "MT27",
+        "trayecto_titulo": "Fresador",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-508-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3380-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0025.1",
+                "Denominación del Módulo": "Metrología y trazado",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0026.1",
+                "Denominación del Módulo": "Tecnología de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0030.2",
+                "Denominación del Módulo": "Tecnología de la fresadora",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "MT0031.2",
+                "Denominación del Módulo": "Opeación de la fresadora",
+                "Hs. Cat. Módulo": "246",
+                "Hs. Reloj Módulo": "164"
+            }
+        ]
+    },
+    {
+        "codigo": "MT28",
+        "trayecto_titulo": "Operador de Máquinas Comandadas a Control Numérico Computarizado para el Arranque de Viruta",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-513-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3352-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0025.1",
+                "Denominación del Módulo": "Metrología y trazado",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0026.1",
+                "Denominación del Módulo": "Tecnología de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0027.2",
+                "Denominación del Módulo": "Tecnología del Torno Paralelo",
+                "Hs. Cat. Módulo": "72",
+                "Hs. Reloj Módulo": "48"
+            },
+            {
+                "Código de Planificación": "MT0028.2",
+                "Denominación del Módulo": "Operación del Torno Paralelo",
+                "Hs. Cat. Módulo": "234",
+                "Hs. Reloj Módulo": "156"
+            },
+            {
+                "Código de Planificación": "MT0030.2",
+                "Denominación del Módulo": "Tecnología de la Fresadora",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "MT0031.2",
+                "Denominación del Módulo": "Operación de la Fresadora",
+                "Hs. Cat. Módulo": "246",
+                "Hs. Reloj Módulo": "164"
+            },
+            {
+                "Código de Planificación": "MT0037.2",
+                "Denominación del Módulo": "Operación del Torno CNC",
+                "Hs. Cat. Módulo": "84",
+                "Hs. Reloj Módulo": "56"
+            },
+            {
+                "Código de Planificación": "MT0038.2",
+                "Denominación del Módulo": "Operación de Fresadora CNC",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            }
+        ]
+    },
+    {
+        "codigo": "MT30",
+        "trayecto_titulo": "Soldador Básico",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-510-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3382-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0041.1",
+                "Denominación del Módulo": "Tratamiento de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0042.2",
+                "Denominación del Módulo": "Soldadura manual con electrodo revestido",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "MT0043.2",
+                "Denominación del Módulo": "Corte de materiales",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            }
+        ]
+    },
+    {
+        "codigo": "MT31",
+        "trayecto_titulo": "Soldador",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-511-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3296-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0041.1",
+                "Denominación del Módulo": "Tratamiento de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0042.2",
+                "Denominación del Módulo": "Soldadura manual con electrodo revestido",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "MT0043.2",
+                "Denominación del Módulo": "Corte de materiales",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "MT0044.2",
+                "Denominación del Módulo": "Soldadura MIG MAG",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "MT0045.2",
+                "Denominación del Módulo": "Soldadura TIG",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "MT0046.2",
+                "Denominación del Módulo": "Procesos específicos en las soldaduras",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            }
+        ]
+    },
+    {
+        "codigo": "MT32",
+        "trayecto_titulo": "Carpintero Metálico y de PVC",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-514-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3294-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0041.1",
+                "Denominación del Módulo": "Tratamiento de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0047.1",
+                "Denominación del Módulo": "Conformado de materiales",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "MT0042.2",
+                "Denominación del Módulo": "Soldadura manual con electrodo revestido",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "MT0048.2",
+                "Denominación del Módulo": "Soldadura para espesores finos",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "MT0049.2",
+                "Denominación del Módulo": "Fabricación de productos metálicos",
+                "Hs. Cat. Módulo": "81",
+                "Hs. Reloj Módulo": "54"
+            },
+            {
+                "Código de Planificación": "MT0050.2",
+                "Denominación del Módulo": "Fabricación e instalación de carpintería de aluminio",
+                "Hs. Cat. Módulo": "66",
+                "Hs. Reloj Módulo": "44"
+            },
+            {
+                "Código de Planificación": "MT0051.2",
+                "Denominación del Módulo": "Fabricación e instalación de carpintería de PVC",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            }
+        ]
+    },
+    {
+        "codigo": "MT33",
+        "trayecto_titulo": "Herrero",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-512-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2023-105-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0041.1",
+                "Denominación del Módulo": "Tratamiento de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "32"
+            },
+            {
+                "Código de Planificación": "MT0043.2",
+                "Denominación del Módulo": "Corte de materiales",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "MT0047.1",
+                "Denominación del Módulo": "Conformado de materiales",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "MT0042.2",
+                "Denominación del Módulo": "Soldadura manual con electrodo revestido",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "MT0048.2",
+                "Denominación del Módulo": "Soldadura para espesores finos",
+                "Hs. Cat. Módulo": "60",
+                "Hs. Reloj Módulo": "40"
+            },
+            {
+                "Código de Planificación": "MT0052.2",
+                "Denominación del Módulo": "Fabricación de productos de herrería",
+                "Hs. Cat. Módulo": "81",
+                "Hs. Reloj Módulo": "54"
+            }
+        ]
+    },
+    {
+        "codigo": "MT42",
+        "trayecto_titulo": "Programador de Máquinas Comandadas a Control Numérico Computarizado para el Arranque de Viruta",
+        "cohorte": "2019 a 2020",
+        "resolucion_jurisdiccional": "RESFC-2019-509-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3351-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "MT0036.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "MT0025.1",
+                "Denominación del Módulo": "Metrología y trazado",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "MT0026.1",
+                "Denominación del Módulo": "Tecnología de los materiales",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "MT0024.1",
+                "Denominación del Módulo": "Administración de la documentación técnica",
+                "Hs. Cat. Módulo": "48",
+                "Hs. Reloj Módulo": "30"
+            },
+            {
+                "Código de Planificación": "MT0063.2",
+                "Denominación del Módulo": "Equipos convencionales de fabricación por arranque de viruta",
+                "Hs. Cat. Módulo": "135",
+                "Hs. Reloj Módulo": "90"
+            },
+            {
+                "Código de Planificación": "MT0064.2",
+                "Denominación del Módulo": "Equipos convencionales de fabricación por conformado y unión soldada.",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            },
+            {
+                "Código de Planificación": "MT0065.2",
+                "Denominación del Módulo": "Modelado",
+                "Hs. Cat. Módulo": "120",
+                "Hs. Reloj Módulo": "80"
+            },
+            {
+                "Código de Planificación": "MT0066.2",
+                "Denominación del Módulo": "Programación y operación de equipos de fabricación asistidos",
+                "Hs. Cat. Módulo": "225",
+                "Hs. Reloj Módulo": "150"
+            }
+        ]
+    },
+    {
+        "codigo": "OC31",
+        "trayecto_titulo": "Instalador Sanitarista",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC 2017 - 2380 E- GDEBA DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2163-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0072.1",
+                "Denominación del Módulo": "Tecnología de las instalaciones Sanitarias",
+                "Hs. Cat. Módulo": "52",
+                "Hs. Reloj Módulo": "35"
+            },
+            {
+                "Código de Planificación": "OC0073.1",
+                "Denominación del Módulo": "Relaciones de trabajo y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "OC0074.1",
+                "Denominación del Módulo": "Representación Gráfica",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "OC0075.2",
+                "Denominación del Módulo": "Montaje de Instalaciones Sanitarias Domiciliarias",
+                "Hs. Cat. Módulo": "332",
+                "Hs. Reloj Módulo": "221"
+            },
+            {
+                "Código de Planificación": "OC0076.2",
+                "Denominación del Módulo": "Proyecto de Instalaciones Sanitarias Domiciliarias",
+                "Hs. Cat. Módulo": "225",
+                "Hs. Reloj Módulo": "150"
+            }
+        ]
+    },
+    {
+        "codigo": "OC32",
+        "trayecto_titulo": "Montador de Instalaciones Sanitarias Domiciliarias",
+        "cohorte": "2017 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2017-2386-E-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2030-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0072.1",
+                "Denominación del Módulo": "Tecnología de las instalaciones Sanitarias",
+                "Hs. Cat. Módulo": "52",
+                "Hs. Reloj Módulo": "35"
+            },
+            {
+                "Código de Planificación": "OC0073.1",
+                "Denominación del Módulo": "Relaciones de trabajo y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "OC0075.2",
+                "Denominación del Módulo": "Montaje de Instalaciones Sanitarias Domiciliarias",
+                "Hs. Cat. Módulo": "332",
+                "Hs. Reloj Módulo": "221"
+            }
+        ]
+    },
+    {
+        "codigo": "OC33",
+        "trayecto_titulo": "Auxiliar de Instalaciones Sanitarias y de Gas",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-4133-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3437-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0076.1",
+                "Denominación del Módulo": "Introducción al trabajo en obra de la Construcción Civil",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "OC0077.2",
+                "Denominación del Módulo": "Introducción al trabajo en las Instalaciones Domiciliarias Sanitarias y de Gas",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            }
+        ]
+    },
+    {
+        "codigo": "OC34",
+        "trayecto_titulo": "Montador de Instalaciones de Gas Domiciliario",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-4134-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3449-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0076.1",
+                "Denominación del Módulo": "Introducción al trabajo en obra de la Construcción Civil",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "OC0077.2",
+                "Denominación del Módulo": "Introducción al trabajo en las Instalaciones Domiciliarias Sanitarias y de Gas (Opcional)",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "OC0078.2",
+                "Denominación del Módulo": "Instalacion, control y mantenimiento del tendido de gas domiciliario en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "183",
+                "Hs. Reloj Módulo": "122"
+            },
+            {
+                "Código de Planificación": "OC0079.2",
+                "Denominación del Módulo": "Instalación y control de artefactos y sistemas de ventilación en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "108",
+                "Hs. Reloj Módulo": "72"
+            }
+        ]
+    },
+    {
+        "codigo": "OC35",
+        "trayecto_titulo": "Gasista de Unidades Unifuncionales",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-4118-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3431-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0076.1",
+                "Denominación del Módulo": "Introducción al trabajo en obra de la Construcción Civil",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "OC0077.2",
+                "Denominación del Módulo": "Introducción al trabajo en las Instalaciones Domiciliarias Sanitarias y de Gas (Opcional)",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "OC0078.2",
+                "Denominación del Módulo": "Instalacion, control y mantenimiento del tendido de gas domiciliario en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "183",
+                "Hs. Reloj Módulo": "122"
+            },
+            {
+                "Código de Planificación": "OC0079.2",
+                "Denominación del Módulo": "Instalación y control de artefactos y sistemas de ventilación en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "108",
+                "Hs. Reloj Módulo": "72"
+            },
+            {
+                "Código de Planificación": "OC0080.2",
+                "Denominación del Módulo": "Proyecto y planificación de instalaciones de gas domiciliaria en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "126",
+                "Hs. Reloj Módulo": "84"
+            },
+            {
+                "Código de Planificación": "OC0081.2",
+                "Denominación del Módulo": "Organización y Gestion de los servicios profesionales en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            }
+        ]
+    },
+    {
+        "codigo": "OC36",
+        "trayecto_titulo": "Gasista Domiciliario",
+        "cohorte": "2019 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2019-4131-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3436-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0076.1",
+                "Denominación del Módulo": "Introducción al trabajo en obra de la Construcción Civil",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "OC0077.2",
+                "Denominación del Módulo": "Introducción al trabajo en las Instalaciones Domiciliarias Sanitarias y de Gas (Opcional)",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "OC0078.2",
+                "Denominación del Módulo": "Instalacion, control y mantenimiento del tendido de gas domiciliario en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "183",
+                "Hs. Reloj Módulo": "122"
+            },
+            {
+                "Código de Planificación": "OC0079.2",
+                "Denominación del Módulo": "Instalación y control de artefactos y sistemas de ventilación en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "108",
+                "Hs. Reloj Módulo": "72"
+            },
+            {
+                "Código de Planificación": "OC0080.2",
+                "Denominación del Módulo": "Proyecto y planificación de instalaciones de gas domiciliaria en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "126",
+                "Hs. Reloj Módulo": "84"
+            },
+            {
+                "Código de Planificación": "OC0081.2",
+                "Denominación del Módulo": "Organización y Gestion de los servicios profesionales en Unidades Unifuncionales",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "OC0082.2",
+                "Denominación del Módulo": "Instalacion, control y mantenimiento del tendido de gas domiciliario en Unidades Multifuncionales",
+                "Hs. Cat. Módulo": "101",
+                "Hs. Reloj Módulo": "67"
+            },
+            {
+                "Código de Planificación": "OC0083.2",
+                "Denominación del Módulo": "Instalación y control de artefactos y sistemas de ventilación en Unidades",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "OC0084.2",
+                "Denominación del Módulo": "Proyecto y planificación de instalaciones de gas domiciliario en Unidades Multifuncionales",
+                "Hs. Cat. Módulo": "63",
+                "Hs. Reloj Módulo": "42"
+            },
+            {
+                "Código de Planificación": "OC0085.2",
+                "Denominación del Módulo": "Organización y Gestión de los servicios profesionales en Unidades Multifuncionales",
+                "Hs. Cat. Módulo": "46",
+                "Hs. Reloj Módulo": "31"
+            }
+        ]
+    },
+    {
+        "codigo": "OC39",
+        "trayecto_titulo": "Albañil",
+        "cohorte": "2021 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2020-1799-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3300-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0073.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "OC0088.1",
+                "Denominación del Módulo": "Tecnología de las Construcciones",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "OC0089.2",
+                "Denominación del Módulo": "Albañilería de Estructuras y Cerramientos",
+                "Hs. Cat. Módulo": "127",
+                "Hs. Reloj Módulo": "85"
+            },
+            {
+                "Código de Planificación": "OC0090.2",
+                "Denominación del Módulo": "Albañilería de Terminaciones, Cubiertas y Gestión del Proceso de Trabajo",
+                "Hs. Cat. Módulo": "129",
+                "Hs. Reloj Módulo": "86"
+            }
+        ]
+    },
+    {
+        "codigo": "OC40",
+        "trayecto_titulo": "Armador y Montador de Paneles y Cielorrasos de Placas de Roca de Yeso",
+        "cohorte": "2021 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2020-1800-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3299-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "OC0073.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "OC0088.1",
+                "Denominación del Módulo": "Tecnología de las Construcciones",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "OC0091.2",
+                "Denominación del Módulo": "Armado y Montaje de Paneles y Cielorrasos de Placa de Roca de Yeso",
+                "Hs. Cat. Módulo": "168",
+                "Hs. Reloj Módulo": "112"
+            }
+        ]
+    },
+    {
+        "codigo": "SM05",
+        "trayecto_titulo": "Guardavidas",
+        "cohorte": "2019 a 2023",
+        "resolucion_jurisdiccional": "RES 1644/07",
+        "resolucion_validez_nacional": "RESOL-2020-2185-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "SM0012.2",
+                "Denominación del Módulo": "Ética y Deontología",
+                "Hs. Cat. Módulo": "15",
+                "Hs. Reloj Módulo": "10"
+            },
+            {
+                "Código de Planificación": "SM0013.2",
+                "Denominación del Módulo": "Derecho Civil, Penal y Laboral",
+                "Hs. Cat. Módulo": "24",
+                "Hs. Reloj Módulo": "16"
+            },
+            {
+                "Código de Planificación": "SM0014.2",
+                "Denominación del Módulo": "Psicología Social",
+                "Hs. Cat. Módulo": "24",
+                "Hs. Reloj Módulo": "16"
+            },
+            {
+                "Código de Planificación": "SM0015.2",
+                "Denominación del Módulo": "Natación",
+                "Hs. Cat. Módulo": "144",
+                "Hs. Reloj Módulo": "96"
+            },
+            {
+                "Código de Planificación": "SM0016.2",
+                "Denominación del Módulo": "Preparación Física",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "SM0017.2",
+                "Denominación del Módulo": "Ejercitación en Aguas Abiertas",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "SM0018.2",
+                "Denominación del Módulo": "Práctica profesional en Natatorio",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            },
+            {
+                "Código de Planificación": "SM0019.2",
+                "Denominación del Módulo": "Práctica profesional en Aguas Abiertas",
+                "Hs. Cat. Módulo": "105",
+                "Hs. Reloj Módulo": "70"
+            },
+            {
+                "Código de Planificación": "SM0020.2",
+                "Denominación del Módulo": "Problemáticas Contextuales",
+                "Hs. Cat. Módulo": "24",
+                "Hs. Reloj Módulo": "16"
+            }
+        ]
+    },
+    {
+        "codigo": "SM07",
+        "trayecto_titulo": "Auxiliar en Seguridad e Higiene Laboral",
+        "cohorte": "2018 a 2024",
+        "resolucion_jurisdiccional": "RESFC-2018-5246-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-2162-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "SM0027.1",
+                "Denominación del Módulo": "Relaciones de trabajo y orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "SM0028.1",
+                "Denominación del Módulo": "Herramientas de Cálculo para el Trabajo Profesional",
+                "Hs. Cat. Módulo": "54",
+                "Hs. Reloj Módulo": "36"
+            },
+            {
+                "Código de Planificación": "SM0029.1",
+                "Denominación del Módulo": "Legislación que regula el campo Laboral",
+                "Hs. Cat. Módulo": "68",
+                "Hs. Reloj Módulo": "45"
+            },
+            {
+                "Código de Planificación": "SM0030.2",
+                "Denominación del Módulo": "Sistemas de Evaluación de Riesgo en Higiene y Seguridad",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "SM0031.2",
+                "Denominación del Módulo": "Condiciones de Seguridad en los ambientes Laborales",
+                "Hs. Cat. Módulo": "98",
+                "Hs. Reloj Módulo": "65"
+            },
+            {
+                "Código de Planificación": "SM0032.2",
+                "Denominación del Módulo": "Sistemas de Gestión en Salud, Seguridad y Ambiente",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            },
+            {
+                "Código de Planificación": "SM0033.2",
+                "Denominación del Módulo": "Gestión del Auxiliar en el contexto del equipo de Higiene y Seguridad Laboral",
+                "Hs. Cat. Módulo": "90",
+                "Hs. Reloj Módulo": "60"
+            }
+        ]
+    },
+    {
+        "codigo": "SP08",
+        "trayecto_titulo": "Maquillador Profesional",
+        "cohorte": "2021 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2020-1809-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2022-3402-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "SP0007.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "SP0008.1",
+                "Denominación del Módulo": "Piel y Anexos Cutáneos",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "SP0009.1",
+                "Denominación del Módulo": "Gestión del proceso de trabajo en estética profesional.",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "SP0013.2",
+                "Denominación del Módulo": "Maquillaje Social",
+                "Hs. Cat. Módulo": "180",
+                "Hs. Reloj Módulo": "120"
+            },
+            {
+                "Código de Planificación": "SP0014.2",
+                "Denominación del Módulo": "Maquillaje Artístico",
+                "Hs. Cat. Módulo": "159",
+                "Hs. Reloj Módulo": "106"
+            },
+            {
+                "Código de Planificación": "SP0015.2",
+                "Denominación del Módulo": "Maquillaje en Moda, Fotografía y producción Audiovisual.",
+                "Hs. Cat. Módulo": "159",
+                "Hs. Reloj Módulo": "106"
+            }
+        ]
+    },
+    {
+        "codigo": "SS17",
+        "trayecto_titulo": "Acompañante Terapeutico",
+        "cohorte": "2019 a 2023",
+        "resolucion_jurisdiccional": "RES 1014/14",
+        "resolucion_validez_nacional": "RESOL-2021-1986-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "SS0061.2",
+                "Denominación del Módulo": "Salud Pública y Salud mental",
+                "Hs. Cat. Módulo": "96",
+                "Hs. Reloj Módulo": "64"
+            },
+            {
+                "Código de Planificación": "SS0062.2",
+                "Denominación del Módulo": "Contextualización del Campo Profesional del Acompañamiento Terapéutico",
+                "Hs. Cat. Módulo": "96",
+                "Hs. Reloj Módulo": "64"
+            },
+            {
+                "Código de Planificación": "SS0063.2",
+                "Denominación del Módulo": "Principios Médicos y de Psicofarmacología",
+                "Hs. Cat. Módulo": "96",
+                "Hs. Reloj Módulo": "64"
+            },
+            {
+                "Código de Planificación": "SS0064.2",
+                "Denominación del Módulo": "Fundamentos de Psicología General y de Intervención Socio-comunitaria",
+                "Hs. Cat. Módulo": "96",
+                "Hs. Reloj Módulo": "64"
+            },
+            {
+                "Código de Planificación": "SS0065.2",
+                "Denominación del Módulo": "Psicología de los Ciclos Vitales",
+                "Hs. Cat. Módulo": "96",
+                "Hs. Reloj Módulo": "64"
+            },
+            {
+                "Código de Planificación": "SS0066.2",
+                "Denominación del Módulo": "Psicopatología",
+                "Hs. Cat. Módulo": "96",
+                "Hs. Reloj Módulo": "64"
+            },
+            {
+                "Código de Planificación": "SS0067.2",
+                "Denominación del Módulo": "Modalidades en la Intervención en el Acompañamiento Terapéutico",
+                "Hs. Cat. Módulo": "192",
+                "Hs. Reloj Módulo": "128"
+            },
+            {
+                "Código de Planificación": "SS0068.2",
+                "Denominación del Módulo": "Prácticas Profesionalizantes",
+                "Hs. Cat. Módulo": "192",
+                "Hs. Reloj Módulo": "128"
+            }
+        ]
+    },
+    {
+        "codigo": "TI25",
+        "trayecto_titulo": "Confeccionista a Medida. Modista/o",
+        "cohorte": "2020 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2020-1802-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2023-103-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "TI0025.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "TI0026.1",
+                "Denominación del Módulo": "Tecnología de los materiales y procesos de fabricación",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "TI0027.1",
+                "Denominación del Módulo": "Gestión de los procesos de trabajo",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "TI0028.2",
+                "Denominación del Módulo": "Elaboración de Moldes Base",
+                "Hs. Cat. Módulo": "72",
+                "Hs. Reloj Módulo": "48"
+            },
+            {
+                "Código de Planificación": "TI0029.2",
+                "Denominación del Módulo": "Confección de prendas básicas",
+                "Hs. Cat. Módulo": "183",
+                "Hs. Reloj Módulo": "122"
+            },
+            {
+                "Código de Planificación": "TI0030.2",
+                "Denominación del Módulo": "Confección de prendas complejas",
+                "Hs. Cat. Módulo": "174",
+                "Hs. Reloj Módulo": "116"
+            }
+        ]
+    },
+    {
+        "codigo": "TI26",
+        "trayecto_titulo": "Modelista - Patronista",
+        "cohorte": "2020 a 2024",
+        "resolucion_jurisdiccional": "RESOC-2020-1813-GDEBA-DGCYE",
+        "resolucion_validez_nacional": "RESOL-2023-104-APN-ME",
+        "modulos": [
+            {
+                "Código de Planificación": "TI0025.1",
+                "Denominación del Módulo": "Relaciones laborales y Orientación profesional",
+                "Hs. Cat. Módulo": "36",
+                "Hs. Reloj Módulo": "24"
+            },
+            {
+                "Código de Planificación": "TI0026.1",
+                "Denominación del Módulo": "Tecnología de los materiales y procesos de fabricación",
+                "Hs. Cat. Módulo": "75",
+                "Hs. Reloj Módulo": "50"
+            },
+            {
+                "Código de Planificación": "TI0027.1",
+                "Denominación del Módulo": "Gestión de los procesos de trabajo",
+                "Hs. Cat. Módulo": "30",
+                "Hs. Reloj Módulo": "20"
+            },
+            {
+                "Código de Planificación": "TI0031.2",
+                "Denominación del Módulo": "Moldería y confección de camisas y pantalones",
+                "Hs. Cat. Módulo": "150",
+                "Hs. Reloj Módulo": "100"
+            },
+            {
+                "Código de Planificación": "TI0032.2",
+                "Denominación del Módulo": "Moldería y confección de sacos y abrigos",
+                "Hs. Cat. Módulo": "150",
+                "Hs. Reloj Módulo": "100"
+            }
+        ]
+    }
+]
