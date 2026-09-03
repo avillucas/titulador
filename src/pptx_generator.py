@@ -205,7 +205,10 @@ class PPTXGenerator:
                 elif shape.shape_id == 88:  # Trayecto / Curso (Arial 11-12)
                     from pptx.util import Mm
                     shape.top = Mm(79.0)
-                    val = str(data.titulo_linea1)
+                    val = str(data.titulo_linea1).strip()
+                    if not val.endswith("-"):
+                        num_dashes = max(3, 60 - len(val))
+                        val = f"{val}{'-' * num_dashes}"
                     sz = 10.5 if len(val) > 42 else 11.5
                     set_text_frame_content(shape, val, font_name="Arial", font_size_pt=sz, word_wrap=False)
                 elif shape.shape_id == 89:  # Certificación DE Line 1 - Starts at 114mm (after CERTIFICADO DE) and ends at 202mm
@@ -213,16 +216,19 @@ class PPTXGenerator:
                     shape.left = Mm(114.0)
                     shape.top = Mm(87.5)
                     shape.width = Mm(88.0)  # Ends at 202mm
-                    set_text_frame_content(shape, cert_part1, font_name="Arial", font_size_pt=12.0, word_wrap=False)
-
-
-
+                    c1 = cert_part1.strip()
+                    if c1 and not c1.endswith("-"):
+                        num_dashes = max(3, 50 - len(c1))
+                        c1 = f"{c1}{'-' * num_dashes}"
+                    set_text_frame_content(shape, c1, font_name="Arial", font_size_pt=12.0, word_wrap=False)
                 elif shape.shape_id == 90:  # Certificación DE Line 2 + Resolución Nro.
-                    res_text = str(data.resolucion)
+                    res_text = str(data.resolucion).strip()
                     if cert_part2:
-                        full_line2 = f"{cert_part2} {res_text}"
+                        full_line2 = f"{cert_part2.strip()} {res_text}"
                     else:
                         full_line2 = res_text
+                    if full_line2 and not full_line2.endswith("-"):
+                        full_line2 = f"{full_line2}--"
                     set_text_frame_content(shape, full_line2, font_name="Arial", font_size_pt=12.0, word_wrap=False)
                 elif shape.shape_id == 91:  # Emisión Día
                     set_text_frame_content(shape, str(data.emision_dia), font_name="Arial", font_size_pt=12.0, word_wrap=False)
