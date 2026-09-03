@@ -60,5 +60,18 @@ class TestTrayectoCatalog(unittest.TestCase):
         self.assertIsNotNone(match)
         self.assertEqual(match.get("codigo"), "MT30")
 
+    def test_display_list_matching(self):
+        display_list = self.catalog.get_trayecto_display_list()
+        self.assertGreater(len(display_list), 0)
+        match = self.catalog.search_trayecto("Mecánico de Sistemas de Suspensión y Dirección del Automotor")
+        self.assertIsNotNone(match)
+        code = str(match.get("codigo", "") or match.get("Código", "")).strip()
+        name = str(match.get("trayecto_titulo", "") or match.get("Nombre del Trayecto", "")).strip()
+        sector = str(match.get("sector", "") or match.get("Sector", "")).strip()
+        disp_str = f"{code} - {name}"
+        if sector:
+            disp_str += f" [{sector}]"
+        self.assertIn(disp_str, display_list)
+
 if __name__ == "__main__":
     unittest.main()

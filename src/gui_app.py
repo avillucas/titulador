@@ -214,7 +214,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         )
         btn_open_pdf.grid(row=1, column=2, padx=5, pady=10, sticky="w")
 
-        self.log("Aplicación iniciada. Catálogo JSON cargado con 322 trayectos.")
+        self.log(f"Aplicación iniciada. Catálogo JSON cargado con {len(self.catalog.get_all_trayectos())} trayectos.")
 
 
     def log(self, message: str):
@@ -259,7 +259,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
         especialidad_acta = self.excel_data.get("especialidad", "")
         
         if self.current_trayecto_data:
-            t_str = f"Categoría JSON: [{self.current_trayecto_data['codigo']}] {self.current_trayecto_data['nombre_trayecto']} ({self.current_trayecto_data['sector']})\n" \
+            sec_str = f" ({self.current_trayecto_data['sector']})" if self.current_trayecto_data.get('sector') else ""
+            t_str = f"Categoría JSON: [{self.current_trayecto_data['codigo']}] {self.current_trayecto_data['nombre_trayecto']}{sec_str}\n" \
                     f"Horas: {self.current_trayecto_data['horas_cursada']} hs | Res: {self.current_trayecto_data['resolucion']} | Módulos: {len(self.current_trayecto_data['modulos'])}"
         else:
             t_str = "Trayecto JSON: No asignado"
@@ -296,10 +297,10 @@ class TituladorGUI(ctk.CTk if ctk else object):
             # Auto-select matched trayecto from catalog
             matched_trayecto = self.excel_data.get("trayecto_matched")
             if matched_trayecto:
-                self.current_trayecto_data = self.excel_data.get("trayecto_data")
-                code = matched_trayecto.get("Código", "")
-                name = matched_trayecto.get("Nombre del Trayecto", "")
-                sector = matched_trayecto.get("Sector", "")
+                self.current_trayecto_data = self.excel_data.get("trayecto_data") or format_trayecto_data(matched_trayecto)
+                code = str(matched_trayecto.get("codigo", "") or matched_trayecto.get("Código", "")).strip()
+                name = str(matched_trayecto.get("trayecto_titulo", "") or matched_trayecto.get("Nombre del Trayecto", "")).strip()
+                sector = str(matched_trayecto.get("sector", "") or matched_trayecto.get("Sector", "")).strip()
                 disp_str = f"{code} - {name}"
                 if sector:
                     disp_str += f" [{sector}]"
