@@ -1,10 +1,7 @@
 FROM python:3.11-slim
 
-# Install LibreOffice, CUPS printer client, fonts, and Tkinter for GUI support
+# Install fonts and Tkinter for GUI support
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libreoffice-impress \
-    libreoffice-java-common \
-    cups-client \
     fonts-dejavu \
     fonts-liberation \
     fonts-freefont-ttf \

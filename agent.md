@@ -3,7 +3,7 @@
 Este documento sirve como guía operativa para desarrolladores y agentes de IA encargados del mantenimiento y ejecución de la aplicación **Titulador**.
 
 ### Finalidad Principal del Proyecto
-La finalidad principal de la aplicación **Titulador** es poner a disposición un medio de uso libre para la generación automatizada de los certificados oficiales de **Certificación de Trayectos Formativos y Cursos de Formación Profesional** de los distintos CFP de la Provincia de Buenos Aires, dando cumplimiento estricto a las especificaciones y normativas dictadas en el anexo técnico de la **Circular N° 04-2020** (`documentacion/Circular 4-2020 Certificacion de trayectos formativos y cursos de Formacion Profesional.pdf`).
+La finalidad principal de la aplicación **Titulador** es poner a disposición un medio de uso libre para la generación automatizada de los certificados oficiales de **Certificación de Trayectos Formativos y Cursos de Formación Profesional** de los distintos CFP de la Provincia de Buenos Aires, dando cumplimiento estricto a las especificaciones y normativas de la **Circular N° 04-2020**.
 
 
 ---
@@ -16,7 +16,6 @@ La aplicación **Titulador** está diseñada con una arquitectura modular desaco
 - **`src/excel_parser.py`**: Procesa libros de trabajo Excel (`.xlsx`), valida la estructura de actas de examen de titulación y extrae la nómina de alumnos aprobados (omitinedo aquellos sin Número de Egresado).
 - **`src/catalog.py`**: Carga y gestiona el catálogo oficial `CATALOGO_2025_FP_agrupado.json`, realizando el emparejamiento automático por especialidad y extrayendo código, horas, resolución y lista de módulos.
 - **`src/pptx_generator.py`**: Motor central de generación de documentos `.pptx` (formato A5) basado en plantillas PowerPoint.
-- **`src/exporter.py`**: Gestiona la conversión de PPTX a PDF mediante LibreOffice (`convert_pptx_to_pdf`) e impresiones.
 - **`src/cli.py` / `main.py`**: Interfaz de línea de comandos (CLI) construida sobre `typer` y `rich`.
 - **`src/gui_app.py` / `app_gui.py`**: Interfaz gráfica de escritorio (GUI) moderna construida con `customtkinter`.
 
@@ -24,7 +23,7 @@ La aplicación **Titulador** está diseñada con una arquitectura modular desaco
 
 ## 2. Configuración e Integración con Docker (Linux / Servidores)
 
-- **`Dockerfile`**: Imagen basada en `python:3.11-slim` que incluye LibreOffice, paquetes de Tkinter (`python3-tk`, `tk`, `tcl`) y fuentes de sistema.
+- **`Dockerfile`**: Imagen basada en `python:3.11-slim` que incluye paquetes de Tkinter (`python3-tk`, `tk`, `tcl`) y fuentes de sistema.
 - **`docker-compose.yml`**:
   - Servicio `titulador`: Ejecuta procesos batch en modo CLI (`python main.py batch`).
   - Servicio `titulador-gui`: Permite lanzar la interfaz de escritorio GUI (`python app_gui.py`) mediante mapeo de socket X11 (`/tmp/.X11-unix`) y la variable `DISPLAY`.
@@ -47,9 +46,7 @@ Para simplificar el uso y evitar fallos de librerías congeladas de PyInstaller/
 
 1. **Instalar Python 3.11+**:
    - Asegurarse de marcar `[X] Add python.exe to PATH`.
-2. **Instalar LibreOffice**:
-   - Necesario para que `convert_pptx_to_pdf` pueda generar los PDFs automáticamente.
-3. **Instalar dependencias**:
+2. **Instalar dependencias**:
    ```cmd
    pip install -r requirements.txt
    ```
@@ -69,7 +66,6 @@ Para simplificar el uso y evitar fallos de librerías congeladas de PyInstaller/
 | `src/excel_parser.py` | Parser de actas de examen en Excel. |
 | `src/catalog.py` | Gestor del catálogo oficial JSON de FP. |
 | `src/pptx_generator.py` | Motor de llenado y formateo de plantillas PPTX. |
-| `src/exporter.py` | Conversor de PPTX a PDF vía LibreOffice. |
 | `src/gui_app.py` | Componentes y vistas de la interfaz CustomTkinter. |
 | `src/cli.py` | Comandos CLI (batch, select, form). |
 | `docker-run.sh` | Orchestrador de ejecución Docker (CLI/GUI). |

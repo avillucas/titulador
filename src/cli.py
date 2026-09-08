@@ -10,7 +10,6 @@ from rich.panel import Panel
 from src.models import RenderConfig, TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
-from src.exporter import convert_pptx_to_pdf, print_pdf_a5
 from src.catalog import TrayectoCatalog, format_trayecto_data
 from src.date_utils import calculate_default_emision_date, parse_emision_input
 
@@ -86,7 +85,6 @@ def batch_generate(
     excel_path: str = typer.Option(DEFAULT_EXCEL, "--excel", "-e", help="Ruta al archivo Excel de Acta de examen"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
     trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
-    output_format: str = typer.Option("all", "--format", "-f", help="Formato de salida: presentacion, pdf, all"),
     fecha_emision: Optional[str] = typer.Option(None, "--fecha-emision", "-m", help="Fecha de emisión personalizada (ej. '14/08/2025' o '14 de Agosto de 2025')"),
     emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
     emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
@@ -97,8 +95,8 @@ def batch_generate(
     trayecto_font_size: Optional[float] = typer.Option(None, "--fuente-trayecto", help="Tamaño de fuente del trayecto en puntos"),
     carrera_font_size: Optional[float] = typer.Option(None, "--fuente-carrera", help="Tamaño de fuente de carrera en puntos"),
 ):
-    """Procesa un archivo Excel de Acta de examen y genera certificados en el formato seleccionado."""
-    console.print(Panel(f"[bold green]Titulador - Generación en Lote (Batch: {output_format.upper()})[/bold green]"))
+    """Procesa un archivo Excel de Acta de examen y genera presentaciones editables."""
+    console.print(Panel("[bold green]Titulador - Generación en Lote (Presentaciones)[/bold green]"))
 
     if not os.path.exists(excel_path):
         console.print(f"[bold red]Error:[bold red] El archivo Excel no existe: {excel_path}")
@@ -154,7 +152,7 @@ def batch_generate(
     res = trayecto_data["resolucion"]
     modules = trayecto_data["modulos"]
 
-    table = Table(title=f"Certificados a Generar (Formato: {output_format.upper()})")
+    table = Table(title="Certificados a Generar (Presentaciones)")
     table.add_column("N° Egresado", style="cyan")
     table.add_column("Nombre y Apellido", style="bold white")
     table.add_column("DNI", style="yellow")
@@ -181,21 +179,9 @@ def batch_generate(
         )
 
 
-        outs = []
         out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
         generator.generate(titulo_data, out_pptx, render_config)
-
-        if output_format in ["presentacion", "all"]:
-            outs.append(os.path.basename(out_pptx))
-
-        if output_format in ["pdf", "all"]:
-            pdf_path = convert_pptx_to_pdf(out_pptx, output_dir)
-            if pdf_path:
-                outs.append(os.path.basename(pdf_path))
-            else:
-                outs.append("(Sin LibreOffice para PDF)")
-
-        table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], ", ".join(outs))
+        table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], os.path.basename(out_pptx))
 
     console.print(table)
     console.print(f"\n[bold green]✔ ¡Se procesaron los certificados exitosamente en {output_dir}![/bold green]")
@@ -316,14 +302,6 @@ def interactive_form(
 
     console.print(f"\n[bold green]✔ Certificado PPTX generado en: {output_pptx}[/bold green]")
     
-    pdf_path = convert_pptx_to_pdf(output_pptx, output_dir)
-    if pdf_path:
-        console.print(f"[bold cyan]✔ Versión PDF generada en: {pdf_path}[/bold cyan]")
-        if Confirm.ask("¿Desea enviar a imprimir en A5?"):
-            if print_pdf_a5(pdf_path):
-                console.print("[bold green]✔ Enviado a la impresora en A5.[/bold green]")
-            else:
-                console.print("[bold red]No se pudo imprimir automáticamente.[/bold red]")
 
 @app.command("select")
 def select_egresado(
@@ -426,10 +404,5 @@ def select_egresado(
     
     console.print(f"\n[bold green]✔ Certificado para {selected_eg['apellido_nombre']} generado en: {output_pptx}[/bold green]")
     
-    pdf_path = convert_pptx_to_pdf(output_pptx, output_dir)
-    if pdf_path:
-        console.print(f"[bold cyan]✔ PDF generado en: {pdf_path}[/bold cyan]")
-
-
 if __name__ == "__main__":
     app()

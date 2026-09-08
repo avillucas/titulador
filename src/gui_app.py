@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import platform
 import subprocess
@@ -12,8 +13,11 @@ except ImportError:
 
 from src.models import RenderConfig, TituloData
 from src.excel_parser import ExcelParser
-from src.pptx_generator import PPTXGenerator
-from src.exporter import convert_pptx_to_pdf
+from src.pptx_generator import (
+    PPTXGenerator,
+    adaptive_font_size,
+    format_certificacion_and_resolucion,
+)
 from src.catalog import TrayectoCatalog, format_trayecto_data
 from src.date_utils import calculate_default_emision_date
 
@@ -69,8 +73,9 @@ class TituladorGUI(ctk.CTk if ctk else object):
         
         self.excel_data: Optional[Dict[str, Any]] = None
         self.current_trayecto_data: Optional[Dict[str, Any]] = None
+        self.advanced_entries: Dict[str, ctk.CTkEntry] = {}
+        self.advanced_content: Optional[ctk.CTkFrame] = None
         self.last_generated_pptx: Optional[str] = None
-        self.last_generated_pdf: Optional[str] = None
 
 
         self._build_ui()
@@ -126,31 +131,21 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.output_entry.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
         ctk.CTkButton(paths_frame, text="Buscar...", width=80, command=self._browse_output).grid(row=1, column=2, padx=10, pady=5)
 
-        # Output Format Selector
-        ctk.CTkLabel(paths_frame, text="Formato Salida:", font=ctk.CTkFont(weight="bold")).grid(row=2, column=0, padx=10, pady=5, sticky="e")
-        self.format_dropdown = ctk.CTkOptionMenu(
-            paths_frame,
-            values=["Solo Presentación", "Presentación + PDF (Recomendado)", "Solo PDF"]
-        )
-        self.format_dropdown.set("Solo Presentación")
-
-        self.format_dropdown.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
-
         # Trayecto Catalog Dropdown
-        ctk.CTkLabel(paths_frame, text="Trayecto Catálogo:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
+        ctk.CTkLabel(paths_frame, text="Trayecto Catálogo:", font=ctk.CTkFont(weight="bold")).grid(row=2, column=0, padx=10, pady=5, sticky="e")
         display_list = self.catalog.get_trayecto_display_list() or ["Sin catálogo disponible"]
         self.trayecto_dropdown = ctk.CTkOptionMenu(
             paths_frame, 
             values=display_list,
             command=self._on_trayecto_selected
         )
-        self.trayecto_dropdown.grid(row=3, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
+        self.trayecto_dropdown.grid(row=2, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
 
         # Fecha de Emisión Controls
-        ctk.CTkLabel(paths_frame, text="Fecha Emisión Certificado:", font=ctk.CTkFont(weight="bold")).grid(row=4, column=0, padx=10, pady=5, sticky="e")
+        ctk.CTkLabel(paths_frame, text="Fecha Emisión Certificado:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
 
         emision_frame = ctk.CTkFrame(paths_frame, fg_color="transparent")
-        emision_frame.grid(row=4, column=1, columnspan=2, padx=5, pady=5, sticky="w")
+        emision_frame.grid(row=3, column=1, columnspan=2, padx=5, pady=5, sticky="w")
 
         ctk.CTkLabel(emision_frame, text="Día:").pack(side="left", padx=(0, 2))
         ctk.CTkEntry(emision_frame, textvariable=self.emision_dia, width=50).pack(side="left", padx=(0, 10))
@@ -163,7 +158,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         ctk.CTkLabel(emision_frame, text="(1 mes posterior al acta por defecto)", font=ctk.CTkFont(size=11, slant="italic")).pack(side="left", padx=5)
 
-
+        self._setup_advanced_panel(paths_frame)
 
         # 3. Main Tabview
         self.tabview = ctk.CTkTabview(self, corner_radius=10)
@@ -200,14 +195,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
             fg_color="#2b845b"
         )
         btn_open_presentation.grid(row=1, column=1, padx=5, pady=10, sticky="w")
-
-        btn_open_pdf = ctk.CTkButton(
-            bottom_frame, 
-            text="✍️ Abrir Último PDF Editable", 
-            command=self._open_last_pdf,
-            fg_color="#844b2b"
-        )
-        btn_open_pdf.grid(row=1, column=2, padx=5, pady=10, sticky="w")
 
         self.log(f"Aplicación iniciada. Catálogo JSON cargado con {len(self.catalog.get_all_trayectos())} trayectos.")
 
@@ -297,6 +284,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 
                 self.trayecto_dropdown.set(disp_str)
                 self.log(f"✔ Trayecto identificado en catálogo: [{code}] {name}")
+                self._populate_form_from_catalog()
             else:
                 self.log(f"⚠️ No se identificó coincidencia exacta en el catálogo para especialidad '{self.excel_data['especialidad']}'. Seleccione un trayecto manualmente.")
                 self.current_trayecto_data = None
@@ -352,8 +340,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
         excel_p = self.excel_path.get()
         tmpl_p = self.template_path.get()
         out_d = self.output_dir.get()
-        fmt_choice = self.format_dropdown.get()
-
         if not os.path.exists(excel_p):
             messagebox.showerror("Error", "Por favor verifique que la ruta del Excel exista.")
             return
@@ -419,20 +405,13 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 generator.generate(titulo_data, out_pptx, render_config)
                 self.last_generated_pptx = out_pptx
 
-                if "Presentación" in fmt_choice:
-                    outs.append("Presentación")
-
-                if "PDF" in fmt_choice or "Recomendado" in fmt_choice:
-                    out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
-                    if out_pdf:
-                        self.last_generated_pdf = out_pdf
-                        outs.append("PDF")
+                outs.append("Presentación")
 
                 self.log(f"[{idx}/{total}] Generado ({', '.join(outs)}): {filename_base}")
                 self.progress_bar.set(idx / total)
                 self.update_idletasks()
 
-            messagebox.showinfo("¡Éxito!", f"Se procesaron {total} certificados ({fmt_choice}) en:\n{out_d}")
+            messagebox.showinfo("¡Éxito!", f"Se procesaron {total} presentaciones en:\n{out_d}")
 
         except Exception as e:
             messagebox.showerror("Error", f"Fallo durante la generación: {e}")
@@ -521,14 +500,55 @@ class TituladorGUI(ctk.CTk if ctk else object):
         generator.generate(titulo_data, out_pptx, render_config)
         self.last_generated_pptx = out_pptx
 
-        out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
-        if out_pdf:
-            self.last_generated_pdf = out_pdf
-            self.log(f"✔ Presentación y PDF generado: {out_pdf}")
-            messagebox.showinfo("¡Éxito!", f"Certificado y PDF generados correctamente:\n{out_pptx}")
+        self.log(f"✔ Presentación generada: {out_pptx}")
+        messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
+
+    def _setup_advanced_panel(self, parent):
+        panel = ctk.CTkFrame(parent, fg_color="transparent")
+        panel.grid(row=4, column=0, columnspan=3, padx=10, pady=(0, 5), sticky="ew")
+        panel.grid_columnconfigure(0, weight=1)
+
+        self.advanced_content = ctk.CTkFrame(panel)
+        self.advanced_content.grid_columnconfigure(1, weight=1)
+
+        self.advanced_toggle = ctk.CTkButton(
+            panel,
+            text="▶ Avanzado: textos y tamaños del frente",
+            anchor="w",
+            fg_color="transparent",
+            text_color=ctk.ThemeManager.theme["CTkLabel"]["text_color"],
+            hover_color=ctk.ThemeManager.theme["CTkButton"]["hover_color"],
+            command=self._toggle_advanced_panel,
+        )
+        self.advanced_toggle.grid(row=0, column=0, sticky="ew")
+
+        advanced_fields = [
+            ("trayecto_text", "Texto línea Trayecto/Curso:"),
+            ("carrera_line1_text", "Texto línea Carrera 1:"),
+            ("carrera_line2_text", "Texto línea Carrera 2:"),
+            ("trayecto_font_size", "Fuente Trayecto (pt):"),
+            ("carrera_font_size", "Fuente Carrera (pt):"),
+        ]
+        for row, (key, label_text) in enumerate(advanced_fields):
+            ctk.CTkLabel(self.advanced_content, text=label_text).grid(
+                row=row, column=0, padx=10, pady=3, sticky="e"
+            )
+            entry = ctk.CTkEntry(
+                self.advanced_content,
+                placeholder_text="Automático",
+            )
+            entry.grid(row=row, column=1, padx=10, pady=3, sticky="ew")
+            self.advanced_entries[key] = entry
+
+    def _toggle_advanced_panel(self):
+        if self.advanced_content is None:
+            return
+        if self.advanced_content.winfo_manager():
+            self.advanced_content.grid_remove()
+            self.advanced_toggle.configure(text="▶ Avanzado: textos y tamaños del frente")
         else:
-            self.log(f"✔ Presentación generada: {out_pptx}")
-            messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
+            self.advanced_content.grid(row=1, column=0, sticky="ew")
+            self.advanced_toggle.configure(text="▼ Avanzado: textos y tamaños del frente")
 
     # --- TAB 3: FORMULARIO MANUAL ---
     def _setup_form_tab(self):
@@ -548,7 +568,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
         scroll_frame.grid_columnconfigure(1, weight=1)
 
         self.form_entries: Dict[str, ctk.CTkEntry] = {}
-        self.advanced_entries: Dict[str, ctk.CTkEntry] = {}
 
         fields = [
             ("apellido_nombre", "Apellido y Nombre:", "Pérez Juan Manuel"),
@@ -576,29 +595,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
             self.form_entries[key] = entry
             row += 1
 
-        ctk.CTkLabel(
-            scroll_frame,
-            text="--- Avanzado: textos y tamaños del frente ---",
-            font=ctk.CTkFont(weight="bold"),
-        ).grid(row=row, column=0, columnspan=2, pady=(12, 4))
-        row += 1
-
-        advanced_fields = [
-            ("trayecto_text", "Texto línea Trayecto/Curso:", ""),
-            ("carrera_line1_text", "Texto línea Carrera 1:", ""),
-            ("carrera_line2_text", "Texto línea Carrera 2:", ""),
-            ("trayecto_font_size", "Fuente Trayecto (pt):", ""),
-            ("carrera_font_size", "Fuente Carrera (pt):", ""),
-        ]
-        for key, label_text, default_val in advanced_fields:
-            ctk.CTkLabel(scroll_frame, text=label_text).grid(row=row, column=0, padx=10, pady=3, sticky="e")
-            entry = ctk.CTkEntry(scroll_frame, placeholder_text="Automático" if not default_val else "")
-            if default_val:
-                entry.insert(0, default_val)
-            entry.grid(row=row, column=1, padx=10, pady=3, sticky="ew")
-            self.advanced_entries[key] = entry
-            row += 1
-
         # Modules Sub-section
         ctk.CTkLabel(scroll_frame, text="--- Módulos (hasta 10) ---", font=ctk.CTkFont(weight="bold")).grid(row=row, column=0, columnspan=2, pady=10)
         row += 1
@@ -613,7 +609,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         btn_form = ctk.CTkButton(
             scroll_frame, 
-            text="✨ Generar Certificado (Presentación y PDF Editable)",
+            text="✨ Generar Certificado (Presentación Editable)",
             font=ctk.CTkFont(size=13, weight="bold"),
             height=35,
             command=self._run_form_generation
@@ -624,7 +620,11 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self._populate_form_from_catalog()
 
     def _populate_form_from_catalog(self):
-        if not hasattr(self, 'form_entries') or not self.current_trayecto_data:
+        if (
+            not hasattr(self, "form_entries")
+            or not self.advanced_entries
+            or not self.current_trayecto_data
+        ):
             return
             
         t_data = self.current_trayecto_data
@@ -640,6 +640,28 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         self.form_entries["resolucion"].delete(0, "end")
         self.form_entries["resolucion"].insert(0, t_data.get("resolucion", ""))
+
+        trayecto_text = t_data.get("titulo_linea1", "").strip()
+        trayecto_text = re.sub(r"-+$", "", trayecto_text).strip()
+        trayecto_text = f"{trayecto_text}{'-' * max(3, 52 - len(trayecto_text))}"
+        carrera_line1, carrera_line2 = format_certificacion_and_resolucion(
+            t_data.get("titulo_linea2", ""),
+            t_data.get("resolucion", ""),
+        )
+
+        advanced_values = {
+            "trayecto_text": trayecto_text,
+            "carrera_line1_text": carrera_line1,
+            "carrera_line2_text": carrera_line2,
+            "trayecto_font_size": str(adaptive_font_size(trayecto_text, 11.5, 42)),
+            "carrera_font_size": str(
+                adaptive_font_size(f"{carrera_line1}\n{carrera_line2}", 12.0, 62)
+            ),
+        }
+        for key, value in advanced_values.items():
+            entry = self.advanced_entries[key]
+            entry.delete(0, "end")
+            entry.insert(0, value)
 
         # Populate modules
         mods = t_data.get("modulos", [])
@@ -707,14 +729,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
         generator.generate(titulo_data, out_pptx, render_config)
         self.last_generated_pptx = out_pptx
 
-        out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
-        if out_pdf:
-            self.last_generated_pdf = out_pdf
-            self.log(f"✔ Presentación y PDF generado desde formulario: {out_pptx}")
-            messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
-        else:
-            self.log(f"✔ Presentación generada desde formulario: {out_pptx}")
-            messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
+        self.log(f"✔ Presentación generada desde formulario: {out_pptx}")
+        messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
 
     # --- ACTIONS ---
     def _open_output_folder(self):
@@ -727,13 +743,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
             open_in_system(self.last_generated_pptx)
         else:
             messagebox.showinfo("Información", "Aún no se ha generado ninguna presentación en esta sesión.")
-
-    def _open_last_pdf(self):
-        if self.last_generated_pdf and os.path.exists(self.last_generated_pdf):
-            open_in_system(self.last_generated_pdf)
-        else:
-            messagebox.showinfo("Información", "Aún no se ha generado ningún archivo PDF Editable en esta sesión.")
-
 
 def main():
     if ctk is None:

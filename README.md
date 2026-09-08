@@ -2,7 +2,7 @@
 
 **Titulador** es una herramienta de **uso libre** desarrollada en Python con **Interfaz Gráfica de Escritorio (GUI)** e **Interfaz de Línea de Comandos (CLI)** cuyo propósito es poner a disposición de los **Centros de Formación Profesional (CFP)** de la Provincia de Buenos Aires un medio automatizado, sencillo y eficiente para la confección masiva de certificados y títulos de sus egresados.
 
-El sistema genera los certificados como **Presentación editable** y/o **PDF** para hojas de tamaño **A5** (210 mm x 148.5 mm). La presentación permite a los directivos y secretarios realizar correcciones o retoques manuales posteriores antes de la impresión definitiva sobre los formularios preimpresos.
+El sistema genera los certificados como **Presentaciones editables** para hojas de tamaño **A5** (210 mm x 148.5 mm). La presentación permite a los directivos y secretarios realizar correcciones o retoques manuales posteriores antes de la impresión definitiva sobre los formularios preimpresos.
 
 Toda la confección se realiza en estricto cumplimiento de los lineamientos e instructivo técnico fijados por la **Circular N° 04-2020** de la Dirección de Formación Profesional (DGCyE).
 
@@ -14,8 +14,7 @@ La aplicación utiliza como referencia los documentos oficiales almacenados en l
 
 | Documento | Ruta del Archivo | Descripción |
 | :--- | :--- | :--- |
-| **Normativa de Certificación** | `documentacion/Circular 4-2020 Certificacion de trayectos formativos y cursos de Formacion Profesional.pdf` | Instructivo técnico oficial que establece los tamaños de fuente, alineación, estilos y pautas de testado para el frente y dorso del certificado A5. |
-| **Catálogo de Trayectos** | `documentacion/CATALOGO 2025 FP.pdf` | Catálogo Oficial de Trayectos Formativos y Cursos de Formación Profesional (procesado en JSON para búsqueda automática de módulos, resoluciones y horas). |
+| **Catálogo de Trayectos** | `utils/catalogo_FP_con_nacionales_2025_agrupado.json` | Catálogo Oficial de Trayectos Formativos y Cursos de Formación Profesional para la búsqueda automática de módulos, resoluciones y horas. |
 | **Modelo Base de Presentación** | `documentacion/Modelo base.pptx` | Modelo fijo en PowerPoint A5 (Diapositivas 1 y 2) para la generación de certificados. No se selecciona desde la aplicación. |
 | **Acta de Examen Modelo** | `documentacion/Acta de examen.xlsx` | Planilla Excel modelo con el formato estándar de actas de examen final de donde el sistema extrae los datos de los egresados aprobados. |
 
@@ -39,11 +38,7 @@ La aplicación utiliza como referencia los documentos oficiales almacenados en l
      python --version
      ```
 
-2. **Instalar LibreOffice (para exportación a PDF)**:
-   - Descarga e instala LibreOffice desde [libreoffice.org](https://es.libreoffice.org/descarga/libreoffice/).
-   - Permite a la aplicación convertir los certificados `.pptx` a `.pdf` de forma automática.
-
-3. **Instalar las Dependencias del Proyecto**:
+2. **Instalar las Dependencias del Proyecto**:
    - Abre la terminal de **CMD** o **PowerShell** en la carpeta del proyecto y ejecuta:
      ```cmd
      pip install -r requirements.txt
@@ -53,11 +48,11 @@ La aplicación utiliza como referencia los documentos oficiales almacenados en l
 
 ### 🐧 En Entornos Linux (Ubuntu / Debian)
 
-1. **Instalar Python, Tkinter y LibreOffice**:
+1. **Instalar Python y Tkinter**:
    - Abre una terminal y ejecuta:
      ```bash
      sudo apt update
-     sudo apt install -y python3 python3-pip python3-tk libreoffice
+   sudo apt install -y python3 python3-pip python3-tk
      ```
 
 2. **Instalar las Dependencias del Proyecto**:
@@ -96,12 +91,7 @@ La interfaz gráfica ofrece un entorno accesible con selectores de archivos y ba
    - Haz clic en el botón **"Buscar..."** junto a *Acta Excel* y selecciona la planilla correspondiente (ej. `documentacion/Acta de examen.xlsx`).
 2. **Seleccionar el Trayecto Formativo**:
    - En el desplegable *Trayecto Catálogo*, selecciona el curso correspondiente del catálogo o permite que el sistema lo detecte automáticamente desde la especialidad descrita en el acta.
-3. **Seleccionar el Formato de Salida**:
-   - Despliega las opciones de *Formato Salida* y elige entre:
-   - `Presentación + PDF (Recomendado)`: Genera ambos formatos.
-   - `Solo Presentación`: Genera únicamente la presentación editable.
-     - `Solo PDF`: Genera certificados listos para imprimir en PDF.
-4. **Ejecutar**:
+3. **Ejecutar**:
    - Haz clic en **"🚀 Generar Certificados (Lote)"**. Los archivos generados se guardarán en la carpeta `output/`.
 
 ---
@@ -114,16 +104,15 @@ Para usuarios avanzados o integración de procesos automatizados:
 Procesa el archivo de acta de examen y genera todos los certificados de los alumnos aprobados:
 ```bash
 # En Windows:
-python main.py batch --excel "documentacion/Acta de examen.xlsx" --trayecto MM11 --format all
+python main.py batch --excel "documentacion/Acta de examen.xlsx" --trayecto MM11
 
 # En Linux:
-python3 main.py batch --excel "documentacion/Acta de examen.xlsx" --trayecto MM11 --format all
+python3 main.py batch --excel "documentacion/Acta de examen.xlsx" --trayecto MM11
 ```
 
 Opciones principales del comando `batch`:
 - `--excel` / `-e`: Ruta al archivo Excel de Acta de Examen.
 - `--trayecto` / `-k`: Código del trayecto en el catálogo (ej: `MM11`, `CL01`).
-- `--format` / `-f`: Formato de salida (`presentacion`, `pdf`, `all`).
 - `--outdir` / `-o`: Carpeta de destino (por defecto `output/`).
 - `--texto-trayecto`: Reemplaza el texto de la línea Trayecto/Curso.
 - `--texto-carrera-linea1` y `--texto-carrera-linea2`: Reemplazan las dos líneas de carrera/resolución.
@@ -132,7 +121,7 @@ Opciones principales del comando `batch`:
 Para el caso de resoluciones extensas, como Mecánica de Sistemas de Inyección Diesel, el tamaño se reduce progresivamente para conservar el texto dentro del bloque. Por ejemplo:
 ```bash
 python3 main.py batch --excel "ruta/al/acta.xlsx" --trayecto MA23 \
-   --format presentacion --fuente-carrera 7.0 \
+   --fuente-carrera 7.0 \
    --texto-carrera-linea2 "diesel según Resolución Nro. RESFC-2018-1735-E-GDEBA-DGCYE"
 ```
 
@@ -159,8 +148,7 @@ titulador/
 ├── documentacion/                   # Fuentes de referencia y modelos oficiales
 │   ├── Modelo base.pptx             # Plantilla base por defecto en PowerPoint A5
 │   ├── Acta de examen.xlsx          # Planilla Excel modelo de examen
-│   ├── CATALOGO 2025 FP.pdf         # Catálogo de certificaciones y módulos de FP
-│   └── Circular 4-2020...pdf        # Normativa e instructivo técnico A5
+│   └── Modelo base.pptx              # Plantilla oficial de presentación A5
 ├── ejemplos/
 │   └── CATALOGO_2025_FP_agrupado.json # Catálogo FP estructurado para búsqueda rápida
 ├── output/                          # Carpeta donde se exportan los certificados generados
@@ -168,7 +156,6 @@ titulador/
 │   ├── catalog.py                   # Búsqueda y normalización de trayectos del catálogo FP
 │   ├── cli.py                       # Comandos CLI (batch, select, form, gui)
 │   ├── excel_parser.py              # Parser y filtrado de egresados aprobados en Excel
-│   ├── exporter.py                  # Conversión de PPTX a PDF vía LibreOffice
 │   ├── gui_app.py                   # Aplicación de escritorio (CustomTkinter)
 │   ├── models.py                    # Modelo de datos Pydantic (TituloData)
 │   └── pptx_generator.py            # Motor de posicionamiento y formato en PowerPoint
