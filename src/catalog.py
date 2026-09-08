@@ -1,9 +1,17 @@
 import os
-import sys
 import json
 import re
 import unicodedata
 from typing import List, Dict, Any, Optional, Tuple
+
+CATALOG_PATH = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "utils",
+        "catalogo_FP_con_nacionales_2025_agrupado.json",
+    )
+)
 
 def normalize_text(text: str) -> str:
     """Normalizes text by removing accents, lowercasing, and stripping whitespace."""
@@ -140,32 +148,9 @@ def format_trayecto_data(trayecto: Dict[str, Any]) -> Dict[str, Any]:
 
 class TrayectoCatalog:
     def __init__(self, catalog_path: Optional[str] = None):
-        self.catalog_path = catalog_path or self._find_catalog_file()
+        self.catalog_path = catalog_path or CATALOG_PATH
         self.trayectos: List[Dict[str, Any]] = []
         self._load_catalog()
-
-    def _find_catalog_file(self) -> str:
-        candidates = [
-            "utils/catalogo_FP_con_nacionales_2025_agrupado.json",
-            "catalogo_FP_con_nacionales_2025_agrupado.json",
-            "utils/CATALOGO_2025_FP_agrupado.json",
-            "CATALOGO_2025_FP_agrupado.json",
-            os.path.join(os.path.dirname(__file__), "..", "utils", "catalogo_FP_con_nacionales_2025_agrupado.json"),
-            os.path.join(os.path.dirname(__file__), "catalogo_FP_con_nacionales_2025_agrupado.json"),
-            os.path.join(os.path.dirname(__file__), "..", "utils", "CATALOGO_2025_FP_agrupado.json"),
-            os.path.join(os.path.dirname(__file__), "CATALOGO_2025_FP_agrupado.json"),
-        ]
-        # PyInstaller sys._MEIPASS support for executable builds
-        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-            candidates.insert(0, os.path.join(sys._MEIPASS, "utils", "catalogo_FP_con_nacionales_2025_agrupado.json"))
-            candidates.insert(1, os.path.join(sys._MEIPASS, "catalogo_FP_con_nacionales_2025_agrupado.json"))
-            candidates.insert(2, os.path.join(sys._MEIPASS, "utils", "CATALOGO_2025_FP_agrupado.json"))
-            candidates.insert(3, os.path.join(sys._MEIPASS, "CATALOGO_2025_FP_agrupado.json"))
-
-        for path in candidates:
-            if os.path.exists(path):
-                return os.path.abspath(path)
-        return os.path.abspath("utils/catalogo_FP_con_nacionales_2025_agrupado.json")
 
     def _load_catalog(self):
         if not os.path.exists(self.catalog_path):

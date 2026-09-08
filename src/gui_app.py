@@ -387,18 +387,18 @@ class TituladorGUI(ctk.CTk if ctk else object):
             generator = PPTXGenerator(tmpl_p) if (tmpl_p and os.path.exists(tmpl_p)) else PPTXGenerator()
             
             t_data = self.current_trayecto_data or data.get("trayecto_data")
-            if t_data:
-                t_line1 = t_data["titulo_linea1"]
-                t_line2 = t_data["titulo_linea2"]
-                horas = t_data["horas_cursada"]
-                res = t_data["resolucion"]
-                modules = t_data["modulos"]
-            else:
-                t_line1 = data["especialidad"].title()
-                t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
-                horas = "540"
-                res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
-                modules = []
+            if not t_data:
+                messagebox.showerror(
+                    "Trayecto no encontrado",
+                    "No se puede generar el certificado porque la especialidad no coincide con un trayecto del catálogo autorizado."
+                )
+                return
+
+            t_line1 = t_data["titulo_linea1"]
+            t_line2 = t_data["titulo_linea2"]
+            horas = t_data["horas_cursada"]
+            res = t_data["resolucion"]
+            modules = t_data["modulos"]
 
             total = len(egresados)
             for idx, eg in enumerate(egresados, 1):
@@ -490,18 +490,18 @@ class TituladorGUI(ctk.CTk if ctk else object):
         generator = PPTXGenerator(tmpl_p)
 
         t_data = self.current_trayecto_data or data.get("trayecto_data")
-        if t_data:
-            t_line1 = t_data["titulo_linea1"]
-            t_line2 = t_data["titulo_linea2"]
-            horas = t_data["horas_cursada"]
-            res = t_data["resolucion"]
-            modules = t_data["modulos"]
-        else:
-            t_line1 = data["especialidad"].title()
-            t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
-            horas = "230"
-            res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
-            modules = []
+        if not t_data:
+            messagebox.showerror(
+                "Trayecto no encontrado",
+                "No se puede generar el certificado porque no hay un trayecto seleccionado del catálogo autorizado."
+            )
+            return
+
+        t_line1 = t_data["titulo_linea1"]
+        t_line2 = t_data["titulo_linea2"]
+        horas = t_data["horas_cursada"]
+        res = t_data["resolucion"]
+        modules = t_data["modulos"]
 
         titulo_data = TituloData(
             apellido_nombre=target_eg['apellido_nombre'],
