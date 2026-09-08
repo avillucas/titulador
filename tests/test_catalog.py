@@ -40,7 +40,7 @@ class TestTrayectoCatalog(unittest.TestCase):
         self.assertEqual(formatted["horas_cursada"], "60")
         self.assertEqual(
             formatted["resolucion"],
-            "Resolución Nro. RESFC-2019-6908-GDEBA-DGCYE / RESOL-2022-2139-APN-ME--"
+            "Resolución Nro. RESFC-2019-6908-GDEBA-DGCYE / RESOL-2022-2139-APN-ME"
         )
         self.assertEqual(len(formatted["modulos"]), 2)
         self.assertEqual(formatted["modulos"][0], "Módulo Uno. (MOD1.1)")
@@ -53,7 +53,7 @@ class TestTrayectoCatalog(unittest.TestCase):
             "modulos": []
         }
         formatted = format_trayecto_data(item)
-        self.assertEqual(formatted["resolucion"], "Resolución Nro. RESFC-2019-510-GDEBA-DGCYE--")
+        self.assertEqual(formatted["resolucion"], "Resolución Nro. RESFC-2019-510-GDEBA-DGCYE")
 
     def test_search_trayecto(self):
         match = self.catalog.search_trayecto("Soldador Básico")

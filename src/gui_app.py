@@ -136,8 +136,9 @@ class TituladorGUI(ctk.CTk if ctk else object):
         ctk.CTkLabel(paths_frame, text="Formato Salida:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
         self.format_dropdown = ctk.CTkOptionMenu(
             paths_frame,
-            values=["PPTX + PDF (Recomendado)", "Solo PPTX", "Solo PDF"]
+            values=["Solo PPTX", "PPTX + PDF (Recomendado)", "Solo PDF"]
         )
+        self.format_dropdown.set("Solo PPTX")
 
         self.format_dropdown.grid(row=3, column=1, padx=5, pady=5, sticky="ew")
 

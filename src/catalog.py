@@ -83,7 +83,7 @@ def format_trayecto_data(trayecto: Dict[str, Any]) -> Dict[str, Any]:
                     horas = str(cat_sum)
 
     # Resolution formatting:
-    # First jurisdictional, then national (if present) separated by ' / ' and padded with '--'
+    # First jurisdictional, then national (if present) separated by ' / '
     res_jur = str(trayecto.get("resolucion_jurisdiccional", "") or trayecto.get("Res Jurisdiccional", "")).strip()
     res_nac = str(trayecto.get("resolucion_validez_nacional", "") or trayecto.get("Res Validez Nacional", "")).strip()
 
@@ -102,7 +102,7 @@ def format_trayecto_data(trayecto: Dict[str, Any]) -> Dict[str, Any]:
 
     if res_parts:
         combined_res = " / ".join(res_parts)
-        resolucion = f"Resolución Nro. {combined_res}--"
+        resolucion = f"Resolución Nro. {combined_res}"
     else:
         resolucion = ""
         

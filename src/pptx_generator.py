@@ -37,32 +37,75 @@ SHAPE_MAP_SLIDE2 = {
     112: "distrito_cpf",
 }
 
-def split_certificacion_title(title: str, max_line1: int = 38) -> Tuple[str, str]:
-    """Splits a certification title so part 1 fits on Shape 89 and part 2 wraps to Shape 90."""
-    title = title.strip()
-    if not title or len(title) <= max_line1:
-        return title, ""
+def format_certificacion_and_resolucion(certificacion: str, resolucion: str, max_s89: int = 38, max_s90_line: int = 65) -> Tuple[str, str]:
+    """
+    Formats certification title and resolution text across Shape 89 and Shape 90.
+    Ensures text never overflows the box width by splitting across Shape 89 (Line 1)
+    and up to two lines in Shape 90 (Line 2 and Line 3), completing the final line with hyphens.
+    """
+    cert = certificacion.strip()
+    res = resolucion.strip()
 
-    words = title.split()
-    l1_words = []
-    curr_len = 0
-    for w in words:
-        if curr_len + len(w) + (1 if l1_words else 0) <= max_line1:
-            l1_words.append(w)
-            curr_len += len(w) + 1
-        else:
-            break
+    if res and not res.lower().startswith("según") and not res.lower().startswith("segun"):
+        res_text = f"según {res}"
+    else:
+        res_text = res
 
-    if l1_words and len(" ".join(l1_words)) >= max_line1 - 10:
-        part1 = " ".join(l1_words)
-        part2 = title[len(part1):].strip()
-        return part1, part2
+    if cert and res_text:
+        full_str = f"{cert} {res_text}".strip()
+    elif cert:
+        full_str = cert
+    else:
+        full_str = res_text
 
-    # Syllable / Hyphen break fallback near max_line1
-    cut = max_line1
-    part1 = title[:cut] + "-"
-    part2 = title[cut:].lstrip()
-    return part1, part2
+    full_str = re.sub(r"-+$", "", full_str).strip()
+
+    res_prefix = "según Resolución Nro." if "según" in res_text.lower() and "resolución" in res_text.lower() else "según"
+    cand_s89 = f"{cert} {res_prefix}" if res_prefix else cert
+
+    if len(cand_s89) <= max_s89:
+        s89_text = cand_s89
+        remainder = full_str[len(cand_s89):].strip()
+    elif len(cert) <= max_s89:
+        s89_text = cert
+        remainder = res_text
+    else:
+        words = cert.split()
+        l1_words = []
+        curr = 0
+        for w in words:
+            if curr + len(w) + (1 if l1_words else 0) <= max_s89:
+                l1_words.append(w)
+                curr += len(w) + 1
+            else:
+                break
+        s89_text = " ".join(l1_words)
+        cert_part2 = cert[len(s89_text):].strip()
+        remainder = f"{cert_part2} {res_text}".strip()
+
+    remainder = re.sub(r"-+$", "", remainder).strip()
+    if len(remainder) <= max_s90_line:
+        num_dashes = max(2, max_s90_line - len(remainder))
+        s90_text = f"{remainder}{'-' * num_dashes}"
+    else:
+        r_words = remainder.split()
+        l1_words = []
+        curr = 0
+        for w in r_words:
+            if curr + len(w) + (1 if l1_words else 0) <= max_s90_line:
+                l1_words.append(w)
+                curr += len(w) + 1
+            else:
+                break
+        s90_l1 = " ".join(l1_words)
+        s90_l2 = remainder[len(s90_l1):].strip()
+        s90_l2 = re.sub(r"-+$", "", s90_l2).strip()
+        num_dashes = max(2, max_s90_line - len(s90_l2))
+        s90_l2_dashed = f"{s90_l2}{'-' * num_dashes}"
+        s90_text = f"{s90_l1}\n{s90_l2_dashed}"
+
+    return s89_text, s90_text
+
 
 
 def format_module_text(module_str: str, max_single_line_chars: int = 52, max_line_chars: int = 42) -> str:
@@ -187,8 +230,8 @@ class PPTXGenerator:
         if len(prs.slides) > 0:
             slide1 = prs.slides[0]
             
-            # Prepare Certificación title line 1 & line 2 split
-            cert_part1, cert_part2 = split_certificacion_title(data.titulo_linea2, max_line1=32)
+            # Prepare Certificación title line 1 & line 2 split and resolution formatting
+            s89_text, s90_text = format_certificacion_and_resolucion(data.titulo_linea2, data.resolucion, max_s89=38, max_s90_line=65)
             
             for shape in slide1.shapes:
                 if shape.shape_id == 85:  # Apellido y Nombre (Arial 14 Bold UPPERCASE)
@@ -206,30 +249,26 @@ class PPTXGenerator:
                     from pptx.util import Mm
                     shape.top = Mm(79.0)
                     val = str(data.titulo_linea1).strip()
-                    if not val.endswith("-"):
-                        num_dashes = max(3, 60 - len(val))
+                    val = re.sub(r"-+$", "", val).strip()
+                    if len(val) < 52:
+                        num_dashes = max(3, 52 - len(val))
                         val = f"{val}{'-' * num_dashes}"
                     sz = 10.5 if len(val) > 42 else 11.5
                     set_text_frame_content(shape, val, font_name="Arial", font_size_pt=sz, word_wrap=False)
-                elif shape.shape_id == 89:  # Certificación DE Line 1 - Starts at 114mm (after CERTIFICADO DE) and ends at 202mm
+                elif shape.shape_id == 89:  # Certificación DE Line 1 - Starts at 109mm (after CERTIFICADO DE)
                     from pptx.util import Mm
-                    shape.left = Mm(114.0)
-                    shape.top = Mm(87.5)
-                    shape.width = Mm(88.0)  # Ends at 202mm
-                    c1 = cert_part1.strip()
-                    if c1 and not c1.endswith("-"):
-                        num_dashes = max(3, 50 - len(c1))
-                        c1 = f"{c1}{'-' * num_dashes}"
-                    set_text_frame_content(shape, c1, font_name="Arial", font_size_pt=12.0, word_wrap=False)
+                    shape.left = Mm(109.0)
+                    shape.top = Mm(86.2)
+                    shape.width = Mm(85.3)
+                    set_text_frame_content(shape, s89_text, font_name="Arial", font_size_pt=12.0, word_wrap=False)
                 elif shape.shape_id == 90:  # Certificación DE Line 2 + Resolución Nro.
-                    res_text = str(data.resolucion).strip()
-                    if cert_part2:
-                        full_line2 = f"{cert_part2.strip()} {res_text}"
-                    else:
-                        full_line2 = res_text
-                    if full_line2 and not full_line2.endswith("-"):
-                        full_line2 = f"{full_line2}--"
-                    set_text_frame_content(shape, full_line2, font_name="Arial", font_size_pt=12.0, word_wrap=False)
+                    from pptx.util import Mm
+                    shape.left = Mm(23.7)
+                    shape.top = Mm(94.1)
+                    shape.width = Mm(164.7)
+                    last_line_len = len(s90_text.split("\n")[-1])
+                    sz = 11.0 if last_line_len > 68 else 12.0
+                    set_text_frame_content(shape, s90_text, font_name="Arial", font_size_pt=sz, word_wrap=False)
                 elif shape.shape_id == 91:  # Emisión Día
                     set_text_frame_content(shape, str(data.emision_dia), font_name="Arial", font_size_pt=12.0, word_wrap=False)
                 elif shape.shape_id == 92:  # Emisión Mes
