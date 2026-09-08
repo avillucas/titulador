@@ -7,7 +7,7 @@ from rich.table import Table
 from rich.prompt import Prompt, Confirm
 from rich.panel import Panel
 
-from src.models import TituloData
+from src.models import RenderConfig, TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
 from src.exporter import convert_pptx_to_pdf, print_pdf_a5
@@ -65,6 +65,22 @@ def resolve_trayecto(catalog: TrayectoCatalog, code_or_name: Optional[str], exce
         
     return None
 
+
+def build_render_config(
+    trayecto_text: Optional[str],
+    carrera_line1_text: Optional[str],
+    carrera_line2_text: Optional[str],
+    trayecto_font_size: Optional[float],
+    carrera_font_size: Optional[float],
+) -> RenderConfig:
+    return RenderConfig(
+        trayecto_text=trayecto_text or None,
+        carrera_line1_text=carrera_line1_text or None,
+        carrera_line2_text=carrera_line2_text or None,
+        trayecto_font_size=trayecto_font_size,
+        carrera_font_size=carrera_font_size,
+    )
+
 @app.command("batch")
 def batch_generate(
     excel_path: str = typer.Option(DEFAULT_EXCEL, "--excel", "-e", help="Ruta al archivo Excel de Acta de examen"),
@@ -75,6 +91,11 @@ def batch_generate(
     emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
     emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
     emision_ano: Optional[str] = typer.Option(None, "--emision-ano", help="Año de emisión del certificado (ej. '25')"),
+    trayecto_text: Optional[str] = typer.Option(None, "--texto-trayecto", help="Texto personalizado de la línea Trayecto/Curso"),
+    carrera_line1_text: Optional[str] = typer.Option(None, "--texto-carrera-linea1", help="Texto personalizado de la primera línea de carrera"),
+    carrera_line2_text: Optional[str] = typer.Option(None, "--texto-carrera-linea2", help="Texto personalizado de la segunda línea de carrera/resolución"),
+    trayecto_font_size: Optional[float] = typer.Option(None, "--fuente-trayecto", help="Tamaño de fuente del trayecto en puntos"),
+    carrera_font_size: Optional[float] = typer.Option(None, "--fuente-carrera", help="Tamaño de fuente de carrera en puntos"),
 ):
     """Procesa un archivo Excel de Acta de examen y genera certificados en el formato seleccionado."""
     console.print(Panel(f"[bold green]Titulador - Generación en Lote (Batch: {output_format.upper()})[/bold green]"))
@@ -122,6 +143,10 @@ def batch_generate(
         console.print("")
 
     generator = PPTXGenerator()
+    render_config = build_render_config(
+        trayecto_text, carrera_line1_text, carrera_line2_text,
+        trayecto_font_size, carrera_font_size,
+    )
     
     t_line1 = trayecto_data["titulo_linea1"]
     t_line2 = trayecto_data["titulo_linea2"]
@@ -158,7 +183,7 @@ def batch_generate(
 
         outs = []
         out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
-        generator.generate(titulo_data, out_pptx)
+        generator.generate(titulo_data, out_pptx, render_config)
 
         if output_format in ["presentacion", "all"]:
             outs.append(os.path.basename(out_pptx))
@@ -186,11 +211,20 @@ def interactive_form(
     emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
     emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
     emision_ano: Optional[str] = typer.Option(None, "--emision-ano", help="Año de emisión del certificado (ej. '25')"),
+    trayecto_text: Optional[str] = typer.Option(None, "--texto-trayecto", help="Texto personalizado de la línea Trayecto/Curso"),
+    carrera_line1_text: Optional[str] = typer.Option(None, "--texto-carrera-linea1", help="Texto personalizado de la primera línea de carrera"),
+    carrera_line2_text: Optional[str] = typer.Option(None, "--texto-carrera-linea2", help="Texto personalizado de la segunda línea de carrera/resolución"),
+    trayecto_font_size: Optional[float] = typer.Option(None, "--fuente-trayecto", help="Tamaño de fuente del trayecto en puntos"),
+    carrera_font_size: Optional[float] = typer.Option(None, "--fuente-carrera", help="Tamaño de fuente de carrera en puntos"),
 ):
     """Crea un certificado completando el formulario campo por campo en la consola."""
     console.print(Panel("[bold green]Titulador - Formulario Interactivo[/bold green]"))
 
     generator = PPTXGenerator()
+    render_config = build_render_config(
+        trayecto_text, carrera_line1_text, carrera_line2_text,
+        trayecto_font_size, carrera_font_size,
+    )
     catalog = TrayectoCatalog()
 
     selected_code = trayecto_code
@@ -278,7 +312,7 @@ def interactive_form(
 
     safe_name = apellido_nombre.strip().replace(" ", "_")
     output_pptx = os.path.join(output_dir, f"{numero_egresado}_{safe_name}.pptx")
-    generator.generate(data, output_pptx)
+    generator.generate(data, output_pptx, render_config)
 
     console.print(f"\n[bold green]✔ Certificado PPTX generado en: {output_pptx}[/bold green]")
     
@@ -300,6 +334,11 @@ def select_egresado(
     emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
     emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
     emision_ano: Optional[str] = typer.Option(None, "--emision-ano", help="Año de emisión del certificado (ej. '25')"),
+    trayecto_text: Optional[str] = typer.Option(None, "--texto-trayecto", help="Texto personalizado de la línea Trayecto/Curso"),
+    carrera_line1_text: Optional[str] = typer.Option(None, "--texto-carrera-linea1", help="Texto personalizado de la primera línea de carrera"),
+    carrera_line2_text: Optional[str] = typer.Option(None, "--texto-carrera-linea2", help="Texto personalizado de la segunda línea de carrera/resolución"),
+    trayecto_font_size: Optional[float] = typer.Option(None, "--fuente-trayecto", help="Tamaño de fuente del trayecto en puntos"),
+    carrera_font_size: Optional[float] = typer.Option(None, "--fuente-carrera", help="Tamaño de fuente de carrera en puntos"),
 ):
     """Muestra la lista de egresados del Excel y permite elegir uno para emitir su certificado."""
     if not os.path.exists(excel_path):
@@ -353,6 +392,10 @@ def select_egresado(
         raise typer.Exit(code=1)
 
     generator = PPTXGenerator()
+    render_config = build_render_config(
+        trayecto_text, carrera_line1_text, carrera_line2_text,
+        trayecto_font_size, carrera_font_size,
+    )
     t_line1 = trayecto_data["titulo_linea1"]
     t_line2 = trayecto_data["titulo_linea2"]
     horas = trayecto_data["horas_cursada"]
@@ -379,7 +422,7 @@ def select_egresado(
 
     safe_name = selected_eg['apellido_nombre'].replace(" ", "_")
     output_pptx = os.path.join(output_dir, f"{selected_eg['num_egresado']}_{safe_name}.pptx")
-    generator.generate(titulo_data, output_pptx)
+    generator.generate(titulo_data, output_pptx, render_config)
     
     console.print(f"\n[bold green]✔ Certificado para {selected_eg['apellido_nombre']} generado en: {output_pptx}[/bold green]")
     

@@ -125,6 +125,18 @@ Opciones principales del comando `batch`:
 - `--trayecto` / `-k`: Código del trayecto en el catálogo (ej: `MM11`, `CL01`).
 - `--format` / `-f`: Formato de salida (`presentacion`, `pdf`, `all`).
 - `--outdir` / `-o`: Carpeta de destino (por defecto `output/`).
+- `--texto-trayecto`: Reemplaza el texto de la línea Trayecto/Curso.
+- `--texto-carrera-linea1` y `--texto-carrera-linea2`: Reemplazan las dos líneas de carrera/resolución.
+- `--fuente-trayecto` y `--fuente-carrera`: Fijan el tamaño de fuente en puntos; si se omiten, el sistema lo calcula según la longitud del texto.
+
+Para el caso de resoluciones extensas, como Mecánica de Sistemas de Inyección Diesel, el tamaño se reduce progresivamente para conservar el texto dentro del bloque. Por ejemplo:
+```bash
+python3 main.py batch --excel "ruta/al/acta.xlsx" --trayecto MA23 \
+   --format presentacion --fuente-carrera 7.0 \
+   --texto-carrera-linea2 "diesel según Resolución Nro. RESFC-2018-1735-E-GDEBA-DGCYE"
+```
+
+En el formulario de la GUI, estos mismos campos están disponibles en la sección **Avanzado: textos y tamaños del frente**. Dejarlos vacíos conserva el texto del catálogo y el cálculo automático.
 
 #### Modo Selección Individual (`select`)
 Muestra el listado de egresados en pantalla para elegir interactivamente a cuál emitirle el certificado:

@@ -31,3 +31,13 @@ class TituloData(BaseModel):
     numero_egresado: str = Field(default="", description="Número de egresado (ej. 354)")
     numero_cpf: str = Field(default="412", description="Número CPF")
     distrito_cpf: str = Field(default="Lomas de Zamora", description="Distrito CPF")
+
+
+class RenderConfig(BaseModel):
+    """Overrides for the text and typography of the certificate front page."""
+
+    trayecto_text: Optional[str] = None
+    carrera_line1_text: Optional[str] = None
+    carrera_line2_text: Optional[str] = None
+    trayecto_font_size: Optional[float] = Field(default=None, gt=0)
+    carrera_font_size: Optional[float] = Field(default=None, gt=0)

@@ -2,7 +2,8 @@ import unittest
 import os
 import pptx
 from src.models import TituloData
-from src.pptx_generator import PPTXGenerator, format_certificacion_and_resolucion
+from src.models import RenderConfig
+from src.pptx_generator import PPTXGenerator, adaptive_font_size, format_certificacion_and_resolucion
 
 class TestPPTXGenerator(unittest.TestCase):
     def test_dash_padding_in_shapes(self):
@@ -58,6 +59,41 @@ class TestPPTXGenerator(unittest.TestCase):
         self.assertNotIn('\n', second_line)
         self.assertNotIn('\r', second_line)
 
+    def test_font_size_decreases_as_text_gets_longer(self):
+        sizes = [
+            adaptive_font_size('texto ' * length, preferred_size=12.0, max_chars=62)
+            for length in (5, 15, 30, 60)
+        ]
+
+        self.assertEqual(sizes[0], 12.0)
+        self.assertGreater(sizes[0], sizes[1])
+        self.assertGreater(sizes[1], sizes[2])
+        self.assertGreaterEqual(sizes[2], sizes[3])
+        self.assertEqual(sizes[3], 6.5)
+
+    def test_render_config_overrides_text_and_font_sizes(self):
+        data = TituloData(titulo_linea1='Trayecto original', titulo_linea2='Carrera original')
+        config = RenderConfig(
+            trayecto_text='Trayecto configurable',
+            carrera_line1_text='Carrera configurable',
+            carrera_line2_text='Resolución configurable',
+            trayecto_font_size=8.0,
+            carrera_font_size=9.0,
+        )
+        out_path = 'output/test_render_config.pptx'
+        PPTXGenerator().generate(data, out_path, config)
+        prs = pptx.Presentation(out_path)
+        shape_dict = {shape.shape_id: shape for shape in prs.slides[0].shapes if shape.has_text_frame}
+
+        self.assertIn('Trayecto configurable', shape_dict[88].text)
+        self.assertEqual(shape_dict[89].text, 'Carrera configurable')
+        self.assertEqual(shape_dict[90].text, 'Resolución configurable')
+        self.assertEqual(shape_dict[88].text_frame.paragraphs[0].font.size.pt, 8.0)
+        self.assertEqual(shape_dict[89].text_frame.paragraphs[0].font.size.pt, 9.0)
+
+        if os.path.exists(out_path):
+            os.remove(out_path)
+
     def test_multi_line_title_no_dashes_in_middle(self):
         data = TituloData(
             apellido_nombre='PEREZ JUAN MANUEL',
@@ -88,6 +124,24 @@ class TestPPTXGenerator(unittest.TestCase):
         # Shape 89 should NOT end with hyphens since the title continues on Shape 90
         self.assertFalse(shape_dict[89].endswith('-'))
         self.assertEqual(shape_dict[89], 'Operadora/or de Carpintería y')
+
+        if os.path.exists(out_path):
+            os.remove(out_path)
+
+    def test_long_trayecto_name_ends_with_dashes(self):
+        data = TituloData(
+            titulo_linea1='Operadora/or de Carpintería y Fabricación de Mobiliario',
+            titulo_linea2='Operadora/or de Carpintería y Fabricación de Mobiliario',
+        )
+
+        gen = PPTXGenerator()
+        out_path = 'output/test_long_trayecto_dashes.pptx'
+        gen.generate(data, out_path)
+
+        prs = pptx.Presentation(out_path)
+        shape_dict = {shape.shape_id: shape.text_frame.text for shape in prs.slides[0].shapes if shape.has_text_frame}
+
+        self.assertTrue(shape_dict[88].endswith('---'))
 
         if os.path.exists(out_path):
             os.remove(out_path)

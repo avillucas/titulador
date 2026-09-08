@@ -10,7 +10,7 @@ try:
 except ImportError:
     ctk = None
 
-from src.models import TituloData
+from src.models import RenderConfig, TituloData
 from src.excel_parser import ExcelParser
 from src.pptx_generator import PPTXGenerator
 from src.exporter import convert_pptx_to_pdf
@@ -359,6 +359,9 @@ class TituladorGUI(ctk.CTk if ctk else object):
             return
 
         try:
+            render_config = self._get_render_config()
+            if render_config is None:
+                return
             parser = ExcelParser(excel_p)
             data = parser.load_data(catalog=self.catalog)
             egresados = data["egresados"]
@@ -413,7 +416,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
                 outs = []
                 out_pptx = os.path.join(out_d, f"{filename_base}.pptx")
-                generator.generate(titulo_data, out_pptx)
+                generator.generate(titulo_data, out_pptx, render_config)
                 self.last_generated_pptx = out_pptx
 
                 if "Presentación" in fmt_choice:
@@ -477,6 +480,9 @@ class TituladorGUI(ctk.CTk if ctk else object):
         tmpl_p = self.template_path.get()
         out_d = self.output_dir.get()
         generator = PPTXGenerator(tmpl_p)
+        render_config = self._get_render_config()
+        if render_config is None:
+            return
 
         t_data = self.current_trayecto_data or data.get("trayecto_data")
         if not t_data:
@@ -512,7 +518,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         safe_name = target_eg['apellido_nombre'].replace(" ", "_")
         out_pptx = os.path.join(out_d, f"{target_eg['num_egresado']}_{safe_name}.pptx")
-        generator.generate(titulo_data, out_pptx)
+        generator.generate(titulo_data, out_pptx, render_config)
         self.last_generated_pptx = out_pptx
 
         out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
@@ -542,6 +548,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         scroll_frame.grid_columnconfigure(1, weight=1)
 
         self.form_entries: Dict[str, ctk.CTkEntry] = {}
+        self.advanced_entries: Dict[str, ctk.CTkEntry] = {}
 
         fields = [
             ("apellido_nombre", "Apellido y Nombre:", "Pérez Juan Manuel"),
@@ -567,6 +574,29 @@ class TituladorGUI(ctk.CTk if ctk else object):
             entry.insert(0, default_val)
             entry.grid(row=row, column=1, padx=10, pady=3, sticky="ew")
             self.form_entries[key] = entry
+            row += 1
+
+        ctk.CTkLabel(
+            scroll_frame,
+            text="--- Avanzado: textos y tamaños del frente ---",
+            font=ctk.CTkFont(weight="bold"),
+        ).grid(row=row, column=0, columnspan=2, pady=(12, 4))
+        row += 1
+
+        advanced_fields = [
+            ("trayecto_text", "Texto línea Trayecto/Curso:", ""),
+            ("carrera_line1_text", "Texto línea Carrera 1:", ""),
+            ("carrera_line2_text", "Texto línea Carrera 2:", ""),
+            ("trayecto_font_size", "Fuente Trayecto (pt):", ""),
+            ("carrera_font_size", "Fuente Carrera (pt):", ""),
+        ]
+        for key, label_text, default_val in advanced_fields:
+            ctk.CTkLabel(scroll_frame, text=label_text).grid(row=row, column=0, padx=10, pady=3, sticky="e")
+            entry = ctk.CTkEntry(scroll_frame, placeholder_text="Automático" if not default_val else "")
+            if default_val:
+                entry.insert(0, default_val)
+            entry.grid(row=row, column=1, padx=10, pady=3, sticky="ew")
+            self.advanced_entries[key] = entry
             row += 1
 
         # Modules Sub-section
@@ -618,6 +648,27 @@ class TituladorGUI(ctk.CTk if ctk else object):
             if i < len(mods):
                 entry.insert(0, mods[i])
 
+    def _get_render_config(self) -> Optional[RenderConfig]:
+        def optional_text(key: str) -> Optional[str]:
+            value = self.advanced_entries[key].get().strip()
+            return value or None
+
+        def optional_size(key: str) -> Optional[float]:
+            value = self.advanced_entries[key].get().strip()
+            return float(value) if value else None
+
+        try:
+            return RenderConfig(
+                trayecto_text=optional_text("trayecto_text"),
+                carrera_line1_text=optional_text("carrera_line1_text"),
+                carrera_line2_text=optional_text("carrera_line2_text"),
+                trayecto_font_size=optional_size("trayecto_font_size"),
+                carrera_font_size=optional_size("carrera_font_size"),
+            )
+        except (TypeError, ValueError) as error:
+            messagebox.showerror("Configuración avanzada inválida", f"Revise los tamaños de fuente: {error}")
+            return None
+
     def _run_form_generation(self):
         tmpl_p = self.template_path.get()
         out_d = self.output_dir.get()
@@ -627,6 +678,9 @@ class TituladorGUI(ctk.CTk if ctk else object):
             return
 
         modulos = [m.get().strip() for m in self.module_entries if m.get().strip()]
+        render_config = self._get_render_config()
+        if render_config is None:
+            return
 
         titulo_data = TituloData(
             apellido_nombre=self.form_entries["apellido_nombre"].get(),
@@ -650,7 +704,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         out_pptx = os.path.join(out_d, f"{num_eg}_{safe_name}.pptx")
 
         generator = PPTXGenerator(tmpl_p)
-        generator.generate(titulo_data, out_pptx)
+        generator.generate(titulo_data, out_pptx, render_config)
         self.last_generated_pptx = out_pptx
 
         out_pdf = convert_pptx_to_pdf(out_pptx, out_d)

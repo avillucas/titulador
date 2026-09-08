@@ -3,7 +3,7 @@ import re
 import pptx
 from pptx.util import Pt
 from typing import Dict, Any, List, Tuple, Optional
-from src.models import TituloData
+from src.models import RenderConfig, TituloData
 
 DEFAULT_DASH_LINE = "--------------------------------------------------------------------------"
 
@@ -101,6 +101,14 @@ def certification_font_size(s89_text: str, s90_text: str) -> float:
     if longest_line > 48:
         return 11.0
     return 12.0
+
+
+def adaptive_font_size(text: str, preferred_size: float, max_chars: int, min_size: float = 6.5) -> float:
+    """Scales text down progressively so long front-page lines stay within their shape."""
+    longest_line = max((len(line) for line in text.splitlines()), default=0)
+    if longest_line <= max_chars:
+        return preferred_size
+    return round(max(min_size, preferred_size * max_chars / longest_line), 1)
 
 
 
@@ -219,8 +227,10 @@ class PPTXGenerator:
             raise FileNotFoundError(f"Template file not found at {template_path}")
         self.template_path = template_path
 
-    def generate(self, data: TituloData, output_path: str) -> str:
+    def generate(self, data: TituloData, output_path: str, render_config: Optional[RenderConfig] = None) -> str:
         prs = pptx.Presentation(self.template_path)
+
+        render_config = render_config or RenderConfig()
         
         # Process Slide 1 (Frente)
         if len(prs.slides) > 0:
@@ -228,7 +238,12 @@ class PPTXGenerator:
             
             # Prepare Certificación title line 1 & line 2 split and resolution formatting
             s89_text, s90_text = format_certificacion_and_resolucion(data.titulo_linea2, data.resolucion)
-            certification_size = certification_font_size(s89_text, s90_text)
+            s89_text = render_config.carrera_line1_text or s89_text
+            s90_text = render_config.carrera_line2_text or s90_text
+            career_text = f"{s89_text}\n{s90_text}"
+            certification_size = render_config.carrera_font_size or adaptive_font_size(
+                career_text, preferred_size=12.0, max_chars=62
+            )
             
             for shape in slide1.shapes:
                 if shape.shape_id == 85:  # Apellido y Nombre (Arial 14 Bold UPPERCASE)
@@ -245,12 +260,13 @@ class PPTXGenerator:
                 elif shape.shape_id == 88:  # Trayecto / Curso (Arial 11-12)
                     from pptx.util import Mm
                     shape.top = Mm(79.0)
-                    val = str(data.titulo_linea1).strip()
+                    val = render_config.trayecto_text or str(data.titulo_linea1).strip()
                     val = re.sub(r"-+$", "", val).strip()
-                    if len(val) < 52:
-                        num_dashes = max(3, 52 - len(val))
-                        val = f"{val}{'-' * num_dashes}"
-                    sz = 10.5 if len(val) > 42 else 11.5
+                    num_dashes = max(3, 52 - len(val))
+                    val = f"{val}{'-' * num_dashes}"
+                    sz = render_config.trayecto_font_size or adaptive_font_size(
+                        val, preferred_size=11.5, max_chars=42
+                    )
                     set_text_frame_content(shape, val, font_name="Arial", font_size_pt=sz, word_wrap=False)
                 elif shape.shape_id == 89:  # Certificación DE Line 1 - Starts at 109mm (after CERTIFICADO DE)
                     from pptx.util import Mm
