@@ -2,7 +2,7 @@ import unittest
 import os
 import pptx
 from src.models import TituloData
-from src.pptx_generator import PPTXGenerator
+from src.pptx_generator import PPTXGenerator, format_certificacion_and_resolucion
 
 class TestPPTXGenerator(unittest.TestCase):
     def test_dash_padding_in_shapes(self):
@@ -38,15 +38,25 @@ class TestPPTXGenerator(unittest.TestCase):
         self.assertIn('Electricista en Inmuebles-', shape_dict[88])
         self.assertTrue(shape_dict[88].endswith('-'))
 
-        # Shape 89: Certificacion line 1 contains title + según Resolución Nro.
-        self.assertIn('Electricista en Inmuebles según Resolución Nro.', shape_dict[89])
+        # Shape 89 starts the certification; the resolution continues on shape 90.
+        self.assertEqual(shape_dict[89], 'Electricista en Inmuebles')
 
         # Shape 90: Resolution line should end with hyphens
-        self.assertTrue(shape_dict[90].endswith('--'))
+        self.assertIn('según Resolución Nro.', shape_dict[90])
+        self.assertTrue(shape_dict[90].rstrip().endswith('---'))
 
         # Clean up test output
         if os.path.exists(out_path):
             os.remove(out_path)
+
+    def test_second_line_never_contains_line_breaks(self):
+        _, second_line = format_certificacion_and_resolucion(
+            'Operadora/or de Carpintería y\nFabricación de Mobiliario',
+            'Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE--\r\n',
+        )
+
+        self.assertNotIn('\n', second_line)
+        self.assertNotIn('\r', second_line)
 
     def test_multi_line_title_no_dashes_in_middle(self):
         data = TituloData(

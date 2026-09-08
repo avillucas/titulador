@@ -2,7 +2,7 @@
 
 **Titulador** es una herramienta de **uso libre** desarrollada en Python con **Interfaz Gráfica de Escritorio (GUI)** e **Interfaz de Línea de Comandos (CLI)** cuyo propósito es poner a disposición de los **Centros de Formación Profesional (CFP)** de la Provincia de Buenos Aires un medio automatizado, sencillo y eficiente para la confección masiva de certificados y títulos de sus egresados.
 
-El sistema genera los certificados en formato **PowerPoint (`.pptx`) editable** y/o **PDF** para hojas de tamaño **A5** (210 mm x 148.5 mm). El formato PPTX permite a los directivos y secretarios realizar correcciones o retoques manuales posteriores en caso de ser necesario antes de la impresión definitiva sobre los formularios preimpresos.
+El sistema genera los certificados como **Presentación editable** y/o **PDF** para hojas de tamaño **A5** (210 mm x 148.5 mm). La presentación permite a los directivos y secretarios realizar correcciones o retoques manuales posteriores antes de la impresión definitiva sobre los formularios preimpresos.
 
 Toda la confección se realiza en estricto cumplimiento de los lineamientos e instructivo técnico fijados por la **Circular N° 04-2020** de la Dirección de Formación Profesional (DGCyE).
 
@@ -16,7 +16,7 @@ La aplicación utiliza como referencia los documentos oficiales almacenados en l
 | :--- | :--- | :--- |
 | **Normativa de Certificación** | `documentacion/Circular 4-2020 Certificacion de trayectos formativos y cursos de Formacion Profesional.pdf` | Instructivo técnico oficial que establece los tamaños de fuente, alineación, estilos y pautas de testado para el frente y dorso del certificado A5. |
 | **Catálogo de Trayectos** | `documentacion/CATALOGO 2025 FP.pdf` | Catálogo Oficial de Trayectos Formativos y Cursos de Formación Profesional (procesado en JSON para búsqueda automática de módulos, resoluciones y horas). |
-| **Modelo Base PPTX** | `documentacion/Modelo base.pptx` | Plantilla base por defecto en PowerPoint A5 (Diapositivas 1 y 2) para la generación de certificados. |
+| **Modelo Base de Presentación** | `documentacion/Modelo base.pptx` | Modelo fijo en PowerPoint A5 (Diapositivas 1 y 2) para la generación de certificados. No se selecciona desde la aplicación. |
 | **Acta de Examen Modelo** | `documentacion/Acta de examen.xlsx` | Planilla Excel modelo con el formato estándar de actas de examen final de donde el sistema extrae los datos de los egresados aprobados. |
 
 > ⚠️ **Nota aclaratoria**: Los archivos presentes en las carpetas `documentacion/` and `ejemplos/` son provistos exclusivamente a modo de **ejemplos y modelos de prueba** para verificar el correcto funcionamiento del sistema.
@@ -98,8 +98,8 @@ La interfaz gráfica ofrece un entorno accesible con selectores de archivos y ba
    - En el desplegable *Trayecto Catálogo*, selecciona el curso correspondiente del catálogo o permite que el sistema lo detecte automáticamente desde la especialidad descrita en el acta.
 3. **Seleccionar el Formato de Salida**:
    - Despliega las opciones de *Formato Salida* y elige entre:
-     - `PPTX + PDF (Recomendado)`: Genera ambos formatos.
-     - `Solo PPTX`: Genera únicamente los archivos de PowerPoint editables.
+   - `Presentación + PDF (Recomendado)`: Genera ambos formatos.
+   - `Solo Presentación`: Genera únicamente la presentación editable.
      - `Solo PDF`: Genera certificados listos para imprimir en PDF.
 4. **Ejecutar**:
    - Haz clic en **"🚀 Generar Certificados (Lote)"**. Los archivos generados se guardarán en la carpeta `output/`.
@@ -123,7 +123,7 @@ python3 main.py batch --excel "documentacion/Acta de examen.xlsx" --trayecto MM1
 Opciones principales del comando `batch`:
 - `--excel` / `-e`: Ruta al archivo Excel de Acta de Examen.
 - `--trayecto` / `-k`: Código del trayecto en el catálogo (ej: `MM11`, `CL01`).
-- `--format` / `-f`: Formato de salida (`pptx`, `pdf`, `all`).
+- `--format` / `-f`: Formato de salida (`presentacion`, `pdf`, `all`).
 - `--outdir` / `-o`: Carpeta de destino (por defecto `output/`).
 
 #### Modo Selección Individual (`select`)

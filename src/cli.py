@@ -68,24 +68,19 @@ def resolve_trayecto(catalog: TrayectoCatalog, code_or_name: Optional[str], exce
 @app.command("batch")
 def batch_generate(
     excel_path: str = typer.Option(DEFAULT_EXCEL, "--excel", "-e", help="Ruta al archivo Excel de Acta de examen"),
-    template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t", help="Ruta a la plantilla PPTX"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
     trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
-    output_format: str = typer.Option("all", "--format", "-f", help="Formato de salida: pdf, pptx, all"),
+    output_format: str = typer.Option("all", "--format", "-f", help="Formato de salida: presentacion, pdf, all"),
     fecha_emision: Optional[str] = typer.Option(None, "--fecha-emision", "-m", help="Fecha de emisión personalizada (ej. '14/08/2025' o '14 de Agosto de 2025')"),
     emision_dia: Optional[str] = typer.Option(None, "--emision-dia", help="Día de emisión del certificado (ej. '14')"),
     emision_mes: Optional[str] = typer.Option(None, "--emision-mes", help="Mes de emisión del certificado (ej. 'Agosto')"),
     emision_ano: Optional[str] = typer.Option(None, "--emision-ano", help="Año de emisión del certificado (ej. '25')"),
 ):
-    """Procesa un archivo Excel de Acta de examen y genera los certificados en el formato seleccionado (PPTX y/o PDF)."""
+    """Procesa un archivo Excel de Acta de examen y genera certificados en el formato seleccionado."""
     console.print(Panel(f"[bold green]Titulador - Generación en Lote (Batch: {output_format.upper()})[/bold green]"))
 
     if not os.path.exists(excel_path):
         console.print(f"[bold red]Error:[bold red] El archivo Excel no existe: {excel_path}")
-        raise typer.Exit(code=1)
-
-    if not os.path.exists(template_path):
-        console.print(f"[bold red]Error:[bold red] La plantilla PPTX no existe: {template_path}")
         raise typer.Exit(code=1)
 
     catalog = TrayectoCatalog()
@@ -126,7 +121,7 @@ def batch_generate(
     else:
         console.print("")
 
-    generator = PPTXGenerator(template_path)
+    generator = PPTXGenerator()
     
     t_line1 = trayecto_data["titulo_linea1"]
     t_line2 = trayecto_data["titulo_linea2"]
@@ -165,7 +160,7 @@ def batch_generate(
         out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
         generator.generate(titulo_data, out_pptx)
 
-        if output_format in ["pptx", "all"]:
+        if output_format in ["presentacion", "all"]:
             outs.append(os.path.basename(out_pptx))
 
         if output_format in ["pdf", "all"]:
@@ -185,7 +180,6 @@ def batch_generate(
 
 @app.command("form")
 def interactive_form(
-    template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t", help="Ruta a la plantilla PPTX"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o", help="Carpeta de salida"),
     trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
     fecha_emision: Optional[str] = typer.Option(None, "--fecha-emision", "-m", help="Fecha de emisión personalizada (ej. '14/08/2025' o '14 de Agosto de 2025')"),
@@ -196,7 +190,7 @@ def interactive_form(
     """Crea un certificado completando el formulario campo por campo en la consola."""
     console.print(Panel("[bold green]Titulador - Formulario Interactivo[/bold green]"))
 
-    generator = PPTXGenerator(template_path)
+    generator = PPTXGenerator()
     catalog = TrayectoCatalog()
 
     selected_code = trayecto_code
@@ -300,7 +294,6 @@ def interactive_form(
 @app.command("select")
 def select_egresado(
     excel_path: str = typer.Option(DEFAULT_EXCEL, "--excel", "-e"),
-    template_path: str = typer.Option(DEFAULT_TEMPLATE, "--template", "-t"),
     output_dir: str = typer.Option(OUTPUT_DIR, "--outdir", "-o"),
     trayecto_code: Optional[str] = typer.Option(None, "--trayecto", "-k", help="Código o nombre del trayecto en el catálogo (ej. MM11)"),
     fecha_emision: Optional[str] = typer.Option(None, "--fecha-emision", "-m", help="Fecha de emisión personalizada (ej. '14/08/2025' o '14 de Agosto de 2025')"),
@@ -359,7 +352,7 @@ def select_egresado(
         console.print("[bold red]✖ No se identificó trayecto en el catálogo JSON autorizado.[/bold red]")
         raise typer.Exit(code=1)
 
-    generator = PPTXGenerator(template_path)
+    generator = PPTXGenerator()
     t_line1 = trayecto_data["titulo_linea1"]
     t_line2 = trayecto_data["titulo_linea2"]
     horas = trayecto_data["horas_cursada"]

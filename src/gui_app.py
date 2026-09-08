@@ -120,43 +120,37 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.excel_entry.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
         ctk.CTkButton(paths_frame, text="Buscar...", width=80, command=self._browse_excel).grid(row=0, column=2, padx=10, pady=5)
 
-        # Template PPTX Picker
-        ctk.CTkLabel(paths_frame, text="Plantilla PPTX:").grid(row=1, column=0, padx=10, pady=5, sticky="e")
-        self.template_entry = ctk.CTkEntry(paths_frame, textvariable=self.template_path)
-        self.template_entry.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
-        ctk.CTkButton(paths_frame, text="Buscar...", width=80, command=self._browse_template).grid(row=1, column=2, padx=10, pady=5)
-
         # Output Directory Picker
-        ctk.CTkLabel(paths_frame, text="Carpeta Salida:").grid(row=2, column=0, padx=10, pady=5, sticky="e")
+        ctk.CTkLabel(paths_frame, text="Carpeta Salida:").grid(row=1, column=0, padx=10, pady=5, sticky="e")
         self.output_entry = ctk.CTkEntry(paths_frame, textvariable=self.output_dir)
-        self.output_entry.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
-        ctk.CTkButton(paths_frame, text="Buscar...", width=80, command=self._browse_output).grid(row=2, column=2, padx=10, pady=5)
+        self.output_entry.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        ctk.CTkButton(paths_frame, text="Buscar...", width=80, command=self._browse_output).grid(row=1, column=2, padx=10, pady=5)
 
         # Output Format Selector
-        ctk.CTkLabel(paths_frame, text="Formato Salida:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
+        ctk.CTkLabel(paths_frame, text="Formato Salida:", font=ctk.CTkFont(weight="bold")).grid(row=2, column=0, padx=10, pady=5, sticky="e")
         self.format_dropdown = ctk.CTkOptionMenu(
             paths_frame,
-            values=["Solo PPTX", "PPTX + PDF (Recomendado)", "Solo PDF"]
+            values=["Solo Presentación", "Presentación + PDF (Recomendado)", "Solo PDF"]
         )
-        self.format_dropdown.set("Solo PPTX")
+        self.format_dropdown.set("Solo Presentación")
 
-        self.format_dropdown.grid(row=3, column=1, padx=5, pady=5, sticky="ew")
+        self.format_dropdown.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
 
         # Trayecto Catalog Dropdown
-        ctk.CTkLabel(paths_frame, text="Trayecto Catálogo:", font=ctk.CTkFont(weight="bold")).grid(row=4, column=0, padx=10, pady=5, sticky="e")
+        ctk.CTkLabel(paths_frame, text="Trayecto Catálogo:", font=ctk.CTkFont(weight="bold")).grid(row=3, column=0, padx=10, pady=5, sticky="e")
         display_list = self.catalog.get_trayecto_display_list() or ["Sin catálogo disponible"]
         self.trayecto_dropdown = ctk.CTkOptionMenu(
             paths_frame, 
             values=display_list,
             command=self._on_trayecto_selected
         )
-        self.trayecto_dropdown.grid(row=4, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
+        self.trayecto_dropdown.grid(row=3, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
 
         # Fecha de Emisión Controls
-        ctk.CTkLabel(paths_frame, text="Fecha Emisión Certificado:", font=ctk.CTkFont(weight="bold")).grid(row=5, column=0, padx=10, pady=5, sticky="e")
+        ctk.CTkLabel(paths_frame, text="Fecha Emisión Certificado:", font=ctk.CTkFont(weight="bold")).grid(row=4, column=0, padx=10, pady=5, sticky="e")
 
         emision_frame = ctk.CTkFrame(paths_frame, fg_color="transparent")
-        emision_frame.grid(row=5, column=1, columnspan=2, padx=5, pady=5, sticky="w")
+        emision_frame.grid(row=4, column=1, columnspan=2, padx=5, pady=5, sticky="w")
 
         ctk.CTkLabel(emision_frame, text="Día:").pack(side="left", padx=(0, 2))
         ctk.CTkEntry(emision_frame, textvariable=self.emision_dia, width=50).pack(side="left", padx=(0, 10))
@@ -199,13 +193,13 @@ class TituladorGUI(ctk.CTk if ctk else object):
         )
         btn_open_out.grid(row=1, column=0, padx=10, pady=10, sticky="w")
 
-        btn_open_pptx = ctk.CTkButton(
+        btn_open_presentation = ctk.CTkButton(
             bottom_frame, 
-            text="📄 Abrir Último PPTX", 
+            text="📄 Abrir Última Presentación",
             command=self._open_last_pptx,
             fg_color="#2b845b"
         )
-        btn_open_pptx.grid(row=1, column=1, padx=5, pady=10, sticky="w")
+        btn_open_presentation.grid(row=1, column=1, padx=5, pady=10, sticky="w")
 
         btn_open_pdf = ctk.CTkButton(
             bottom_frame, 
@@ -232,11 +226,6 @@ class TituladorGUI(ctk.CTk if ctk else object):
         if filename:
             self.excel_path.set(filename)
             self._load_excel_data()
-
-    def _browse_template(self):
-        filename = filedialog.askopenfilename(filetypes=[("Plantillas PowerPoint", "*.pptx")])
-        if filename:
-            self.template_path.set(filename)
 
     def _browse_output(self):
         folder = filedialog.askdirectory()
@@ -352,7 +341,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         btn_batch = ctk.CTkButton(
             self.tab_batch, 
-            text="🚀 Generar Todos los Certificados (PPTX)", 
+            text="🚀 Generar Todas las Presentaciones",
             font=ctk.CTkFont(size=14, weight="bold"),
             height=40,
             command=self._run_batch_generation
@@ -427,8 +416,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 generator.generate(titulo_data, out_pptx)
                 self.last_generated_pptx = out_pptx
 
-                if "PPTX" in fmt_choice:
-                    outs.append("PPTX")
+                if "Presentación" in fmt_choice:
+                    outs.append("Presentación")
 
                 if "PDF" in fmt_choice or "Recomendado" in fmt_choice:
                     out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
@@ -453,7 +442,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         ctk.CTkLabel(
             self.tab_select, 
-            text="Seleccione un alumno egresado para generar su certificado PPTX:",
+            text="Seleccione un alumno egresado para generar su certificado:",
             font=ctk.CTkFont(size=13)
         ).pack(padx=15, pady=(20, 5), anchor="w")
 
@@ -462,7 +451,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         btn_single = ctk.CTkButton(
             self.tab_select, 
-            text="📄 Generar PPTX del Alumno Seleccionado", 
+            text="📄 Generar Presentación del Alumno Seleccionado",
             font=ctk.CTkFont(size=13, weight="bold"),
             height=35,
             command=self._run_single_generation
@@ -529,11 +518,11 @@ class TituladorGUI(ctk.CTk if ctk else object):
         out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
         if out_pdf:
             self.last_generated_pdf = out_pdf
-            self.log(f"✔ PPTX y PDF generado: {out_pdf}")
-            messagebox.showinfo("¡Éxito!", f"Certificado PPTX y PDF generados correctamente:\n{out_pptx}")
+            self.log(f"✔ Presentación y PDF generado: {out_pdf}")
+            messagebox.showinfo("¡Éxito!", f"Certificado y PDF generados correctamente:\n{out_pptx}")
         else:
-            self.log(f"✔ PPTX generado: {out_pptx}")
-            messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
+            self.log(f"✔ Presentación generada: {out_pptx}")
+            messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
 
     # --- TAB 3: FORMULARIO MANUAL ---
     def _setup_form_tab(self):
@@ -594,7 +583,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
 
         btn_form = ctk.CTkButton(
             scroll_frame, 
-            text="✨ Generar Certificado (PPTX y PDF Editable)", 
+            text="✨ Generar Certificado (Presentación y PDF Editable)",
             font=ctk.CTkFont(size=13, weight="bold"),
             height=35,
             command=self._run_form_generation
@@ -634,7 +623,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         out_d = self.output_dir.get()
 
         if not os.path.exists(tmpl_p):
-            messagebox.showerror("Error", "La plantilla PPTX no existe.")
+            messagebox.showerror("Error", "La plantilla de presentación no existe.")
             return
 
         modulos = [m.get().strip() for m in self.module_entries if m.get().strip()]
@@ -667,11 +656,11 @@ class TituladorGUI(ctk.CTk if ctk else object):
         out_pdf = convert_pptx_to_pdf(out_pptx, out_d)
         if out_pdf:
             self.last_generated_pdf = out_pdf
-            self.log(f"✔ PPTX y PDF generado desde formulario: {out_pptx}")
-            messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
+            self.log(f"✔ Presentación y PDF generado desde formulario: {out_pptx}")
+            messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
         else:
-            self.log(f"✔ PPTX generado desde formulario: {out_pptx}")
-            messagebox.showinfo("¡Éxito!", f"Certificado PPTX generado correctamente:\n{out_pptx}")
+            self.log(f"✔ Presentación generada desde formulario: {out_pptx}")
+            messagebox.showinfo("¡Éxito!", f"Certificado generado correctamente:\n{out_pptx}")
 
     # --- ACTIONS ---
     def _open_output_folder(self):
@@ -683,7 +672,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         if self.last_generated_pptx and os.path.exists(self.last_generated_pptx):
             open_in_system(self.last_generated_pptx)
         else:
-            messagebox.showinfo("Información", "Aún no se ha generado ningún archivo PPTX en esta sesión.")
+            messagebox.showinfo("Información", "Aún no se ha generado ninguna presentación en esta sesión.")
 
     def _open_last_pdf(self):
         if self.last_generated_pdf and os.path.exists(self.last_generated_pdf):

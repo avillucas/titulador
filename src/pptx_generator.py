@@ -37,14 +37,14 @@ SHAPE_MAP_SLIDE2 = {
     112: "distrito_cpf",
 }
 
-def format_certificacion_and_resolucion(certificacion: str, resolucion: str, max_s89: int = 38, max_s90_line: int = 65) -> Tuple[str, str]:
+def format_certificacion_and_resolucion(certificacion: str, resolucion: str, max_s89: int = 38, max_s90_line: int = 62) -> Tuple[str, str]:
     """
     Formats certification title and resolution text across Shape 89 and Shape 90.
-    Ensures text never overflows the box width by splitting across Shape 89 (Line 1)
-    and up to two lines in Shape 90 (Line 2 and Line 3), completing the final line with hyphens.
+    Splits the certification and resolution across the two certification shapes,
+    reserving three hyphens at the end of the final line.
     """
-    cert = certificacion.strip()
-    res = resolucion.strip()
+    cert = re.sub(r"[\r\n]+", " ", certificacion).strip()
+    res = re.sub(r"[\r\n]+", " ", resolucion).strip()
 
     if res and not res.lower().startswith("según") and not res.lower().startswith("segun"):
         res_text = f"según {res}"
@@ -84,27 +84,23 @@ def format_certificacion_and_resolucion(certificacion: str, resolucion: str, max
         remainder = f"{cert_part2} {res_text}".strip()
 
     remainder = re.sub(r"-+$", "", remainder).strip()
-    if len(remainder) <= max_s90_line:
-        num_dashes = max(2, max_s90_line - len(remainder))
-        s90_text = f"{remainder}{'-' * num_dashes}"
-    else:
-        r_words = remainder.split()
-        l1_words = []
-        curr = 0
-        for w in r_words:
-            if curr + len(w) + (1 if l1_words else 0) <= max_s90_line:
-                l1_words.append(w)
-                curr += len(w) + 1
-            else:
-                break
-        s90_l1 = " ".join(l1_words)
-        s90_l2 = remainder[len(s90_l1):].strip()
-        s90_l2 = re.sub(r"-+$", "", s90_l2).strip()
-        num_dashes = max(2, max_s90_line - len(s90_l2))
-        s90_l2_dashed = f"{s90_l2}{'-' * num_dashes}"
-        s90_text = f"{s90_l1}\n{s90_l2_dashed}"
+    num_dashes = max(3, max_s90_line - len(remainder))
+    s90_text = f"{remainder}{'-' * num_dashes}"
 
     return s89_text, s90_text
+
+
+def certification_font_size(s89_text: str, s90_text: str) -> float:
+    """Returns one font size for both certification shapes based on the longest line."""
+    longest_line = max(
+        (len(line) for line in f"{s89_text}\n{s90_text}".splitlines()),
+        default=0,
+    )
+    if longest_line > 58:
+        return 10.5
+    if longest_line > 48:
+        return 11.0
+    return 12.0
 
 
 
@@ -231,7 +227,8 @@ class PPTXGenerator:
             slide1 = prs.slides[0]
             
             # Prepare Certificación title line 1 & line 2 split and resolution formatting
-            s89_text, s90_text = format_certificacion_and_resolucion(data.titulo_linea2, data.resolucion, max_s89=38, max_s90_line=65)
+            s89_text, s90_text = format_certificacion_and_resolucion(data.titulo_linea2, data.resolucion)
+            certification_size = certification_font_size(s89_text, s90_text)
             
             for shape in slide1.shapes:
                 if shape.shape_id == 85:  # Apellido y Nombre (Arial 14 Bold UPPERCASE)
@@ -260,15 +257,13 @@ class PPTXGenerator:
                     shape.left = Mm(109.0)
                     shape.top = Mm(86.2)
                     shape.width = Mm(85.3)
-                    set_text_frame_content(shape, s89_text, font_name="Arial", font_size_pt=12.0, word_wrap=False)
+                    set_text_frame_content(shape, s89_text, font_name="Arial", font_size_pt=certification_size, word_wrap=False)
                 elif shape.shape_id == 90:  # Certificación DE Line 2 + Resolución Nro.
                     from pptx.util import Mm
                     shape.left = Mm(23.7)
                     shape.top = Mm(94.1)
                     shape.width = Mm(164.7)
-                    last_line_len = len(s90_text.split("\n")[-1])
-                    sz = 11.0 if last_line_len > 68 else 12.0
-                    set_text_frame_content(shape, s90_text, font_name="Arial", font_size_pt=sz, word_wrap=False)
+                    set_text_frame_content(shape, s90_text, font_name="Arial", font_size_pt=certification_size, word_wrap=False)
                 elif shape.shape_id == 91:  # Emisión Día
                     set_text_frame_content(shape, str(data.emision_dia), font_name="Arial", font_size_pt=12.0, word_wrap=False)
                 elif shape.shape_id == 92:  # Emisión Mes
