@@ -110,7 +110,8 @@ def batch_generate(
         console.print(f"[bold green]✔ Trayecto Catálogo JSON:[/bold green] [cyan]{trayecto_data['codigo']}[/cyan] - [cyan]{trayecto_data['nombre_trayecto']}[/cyan] ({trayecto_data['sector']})")
         console.print(f"  • Horas: [yellow]{trayecto_data['horas_cursada']}[/yellow] | Res: [yellow]{trayecto_data['resolucion']}[/yellow] | Módulos: [yellow]{len(trayecto_data['modulos'])}[/yellow]")
     else:
-        console.print("[bold yellow]⚠️  No se identificó trayecto en catálogo JSON. Se usarán datos por defecto del acta.[/bold yellow]")
+        console.print("[bold red]✖ No se identificó trayecto en el catálogo JSON autorizado.[/bold red]")
+        raise typer.Exit(code=1)
 
     console.print(f"Fecha Egreso Acta: [cyan]{data['fecha_egreso']}[/cyan]")
     console.print(f"Fecha Emisión Certificado: [cyan]{e_dia} de {e_mes} de 20{e_ano}[/cyan]")
@@ -127,19 +128,11 @@ def batch_generate(
 
     generator = PPTXGenerator(template_path)
     
-    # Determine certificate template fields from trayecto_data or fallback
-    if trayecto_data:
-        t_line1 = trayecto_data["titulo_linea1"]
-        t_line2 = trayecto_data["titulo_linea2"]
-        horas = trayecto_data["horas_cursada"]
-        res = trayecto_data["resolucion"]
-        modules = trayecto_data["modulos"]
-    else:
-        t_line1 = data["especialidad"].title()
-        t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
-        horas = "540"
-        res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
-        modules = []
+    t_line1 = trayecto_data["titulo_linea1"]
+    t_line2 = trayecto_data["titulo_linea2"]
+    horas = trayecto_data["horas_cursada"]
+    res = trayecto_data["resolucion"]
+    modules = trayecto_data["modulos"]
 
     table = Table(title=f"Certificados a Generar (Formato: {output_format.upper()})")
     table.add_column("N° Egresado", style="cyan")
@@ -219,11 +212,15 @@ def interactive_form(
         else:
             console.print(f"[bold yellow]⚠️  Trayecto '{selected_code}' no encontrado en el catálogo.[/bold yellow]")
 
-    def_l1 = trayecto_data["titulo_linea1"] if trayecto_data else "Operadora/or de Carpintería y Fabricación de Mobiliario"
-    def_l2 = trayecto_data["titulo_linea2"] if trayecto_data else ""
-    def_hrs = trayecto_data["horas_cursada"] if trayecto_data else "230"
-    def_res = trayecto_data["resolucion"] if trayecto_data else "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
-    def_mods = trayecto_data["modulos"] if trayecto_data else []
+    if not trayecto_data:
+        console.print("[bold red]✖ Debe seleccionar un trayecto válido del catálogo JSON autorizado.[/bold red]")
+        raise typer.Exit(code=1)
+
+    def_l1 = trayecto_data["titulo_linea1"]
+    def_l2 = trayecto_data["titulo_linea2"]
+    def_hrs = trayecto_data["horas_cursada"]
+    def_res = trayecto_data["resolucion"]
+    def_mods = trayecto_data["modulos"]
 
     apellido_nombre = Prompt.ask("Apellido y Nombre")
     documento = Prompt.ask("DNI / Documento")
@@ -358,20 +355,16 @@ def select_egresado(
         console.print("[bold red]Índice inválido.[/bold red]")
         raise typer.Exit(code=1)
 
+    if not trayecto_data:
+        console.print("[bold red]✖ No se identificó trayecto en el catálogo JSON autorizado.[/bold red]")
+        raise typer.Exit(code=1)
+
     generator = PPTXGenerator(template_path)
-    
-    if trayecto_data:
-        t_line1 = trayecto_data["titulo_linea1"]
-        t_line2 = trayecto_data["titulo_linea2"]
-        horas = trayecto_data["horas_cursada"]
-        res = trayecto_data["resolucion"]
-        modules = trayecto_data["modulos"]
-    else:
-        t_line1 = data["especialidad"].title()
-        t_line2 = data["especialidad"].title() if len(data["especialidad"]) > 40 else ""
-        horas = "230"
-        res = "Resolución Nro. RESOC-2022-2450-GDEBA-DGCYE"
-        modules = []
+    t_line1 = trayecto_data["titulo_linea1"]
+    t_line2 = trayecto_data["titulo_linea2"]
+    horas = trayecto_data["horas_cursada"]
+    res = trayecto_data["resolucion"]
+    modules = trayecto_data["modulos"]
 
     titulo_data = TituloData(
         apellido_nombre=selected_eg['apellido_nombre'],

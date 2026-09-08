@@ -1,0 +1,347 @@
+{
+  "circular_info": {
+    "numero": "CIR-2023-1-GDEBA-DFPDGCYE",
+    "fecha": "2023-02-14",
+    "referencia": "Cir. 01-2023 'Certificación de trayectos formativos y cursos de Formación Profesional ampliación Circular Nro. CIR-2020-4-GDEBA-DFPDGCYE'",
+    "emisor": "Dirección de Formación Profesional - DGCYE - Gobierno de la Provincia de Buenos Aires"
+  },
+  "ejemplo_catalogo": {
+    "codigo": "GH38",
+    "nombre_trayecto": "Cocinera/o",
+    "tipo_certificacion": "Nivel II de FP inicial",
+    "certificacion": "Cocinero según Resolución Nro. RESOL-2022-3340-APN-ME",
+    "resolucion_jurisdiccional": "RESFC-2017-2387-E-GDEBA-DGCYE",
+    "resolucion_validez_nacional": "RESOL-2022-3340-APN-ME"
+  },
+  "certificaciones_validez_nacional": [
+    {
+      "trayecto": "Acompañante terapéutico",
+      "resolucion_jurisdiccional": "RES 1014/14",
+      "resolucion_validez_nacional": "RESOL-2022-2562-APN-ME",
+      "cohortes_desde": 2018,
+      "cohortes_hasta": 2018
+    },
+    {
+      "trayecto": "Acompañante terapéutico",
+      "resolucion_jurisdiccional": "RES 1014/14",
+      "resolucion_validez_nacional": "RESOL-2021-1986-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2023
+    },
+    {
+      "trayecto": "Administrativo/o",
+      "resolucion_jurisdiccional": "RESFC-2019-2319-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2072-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Albañil",
+      "resolucion_jurisdiccional": "RESOC-2020-1799-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3300-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Armador y Montador de Paneles y Cielorrasos de Roca de Yeso",
+      "resolucion_jurisdiccional": "RESOC-2020-1800-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3299-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Auxiliar Contable",
+      "resolucion_jurisdiccional": "RESFC-2019-6861-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2804-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Auxiliar de Instalaciones Sanitarias y de Gas",
+      "resolucion_jurisdiccional": "RESFC-2019-4133-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3437-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Auxiliar en Seguridad e Higiene Laboral",
+      "resolucion_jurisdiccional": "RESFC-2018-5246-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2162-APN-ME",
+      "cohortes_desde": 2018,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Bobinador de Máquinas Eléctricas",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2385-E-GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2145-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Carpintero Metálico y de PVC",
+      "resolucion_jurisdiccional": "RESFC-2019-514-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3294-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Cocinero",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2387 - E - GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3440-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Confeccionista a Medida. Modista/o",
+      "resolucion_jurisdiccional": "RESOC-2020-1802-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2023-103-APN-ME",
+      "cohortes_desde": 2020,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Diseñador - Modelista de Calzado",
+      "resolucion_jurisdiccional": "RESFC-2018-4869-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2267-APN-ME",
+      "cohortes_desde": 2018,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Electricista del Automotor",
+      "resolucion_jurisdiccional": "RESFC 2018 - 1678-E-GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2060-APN-ME",
+      "cohortes_desde": 2018,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Electricista en Inmuebles",
+      "resolucion_jurisdiccional": "RESFC 2019 - 6908GDEBA - DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2139-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Electricista industrial",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2389 - E- GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2266-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Fabricante de Calzado",
+      "resolucion_jurisdiccional": "RESFC-2019-6869-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2123-APN-ME",
+      "cohortes_desde": 2018,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Fresador",
+      "resolucion_jurisdiccional": "RESFC-2019-508-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3380-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Gasista de Unidades Unifuncionales",
+      "resolucion_jurisdiccional": "RESFC-2019-4118-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3431-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Gasista Domiciliario",
+      "resolucion_jurisdiccional": "RESFC-2019-4131-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3436-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Guardavidas",
+      "resolucion_jurisdiccional": "RES 1644/07",
+      "resolucion_validez_nacional": "RESOL-2020-2185-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2023
+    },
+    {
+      "trayecto": "Guardavidas",
+      "resolucion_jurisdiccional": "RES 1644/07",
+      "resolucion_validez_nacional": "RESOL-2020-2054-APN-ME",
+      "cohortes_desde": 2018,
+      "cohortes_hasta": 2018
+    },
+    {
+      "trayecto": "Herrero",
+      "resolucion_jurisdiccional": "RESFC-2019-512-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2023-105-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Instalador de Sistemas Eléctricos de Energías Renovables",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2381 - E - GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2148-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Instalador en Sistemas de Automatización",
+      "resolucion_jurisdiccional": "RESFC 2019 - 2265-E-GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2146-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Instalador Sanitarista",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2380 E- GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2163-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Instalador y Reparador de Equipos de Climatización",
+      "resolucion_jurisdiccional": "RESOC-2020-1808-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3408-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Liquidador de Sueldos",
+      "resolucion_jurisdiccional": "RESFC-2019-6862-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2158-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Maquillador/a Profesional",
+      "resolucion_jurisdiccional": "RESOC-2020-1809-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3402-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Mecánico de Sistemas de Suspensión y Dirección del Automotor",
+      "resolucion_jurisdiccional": "RESOC-2020-1811-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3401-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Modelista Patronista",
+      "resolucion_jurisdiccional": "RESOC-2020-1813-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2023-104-APN-ME",
+      "cohortes_desde": 2020,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Montador de Instalaciones de Gas Domiciliario",
+      "resolucion_jurisdiccional": "RESFC-2019-4134-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3449-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Montador de Instalaciones Sanitarias Domiciliarias",
+      "resolucion_jurisdiccional": "RESFC-2017-2386-E-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2030-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Montador Electricista Domiciliario",
+      "resolucion_jurisdiccional": "RESFC 2019 - 6865-GDEBA - DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2147-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Montador Tablerista de Sistemas de Potencia",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2388 - E- GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2161-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Operador Cortador de Industria Indumentaria",
+      "resolucion_jurisdiccional": "RESOC-2020-1814-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3338-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Operador de Máquinas Comandadas a Control Numérico Computarizado para el Arranque de Viruta",
+      "resolucion_jurisdiccional": "RESFC-2019-513-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3352-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Operador/a de Máquina para la Confección de Indumentaria",
+      "resolucion_jurisdiccional": "RESOC-2020-1815-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3341-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2022
+    },
+    {
+      "trayecto": "Operaria/o Hortícola",
+      "resolucion_jurisdiccional": "RESOC-2021-3472-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3403-APN-ME",
+      "cohortes_desde": 2021,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Panadero",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2390-E- GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3339-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Pastelero",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2384-E- GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3348-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Programador",
+      "resolucion_jurisdiccional": "RESFC 2017 - 2383 - E- GDEBA DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2058-APN-ME",
+      "cohortes_desde": 2017,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Programador de Máquinas Comandadas a Control Numérico Computarizado para el Arranque de Viruta",
+      "resolucion_jurisdiccional": "RESFC-2019-509-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3351-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2020
+    },
+    {
+      "trayecto": "Soldador",
+      "resolucion_jurisdiccional": "RESFC-2019-511-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3296-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Soldador Básico",
+      "resolucion_jurisdiccional": "RESFC-2019-510-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3382-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Tornero",
+      "resolucion_jurisdiccional": "RESFC-2019-507-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-3405-APN-ME",
+      "cohortes_desde": 2019,
+      "cohortes_hasta": 2024
+    },
+    {
+      "trayecto": "Vendedor",
+      "resolucion_jurisdiccional": "RESFC-2018-4953-GDEBA-DGCYE",
+      "resolucion_validez_nacional": "RESOL-2022-2032-APN-ME",
+      "cohortes_desde": 2018,
+      "cohortes_hasta": 2024
+    }
+  ]
+}
