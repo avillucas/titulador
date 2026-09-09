@@ -8,7 +8,27 @@ Toda la confección se realiza en estricto cumplimiento de los lineamientos e in
 
 ---
 
-## 📚 Fuentes y Normativa de Referencia (Archivos Modelo)
+## � Capturas de la Aplicación
+
+A continuación, se muestran ejemplos de la interfaz principal del generador de certificados y títulos A5.
+
+<p align="center">
+  <img src="docs/images/gui-principal.png" alt="Interfaz principal de Titulador A5" width="900" />
+</p>
+
+<p align="center">
+  <img src="docs/images/generacion-lote.png" alt="Generación masiva de certificados" width="900" />
+</p>
+
+<p align="center">
+  <img src="docs/images/resultados-generados.png" alt="Resultados y certificados generados" width="900" />
+</p>
+
+> Si deseas utilizar tus propias capturas, coloca los archivos en la carpeta `docs/images/` con esos nombres.
+
+---
+
+## �📚 Fuentes y Normativa de Referencia (Archivos Modelo)
 
 La aplicación utiliza como referencia los documentos oficiales almacenados en la carpeta `documentacion/`:
 
