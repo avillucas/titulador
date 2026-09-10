@@ -94,6 +94,20 @@ class TestPPTXGenerator(unittest.TestCase):
         if os.path.exists(out_path):
             os.remove(out_path)
 
+    def test_default_front_font_size_is_12_points(self):
+        data = TituloData(titulo_linea1='Trayecto breve', titulo_linea2='Carrera breve')
+        out_path = 'output/test_default_font_size.pptx'
+        PPTXGenerator().generate(data, out_path)
+
+        try:
+            prs = pptx.Presentation(out_path)
+            shape_dict = {shape.shape_id: shape for shape in prs.slides[0].shapes if shape.has_text_frame}
+            self.assertEqual(shape_dict[89].text_frame.paragraphs[0].font.size.pt, 12.0)
+            self.assertEqual(adaptive_font_size('Trayecto breve', 12.0, 42), 12.0)
+        finally:
+            if os.path.exists(out_path):
+                os.remove(out_path)
+
     def test_multi_line_title_no_dashes_in_middle(self):
         data = TituloData(
             apellido_nombre='PEREZ JUAN MANUEL',
@@ -145,6 +159,46 @@ class TestPPTXGenerator(unittest.TestCase):
 
         if os.path.exists(out_path):
             os.remove(out_path)
+
+    def test_generate_batch_creates_two_slides_per_title(self):
+        titles = [
+            TituloData(apellido_nombre='PRUEBA UNO', numero_egresado='1'),
+            TituloData(apellido_nombre='PRUEBA DOS', numero_egresado='2'),
+        ]
+        out_path = 'output/test_batch_generation.pptx'
+        PPTXGenerator().generate_batch(titles, out_path)
+
+        try:
+            prs = pptx.Presentation(out_path)
+            self.assertEqual(len(prs.slides), 4)
+            slide_text = [
+                shape.text
+                for slide in prs.slides
+                for shape in slide.shapes
+                if shape.has_text_frame
+            ]
+            self.assertIn('PRUEBA UNO', slide_text)
+            self.assertIn('PRUEBA DOS', slide_text)
+        finally:
+            if os.path.exists(out_path):
+                os.remove(out_path)
+
+    def test_generate_batch_copies_template_images(self):
+        titles = [TituloData(apellido_nombre='PRUEBA UNO'), TituloData(apellido_nombre='PRUEBA DOS')]
+        out_path = 'output/test_batch_images.pptx'
+        PPTXGenerator().generate_batch(titles, out_path)
+
+        try:
+            prs = pptx.Presentation(out_path)
+            self.assertTrue(any(shape.shape_type == 13 for shape in prs.slides[0].shapes))
+            self.assertTrue(any(shape.shape_type == 13 for shape in prs.slides[2].shapes))
+            self.assertEqual(
+                prs.slides[0].shapes[0].image.blob,
+                prs.slides[2].shapes[0].image.blob,
+            )
+        finally:
+            if os.path.exists(out_path):
+                os.remove(out_path)
 
 if __name__ == '__main__':
     unittest.main()

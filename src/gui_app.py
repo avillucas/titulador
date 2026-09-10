@@ -64,6 +64,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
         self.excel_path = ctk.StringVar(value=DEFAULT_EXCEL)
         self.template_path = ctk.StringVar(value=DEFAULT_TEMPLATE)
         self.output_dir = ctk.StringVar(value=OUTPUT_DIR)
+        self.single_file = ctk.BooleanVar(value=False)
         
         # Fecha de emisión del certificado (por defecto 1 mes posterior al acta)
         self.emision_dia = ctk.StringVar(value="14")
@@ -334,7 +335,14 @@ class TituladorGUI(ctk.CTk if ctk else object):
             height=40,
             command=self._run_batch_generation
         )
-        btn_batch.grid(row=2, column=0, padx=15, pady=15)
+        self.single_file_checkbox = ctk.CTkCheckBox(
+            self.tab_batch,
+            text="Generar todos los títulos en un único archivo PPTX",
+            variable=self.single_file,
+        )
+        self.single_file_checkbox.grid(row=2, column=0, padx=15, pady=(5, 0), sticky="w")
+
+        btn_batch.grid(row=3, column=0, padx=15, pady=15)
 
     def _run_batch_generation(self):
         excel_p = self.excel_path.get()
@@ -379,6 +387,7 @@ class TituladorGUI(ctk.CTk if ctk else object):
             modules = t_data["modulos"]
 
             total = len(egresados)
+            batch_titles = []
             for idx, eg in enumerate(egresados, 1):
                 filename_base = f"{eg['num_egresado']}_{eg['apellido_nombre'].replace(' ', '_')}"
 
@@ -400,18 +409,23 @@ class TituladorGUI(ctk.CTk if ctk else object):
                 )
 
 
-                outs = []
-                out_pptx = os.path.join(out_d, f"{filename_base}.pptx")
-                generator.generate(titulo_data, out_pptx, render_config)
-                self.last_generated_pptx = out_pptx
-
-                outs.append("Presentación")
-
-                self.log(f"[{idx}/{total}] Generado ({', '.join(outs)}): {filename_base}")
+                batch_titles.append((filename_base, titulo_data))
+                if not self.single_file.get():
+                    out_pptx = os.path.join(out_d, f"{filename_base}.pptx")
+                    generator.generate(titulo_data, out_pptx, render_config)
+                    self.last_generated_pptx = out_pptx
+                    self.log(f"[{idx}/{total}] Generado: {filename_base}")
                 self.progress_bar.set(idx / total)
                 self.update_idletasks()
 
-            messagebox.showinfo("¡Éxito!", f"Se procesaron {total} presentaciones en:\n{out_d}")
+            if self.single_file.get():
+                out_pptx = os.path.join(out_d, "titulos_lote.pptx")
+                generator.generate_batch([titulo for _, titulo in batch_titles], out_pptx, render_config)
+                self.last_generated_pptx = out_pptx
+                self.log(f"Generado archivo único: {os.path.basename(out_pptx)}")
+
+            output_description = "un archivo único" if self.single_file.get() else f"{total} presentaciones"
+            messagebox.showinfo("¡Éxito!", f"Se generaron {output_description} en:\n{out_d}")
 
         except Exception as e:
             messagebox.showerror("Error", f"Fallo durante la generación: {e}")
@@ -653,10 +667,8 @@ class TituladorGUI(ctk.CTk if ctk else object):
             "trayecto_text": trayecto_text,
             "carrera_line1_text": carrera_line1,
             "carrera_line2_text": carrera_line2,
-            "trayecto_font_size": str(adaptive_font_size(trayecto_text, 11.5, 42)),
-            "carrera_font_size": str(
-                adaptive_font_size(f"{carrera_line1}\n{carrera_line2}", 12.0, 62)
-            ),
+            "trayecto_font_size": "12.0",
+            "carrera_font_size": "12.0",
         }
         for key, value in advanced_values.items():
             entry = self.advanced_entries[key]

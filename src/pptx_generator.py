@@ -1,6 +1,9 @@
 import os
 import re
+from copy import deepcopy
+from io import BytesIO
 import pptx
+from pptx.opc.constants import RELATIONSHIP_TYPE as RT
 from pptx.util import Pt
 from typing import Dict, Any, List, Tuple, Optional
 from src.models import RenderConfig, TituloData
@@ -200,6 +203,30 @@ def set_default_base_model(path: str):
 class PPTXGenerator:
     _default_template_path: str = DEFAULT_BASE_MODEL
 
+    @staticmethod
+    def _copy_shape_with_relationships(template_slide, new_slide, shape):
+        """Copia una forma y conserva las relaciones que referencia su XML."""
+        new_shape_element = deepcopy(shape.element)
+        referenced_rids = {
+            value
+            for element in new_shape_element.iter()
+            for value in element.attrib.values()
+        }
+
+        for rel in template_slide.part.rels.values():
+            if rel.rId not in referenced_rids:
+                continue
+            if rel.reltype == RT.IMAGE:
+                _, new_rid = new_slide.part.get_or_add_image_part(BytesIO(rel._target.blob))
+            else:
+                new_rid = new_slide.part.relate_to(rel._target, rel.reltype, rel.is_external)
+            for element in new_shape_element.iter():
+                for attribute, value in list(element.attrib.items()):
+                    if value == rel.rId:
+                        element.set(attribute, new_rid)
+
+        new_slide.shapes._spTree.insert_element_before(new_shape_element, 'p:extLst')
+
     @classmethod
     def get_default_template_path(cls) -> str:
         """Devuelve la ruta por defecto de la plantilla base PPTX."""
@@ -227,9 +254,7 @@ class PPTXGenerator:
             raise FileNotFoundError(f"Template file not found at {template_path}")
         self.template_path = template_path
 
-    def generate(self, data: TituloData, output_path: str, render_config: Optional[RenderConfig] = None) -> str:
-        prs = pptx.Presentation(self.template_path)
-
+    def _render(self, prs, data: TituloData, render_config: Optional[RenderConfig] = None) -> None:
         render_config = render_config or RenderConfig()
         
         # Process Slide 1 (Frente)
@@ -257,7 +282,7 @@ class PPTXGenerator:
                     shape.left = Mm(149.5)
                     shape.top = Mm(78.6)
                     set_text_frame_content(shape, str(data.horas_cursada), font_name="Arial", font_size_pt=12.0, word_wrap=False)
-                elif shape.shape_id == 88:  # Trayecto / Curso (Arial 11-12)
+                elif shape.shape_id == 88:  # Trayecto / Curso (Arial 12)
                     from pptx.util import Mm
                     shape.top = Mm(79.0)
                     val = render_config.trayecto_text or str(data.titulo_linea1).strip()
@@ -265,7 +290,7 @@ class PPTXGenerator:
                     num_dashes = max(3, 52 - len(val))
                     val = f"{val}{'-' * num_dashes}"
                     sz = render_config.trayecto_font_size or adaptive_font_size(
-                        val, preferred_size=11.5, max_chars=42
+                        val, preferred_size=12.0, max_chars=42
                     )
                     set_text_frame_content(shape, val, font_name="Arial", font_size_pt=sz, word_wrap=False)
                 elif shape.shape_id == 89:  # Certificación DE Line 1 - Starts at 109mm (after CERTIFICADO DE)
@@ -314,8 +339,47 @@ class PPTXGenerator:
                     elif target == "distrito_cpf":
                         set_text_frame_content(shape, str(data.distrito_cpf), font_name="Arial", font_size_pt=12.0, word_wrap=False)
 
+    def generate(self, data: TituloData, output_path: str, render_config: Optional[RenderConfig] = None) -> str:
+        prs = pptx.Presentation(self.template_path)
+        self._render(prs, data, render_config)
+
         # Ensure output directory exists
         os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
         prs.save(output_path)
         return output_path
+
+    def generate_batch(
+        self,
+        data_list: List[TituloData],
+        output_path: str,
+        render_config: Optional[RenderConfig] = None,
+    ) -> str:
+        """Genera un único PPTX con frente y dorso para cada título."""
+        if not data_list:
+            raise ValueError("No hay títulos para generar")
+
+        prs = pptx.Presentation(self.template_path)
+        template_prs = pptx.Presentation(self.template_path)
+        template_slides = list(template_prs.slides)[:2]
+        for index, data in enumerate(data_list):
+            if index:
+                for template_slide in template_slides:
+                    new_slide = prs.slides.add_slide(prs.slide_layouts[6])
+                    for shape in template_slide.shapes:
+                        self._copy_shape_with_relationships(template_slide, new_slide, shape)
+
+            slide_offset = index * 2
+            batch_slides = list(prs.slides)[slide_offset:slide_offset + 2]
+            self._render_slides(batch_slides, data, render_config)
+
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        prs.save(output_path)
+        return output_path
+
+    def _render_slides(self, slides, data: TituloData, render_config: Optional[RenderConfig] = None) -> None:
+        """Renderiza un título sobre el par de diapositivas indicado."""
+        # El render actual trabaja sobre una presentación; este contenedor
+        # permite reutilizarlo también al generar un lote en un único archivo.
+        prs = type("PresentationView", (), {"slides": slides})()
+        self._render(prs, data, render_config)
 

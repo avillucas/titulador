@@ -46,14 +46,23 @@ class TestDateUtils(unittest.TestCase):
         self.assertEqual(next_dt_leap, datetime.date(2024, 2, 29))
 
     def test_calculate_default_emision_date(self):
-        dia, mes, ano = calculate_default_emision_date("14 de Julio de 2025")
+        dia, mes, ano = calculate_default_emision_date(
+            "14 de Julio de 2025", today=datetime.date(2025, 7, 20)
+        )
         self.assertEqual(dia, "14")
         self.assertEqual(mes, "Agosto")
         self.assertEqual(ano, "25")
 
-        # Invalid date string should fallback safely
-        dia_f, mes_f, ano_f = calculate_default_emision_date("fecha invalida")
-        self.assertEqual((dia_f, mes_f, ano_f), ("02", "Septiembre", "25"))
+        dia_today, mes_today, ano_today = calculate_default_emision_date(
+            "14 de Julio de 2025", today=datetime.date(2025, 9, 1)
+        )
+        self.assertEqual((dia_today, mes_today, ano_today), ("01", "Septiembre", "25"))
+
+        # Invalid date string should fallback to the supplied current date.
+        dia_f, mes_f, ano_f = calculate_default_emision_date(
+            "fecha invalida", today=datetime.date(2025, 8, 20)
+        )
+        self.assertEqual((dia_f, mes_f, ano_f), ("20", "Agosto", "25"))
 
     def test_parse_emision_input(self):
         self.assertEqual(parse_emision_input("20/10/2025"), ("20", "Octubre", "25"))

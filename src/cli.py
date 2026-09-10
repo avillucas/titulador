@@ -94,6 +94,7 @@ def batch_generate(
     carrera_line2_text: Optional[str] = typer.Option(None, "--texto-carrera-linea2", help="Texto personalizado de la segunda línea de carrera/resolución"),
     trayecto_font_size: Optional[float] = typer.Option(None, "--fuente-trayecto", help="Tamaño de fuente del trayecto en puntos"),
     carrera_font_size: Optional[float] = typer.Option(None, "--fuente-carrera", help="Tamaño de fuente de carrera en puntos"),
+    archivo_unico: bool = typer.Option(False, "--archivo-unico", help="Genera todos los títulos en una única presentación PPTX"),
 ):
     """Procesa un archivo Excel de Acta de examen y genera presentaciones editables."""
     console.print(Panel("[bold green]Titulador - Generación en Lote (Presentaciones)[/bold green]"))
@@ -158,6 +159,7 @@ def batch_generate(
     table.add_column("DNI", style="yellow")
     table.add_column("Archivos Generados", style="green")
 
+    titulos = []
     for eg in egresados:
         filename_base = f"{eg['num_egresado']}_{eg['apellido_nombre'].replace(' ', '_')}"
         
@@ -179,9 +181,18 @@ def batch_generate(
         )
 
 
-        out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
-        generator.generate(titulo_data, out_pptx, render_config)
-        table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], os.path.basename(out_pptx))
+        titulos.append((eg, filename_base, titulo_data))
+
+    if archivo_unico:
+        out_pptx = os.path.join(output_dir, "titulos_lote.pptx")
+        generator.generate_batch([titulo for _, _, titulo in titulos], out_pptx, render_config)
+        for eg, _, _ in titulos:
+            table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], os.path.basename(out_pptx))
+    else:
+        for eg, filename_base, titulo_data in titulos:
+            out_pptx = os.path.join(output_dir, f"{filename_base}.pptx")
+            generator.generate(titulo_data, out_pptx, render_config)
+            table.add_row(eg["num_egresado"], eg["apellido_nombre"], eg["documento"], os.path.basename(out_pptx))
 
     console.print(table)
     console.print(f"\n[bold green]✔ ¡Se procesaron los certificados exitosamente en {output_dir}![/bold green]")

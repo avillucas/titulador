@@ -134,6 +134,7 @@ Opciones principales del comando `batch`:
 - `--excel` / `-e`: Ruta al archivo Excel de Acta de Examen.
 - `--trayecto` / `-k`: Código del trayecto en el catálogo (ej: `MM11`, `CL01`).
 - `--outdir` / `-o`: Carpeta de destino (por defecto `output/`).
+- `--archivo-unico`: Genera todos los títulos aprobados en `titulos_lote.pptx`, manteniendo un frente y un dorso por título para imprimirlos desde una sola presentación.
 - `--texto-trayecto`: Reemplaza el texto de la línea Trayecto/Curso.
 - `--texto-carrera-linea1` y `--texto-carrera-linea2`: Reemplazan las dos líneas de carrera/resolución.
 - `--fuente-trayecto` y `--fuente-carrera`: Fijan el tamaño de fuente en puntos; si se omiten, el sistema lo calcula según la longitud del texto.
@@ -146,6 +147,8 @@ python3 main.py batch --excel "ruta/al/acta.xlsx" --trayecto MA23 \
 ```
 
 En el formulario de la GUI, estos mismos campos están disponibles en la sección **Avanzado: textos y tamaños del frente**. Dejarlos vacíos conserva el texto del catálogo y el cálculo automático.
+
+En la pestaña **Generación Masiva** de la GUI, marcar **Generar todos los títulos en un único archivo PPTX** produce el mismo resultado que `--archivo-unico`.
 
 #### Modo Selección Individual (`select`)
 Muestra el listado de egresados en pantalla para elegir interactivamente a cuál emitirle el certificado:

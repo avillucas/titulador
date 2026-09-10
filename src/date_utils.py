@@ -92,17 +92,23 @@ def format_emision_tuple(dt: datetime.date) -> Tuple[str, str, str]:
     return dia_str, mes_str, ano_str
 
 
-def calculate_default_emision_date(fecha_egreso_str: str) -> Tuple[str, str, str]:
+def calculate_default_emision_date(
+    fecha_egreso_str: str,
+    today: Optional[datetime.date] = None,
+) -> Tuple[str, str, str]:
     """
-    Calculates the default certificate emission date (1 month after fecha_egreso).
+    Calculates the default certificate emission date.
+
+    Uses today's date unless it is earlier than one month after fecha_egreso.
     Returns (emision_dia, emision_mes, emision_ano).
-    Falls back to ('02', 'Septiembre', '25') if fecha_egreso cannot be parsed.
+    Falls back to today's date if fecha_egreso cannot be parsed.
     """
+    today = today or datetime.date.today()
     dt = parse_date_string(fecha_egreso_str)
     if dt:
         dt_next = add_one_month(dt)
-        return format_emision_tuple(dt_next)
-    return "02", "Septiembre", "25"
+        return format_emision_tuple(max(today, dt_next))
+    return format_emision_tuple(today)
 
 
 def parse_emision_input(emision_str: str) -> Optional[Tuple[str, str, str]]:
